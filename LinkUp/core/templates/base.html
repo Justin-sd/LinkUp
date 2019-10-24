@@ -1,9 +1,9 @@
 {# HTML5 declaration #}
 <!DOCTYPE html>
-<html>
+<html class="has-navbar-fixed-top">
     {# Make modifiable head elements #}
     <head>
-        <title>{% block title %}Home {% endblock title %} | CRM Easy</title>
+        <title>{% block title %} Home {% endblock title %} </title>
         {% block head_favicon %}
             <link rel="icon" type="image/png"
                   href="{{ STATIC_URL }}images/favicon.ico">
@@ -23,8 +23,11 @@
         {% endblock head_meta %}
         {% block head_css %}
             {% block head_css_site %}
-
-        {% endblock head_css_site %}
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/combine/npm/bulma@0.8.0/css/bulma.min.css,npm/bulma@0.8.0/css/bulma.min.css">
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+                <link rel="stylesheet" href="httpma@0.8.0/css/bulma.min.css">
+                <link rel="stylesheet" href="static/css/bulmaHelper.css">
+            {% endblock head_css_site %}
             {% block head_css_section %}{% endblock head_css_section %}
             {% block head_css_page %}{% endblock head_css_page %}
         {% endblock head_css %}
@@ -32,36 +35,47 @@
     <body>
         {# Navigation Menu #}
         <header>
-            {% block nav-style %} {% endblock %}">
-            <nav class="navbar navbar-default navbar-fixed-top">
-              <div class="container">
-                <div class="navbar-header">
-                  <a class="navbar-brand" href="/">LinkUp</a>
+            {% block nav-style %} {% endblock %}
+            <nav class="navbar is-fixed-top" role="navigation" aria-label="main navigation">
+                <div class="navbar-brand">
+                    <a class="navbar-item" href="/"> LinkUp
+                    <!--<img src="/static/images/linkup-logo.png" width="50" height="50">-->
+                    </a>
+
+                    <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                    </a>
                 </div>
-                <div id="navbar" class="navbar-collapse collapse">
-                  <ul class="nav navbar-nav">
-                    <li ><a href="/">Home</a></li>
-                    <li><a href="#">My Events</a></li>
-                    <li><a href="/event_page/">Events</a></li>
-                    <li class="dropdown">
-                      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-                      <ul class="dropdown-menu">
-                        <li><a href="#">My Account</a></li>
-                        <li><a href="#">About</a></li>
-                        <li><a href="#">Support</a></li>
-                        <li role="separator" class="divider"></li>
-                        <li class="dropdown-header">Nav header</li>
-                        <li><a href="#">Separated link</a></li>
-                        <li><a href="#">One more separated link</a></li>
-                      </ul>
-                    </li>
-                  </ul>
-                  <ul class="nav navbar-nav navbar-right">
-                    <li><a href="../login/">Log In</a></li>
-                    <li><a href="../register/">Register</a></li>
-                  </ul>
-                </div><!--/.nav-collapse -->
-              </div>
+                <div id="navbar" class="navbar-menu">
+                    <div class="navbar-start">
+                        <a class="navbar-item" href="/"> Home </a>
+                        <a class="navbar-item"> My Events </a>
+                        <a class="navbar-item" href="/event_page/"> Events </a>
+                        <div class="navbar-item has-dropdown is-hoverable">
+                            <a class="navbar-link"> More </a>
+                            <div class="navbar-dropdown">
+                                <a class="navbar-item"> About </a>
+                                <a class="navbar-item"> My Account </a>
+                                <a class="navbar-item"> Support </a>
+                                <hr class="navbar-divider">
+                                <a class="navbar-item"> Report an issue </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="navbar-end">
+                        <div class="navbar-item">
+                            <div class="buttons">
+                                <a class="button is-info">
+                                    <strong>Sign up</strong>
+                                </a>
+
+                                <a class="button is-light"> Log in </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </nav>
         </header>
         {# The Document Body #}

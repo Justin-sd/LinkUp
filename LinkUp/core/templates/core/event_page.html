@@ -1,62 +1,78 @@
 {% extends 'base.html' %}
 {% block title %}LinkUp {% endblock title %} //modifying the title
-{% block nav-style %}mkt-nav{% endblock nav-style %} //sets the nav style
+{% block nav-style %}{% endblock nav-style %} //sets the nav style
 
 {% block content %}
 
-    {# Banner Section #}
-    <div class="mkt-s1">
-        <div class="mkt-s1-body container ">
-            <div class="row">
-                <h1 class="col-md-8">Untitled Event</h1>
-            </div>
-            <div class="row">
-                <p class="col-md-8"> Saturday 10pm - 2am </p>
-            </div>
-            <div class="row">
-                {# First Edit Link #}
-                <a href=""
-                   class="sign-up btn btn-success">Edit
-                </a>
+     <section class="section has-background-light">
+        <div class="container">
+            <h3 class="is-size-2"> Untitled event </h3>
+            <div class="columns">
+                <div class="column">
+                    <div class="notification is-info">
+                        <center>
+                            <p class="title"> Saturday 10pm-2am </p>
+                            <p>Event Details. Optional Description of event which admins can edit at anytime</p>
+                            <a class="button is-info"> Edit Event </a>
+                        </center>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+     </section>
 
-    {# Main Section #}
-    <div class="mkt-s2 container">
-        <h2 class="mkt-s2-h">Admin Posts</h2>
-        <div class="mkt-s2-body">
-            <div class="col-md-4 mkt-vp">
-                <img class="" src="/static/images/clock.png"/>
-                <h5>Gate Code is 6965</h5>
-                <p>Meeting in 30 minutes</p>
+    <section class="section has-background-light">
+        <div class="container">
+            <h3 class="is-size-2">Admin Posts</h3>
+            <div class="columns">
+                <div class="column">
+                    <div class="notification is-info">
+                        <center>
+                            <p>Meeting starts at 9</p>
+                            <p>Please input your availability!</p>
+                            <p>Location: 123 Easy St, New York</p>
+                        </center>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <div class="mkt-s2 container">
-        <h2 class="mkt-s2-h">Guest Lists</h2>
-        <div class="mkt-s2-body">
-            <div class="col-md-4 mkt-vp">
-                <img class="" src="/static/images/clock.png"/>
-                <h4>Guests who can make it</h4>
-                <p>Guest</p><p>Guest</p><p>Guest</p><p>Guest</p><p>Guest</p>
-            </div>
-            <div class="col-md-4 mkt-vp">
-                <img class="" src="/static/images/clock.png"/>
-                <h4>Guests who can't make it</h4>
-                <p>Guest</p><p>Guest</p><p>Guest</p><p>Guest</p><p>Guest</p>
+    <section class="section has-background-light">
+        <div class="container">
+            <h3 class="is-size-2">Guest List</h3>
+            <div class="columns">
+                <div class="column">
+                    <div class="notification is-primary">
+                        <h4 class="title is-size-4">Can Make It!</h4>
+                        <center><p>Guest</p><p>Guest</p><p>Guest</p><p>Guest</p></center>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="notification is-danger">
+                        <h4 class="title is-size-4">Can't Make It!</h4>
+                        <center><p>Guest</p><p>Guest</p><p>Guest</p><p>Guest</p><center>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
 
-     <div class="mkt-s2 container">
-        <h2 class="mkt-s2-h">Admin Controls</h2>
-        <div class="mkt-s2-body">
-            <a href="" class="btn btn-success">Create Sub Events</a>
-            <a href="" class="btn btn-success">Invite Guest</a>
-            <a href="" class="btn btn-success">Add Admins</a>
+    <section class="section has-background-light">
+        <div class="container">
+            <h3 class="is-size-2"> Admin Controls </h3>
+            <div class="columns">
+                <div class="column">
+                    <div class="notification is-dark">
+                        <center>
+                            <a class="button is-info"> Invite Guest </a>
+                            <a class="button is-info">  Add an Admin </a>
+                            <a class="button is-info"> Create SubEvent </a>
+                        </center>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+    </section>
 
 {% endblock content %}
