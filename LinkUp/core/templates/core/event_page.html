@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %}LinkUp {% endblock title %} //modifying the title
+{% block nav-style %}mkt-nav{% endblock nav-style %} //sets the nav style
+
+{% block content %}
+
+    {# Banner Section #}
+    <div class="mkt-s1">
+        <div class="mkt-s1-body container ">
+            <div class="row">
+                <h1 class="col-md-8">Untitled Event</h1>
+            </div>
+            <div class="row">
+                <p class="col-md-8"> Saturday 10pm - 2am </p>
+            </div>
+            <div class="row">
+                {# First Edit Link #}
+                <a href=""
+                   class="sign-up btn btn-success">Edit
+                </a>
+            </div>
+        </div>
+    </div>
+
+    {# Main Section #}
+    <div class="mkt-s2 container">
+        <h2 class="mkt-s2-h">Admin Posts</h2>
+        <div class="mkt-s2-body">
+            <div class="col-md-4 mkt-vp">
+                <img class="" src="/static/images/clock.png"/>
+                <h5>Gate Code is 6965</h5>
+                <p>Meeting in 30 minutes</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="mkt-s2 container">
+        <h2 class="mkt-s2-h">Guest Lists</h2>
+        <div class="mkt-s2-body">
+            <div class="col-md-4 mkt-vp">
+                <img class="" src="/static/images/clock.png"/>
+                <h4>Guests who can make it</h4>
+                <p>Guest</p><p>Guest</p><p>Guest</p><p>Guest</p><p>Guest</p>
+            </div>
+            <div class="col-md-4 mkt-vp">
+                <img class="" src="/static/images/clock.png"/>
+                <h4>Guests who can't make it</h4>
+                <p>Guest</p><p>Guest</p><p>Guest</p><p>Guest</p><p>Guest</p>
+            </div>
+        </div>
+    </div>
+
+     <div class="mkt-s2 container">
+        <h2 class="mkt-s2-h">Admin Controls</h2>
+        <div class="mkt-s2-body">
+            <a href="" class="btn btn-success">Create Sub Events</a>
+            <a href="" class="btn btn-success">Invite Guest</a>
+            <a href="" class="btn btn-success">Add Admins</a>
+        </div>
+    </div>
+
+{% endblock content %}
