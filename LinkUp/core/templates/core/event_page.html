@@ -3,16 +3,15 @@
 {% block nav-style %}{% endblock nav-style %} //sets the nav style
 
 {% block content %}
-
      <section class="section has-background-light">
         <div class="container">
-            <h3 class="is-size-2"> Untitled event </h3>
+            <h3 class="is-size-2">{{event_title}}</h3>
             <div class="columns">
                 <div class="column">
                     <div class="notification is-info">
                         <center>
                             <p class="title"> Saturday 10pm-2am </p>
-                            <p>Event Details. Optional Description of event which admins can edit at anytime</p>
+                            <p>{{event_description}}</p>
                             <a class="button is-info"> Edit Event </a>
                         </center>
                     </div>
