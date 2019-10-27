@@ -36,16 +36,16 @@
         {# Navigation Menu #}
         <header>
             {% block nav-style %} {% endblock %}
-            <nav class="navbar is-fixed-top" role="navigation" aria-label="main navigation">
+            <nav class="navbar is-fixed-top is-light" role="navigation" aria-label="main navigation">
                 <div class="navbar-brand">
-                    <a class="navbar-item" href="/"> LinkUp
-                    <!--<img src="/static/images/linkup-logo.png" width="50" height="50">-->
+                    <a class="" href="/">
+                        <img src="/static/images/LinkUpWchainbox.png" height="140px" width="180px">
                     </a>
 
-                    <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-                        <span aria-hidden="true"></span>
-                        <span aria-hidden="true"></span>
-                        <span aria-hidden="true"></span>
+                    <a role="button" class="navbar-burger burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+                      <span aria-hidden="true"></span>
+                      <span aria-hidden="true"></span>
+                      <span aria-hidden="true"></span>
                     </a>
                 </div>
                 <div id="navbar" class="navbar-menu">
@@ -85,9 +85,27 @@
         </div>
         {# The Footer #}
         <div class="footer">
-            <div class="container">
-                <p>Copyright Brighter Mornings - Gary will get you.</p>
-            </div>
+            <nav class="level">
+              <p class="level-item has-text-centered">
+                <a class="link is-info">About Us</a>
+              </p>
+              <p class="level-item has-text-centered">
+                <a class="link is-info">Donate</a>
+              </p>
+              <p class="level-item has-text-centered">
+                <img src="/static/images/LinkUpWchainbox.png" alt="" height="140px" width="180px">
+              </p>
+              <p class="level-item has-text-centered">
+                <a class="link is-info">Contact</a>
+              </p>
+              <p class="level-item has-text-centered">
+                <a class="link is-info">Report An Issue</a>
+              </p>
+            </nav>
+
+
+            <hr/>
+
         </div>
     </body>
     {# Set of blocks that can be used to display JavaScript files #}

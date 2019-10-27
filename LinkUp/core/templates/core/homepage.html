@@ -3,47 +3,24 @@
 {% block nav-style %} {% endblock nav-style %}
 
 {% block content %}
-
-    {# Banner Section #}
-    <div class="mkt-s1">
-        <div class="mkt-s1-body container ">
-            <div class="row">
-                <h1 class="col-md-8">Make Your Meeting Today!</h1>
+    <section class="hero is-medium is-$hsl(192, 100%, 96%); is-bold">
+        <div class="hero-body ">
+            <div class="container">
+                <div style="text-align: center;">
+                    <img src="static/images/LinkUpLogoTransBack.png" width="700" height="800"/>
+                </div>
+                <div style="text-align: center;">
+                    <div class="buttons is-inline">
+                            <a class="button is-info">
+                                <strong>Sign up</strong>
+                            </a>
+                            <a class="button is-light">
+                                Log in
+                            </a>
+                    </div>
+                </div>
             </div>
-            <div class="row">
-                <p class="col-md-8">Find the perfect time to meet! </p>
-            </div>
-            <div class="row">
-                {# First Signup Link #}
-                <a href=""
-                   class="sign-up btn btn-success">Register Now!
-                </a>
-            </div>
-        </div>
-    </div>
-
-    {# Main Section #}
-    <div class="mkt-s2 container">
-        <h2 class="mkt-s2-h">Time Savings</h2>
-        <div class="mkt-s2-body">
-            <div class="col-md-4 mkt-vp">
-                <img class="" src="/static/images/clock.png"/>
-                <h5>Save Time</h5>
-                <p>By not using the archaic when2meet, you can now successfully plan your meeting</p>
-            </div>
-            <div class="col-md-4 mkt-vp">
-                <img class="" src="static/images/lightbulb.png"/>
-                <h5>Stay Current</h5>
-                <p>With Real Time updates always know peoples schedules</p>
-            </div>
-            <div class="col-md-4 mkt-vp">
-                <img class="" src="{{ STATIC_URL }}images/dollar.png"/>
-                <h5>Google Intergration</h5>
-                <p>Because google owns eveything anyway...........so just give them your schedule too!</p>
-            </div>
-        </div>
-        {# Second Signup Link #}
-        <a href="" class=" sgn-btm ">Register Now!</a>
-    </div>
+          </div>
+    </section>
 
 {% endblock content %}
