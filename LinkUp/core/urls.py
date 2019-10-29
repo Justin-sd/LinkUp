@@ -16,8 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from . import views
+from django.views.generic import TemplateView
 
 urlpatterns = [
     path('', views.home),
-    path('event_page/<str:event_id>', views.event_page)
+    path('event_page/<str:event_id>', views.event_page),
+    path('login_page/', TemplateView.as_view(template_name="core/login_page.html")),
 ]

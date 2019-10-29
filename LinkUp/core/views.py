@@ -19,3 +19,7 @@ def event_page(request, event_id):
 
 	context = {"event_title": event_title, "event_description": event_description}
 	return render(request, "core/event_page.html", context)
+
+
+def login_page(request):
+	return render(request, "core/login_page.html", {})
