@@ -21,19 +21,20 @@ def event_page(request, event_id):
 	return render(request, "core/event_page.html", context)
 
 
-def my_events(request, user_name):
-	all_events = Event.objects.all()
-	number_of_events = Event.objects.count()
+def my_events(request):
+	user = request.user
 
-	if number_of_events < 1:
-		return render(request, "core/error_page", {})
+	user_name = user.first_name
+	users_events = Event.objects.filter(owner=user)
+	user_event_count = users_events.count()
 
-	context = {"all_events": all_events, "user_name": user_name, "number_of_events": number_of_events}
+	context = {"users_events": users_events, "user_name": user_name, "user_event_count": user_event_count}
 	return render(request, "core/my_events.html", context)
 
 
 def attendees_page(request):
 	return render(request, "core/attendees.html", {})
+
 
 def login_page(request):
 	return render(request, "core/login_page.html", {})
