@@ -27,9 +27,13 @@
                 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
                 <link rel="stylesheet" href="httpma@0.8.0/css/bulma.min.css">
                 <link rel="stylesheet" href="static/css/bulmaHelper.css">
+                <link rel="stylesheet" href="static/css/animatedModal.css">
+                <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.2.0/animate.min.css">
             {% endblock head_css_site %}
-            {% block head_css_section %}{% endblock head_css_section %}
-            {% block head_css_page %}{% endblock head_css_page %}
+            {% block head_css_section %}<link rel="stylesheet" href="static/css/animatedModal.css">
+                <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.2.0/animate.min.css">{% endblock head_css_section %}
+            {% block head_css_page %}<link rel="stylesheet" href="static/css/animatedModal.css">
+                <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.2.0/animate.min.css">{% endblock head_css_page %}
 		{% endblock head_css %}
 	</head>
 	<body>
@@ -65,14 +69,32 @@
 					<div class="navbar-end">
 						<div class="navbar-item">
 							<div class="buttons">
-								<a class="button is-info">
-								<strong>Sign up</strong>
-								</a>
-								<a class="button is-light"> Log in </a>
-							</div>
-						</div>
-					</div>
-				</div>
+								 <a class="button is-info" id="signUpNav" href="#signUpNavModal">
+                                     <strong>Sign Up</strong>
+                                 </a>
+                                <a class="button" id="loginNav" href="#loginNavModal">
+                                    <strong>Login</strong>
+                                </a>
+                                <div id="signUpNavModal">
+                                    <div class="close-signUpNavModal has-text-centered"><span class="fa fa-close"></span>X</div>
+                                    <div class="modal-content">
+                                        <div class="thum">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="loginNavModal">
+                                    <div class="close-loginNavModal has-text-centered"><span class="fa fa-close"></span>X</div>
+                                    <div class="modal-content">
+                                        <div class="thum">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 			</nav>
 		</header>
 		{# The Document Body #}
@@ -106,11 +128,20 @@
 	{# Set of blocks that can be used to display JavaScript files #}
 	{% block footer_javascript %}
 	    {% block footer_javascript_site %}
-            <script src="static/js/jquery.min.js"></script>
-            <script src="static/js/bootstrap.min.js"></script>
+            <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script> <script src="static/js/bootstrap.min.js"></script>
             <script src="static/js/app.js"></script>
+            <script src="static/js/animatedModal.min.js"></script>
+            <script src="static/js/animatedModal.js"></script>
 	    {% endblock footer_javascript_site %}
-	    {% block footer_javascript_section %}{% endblock footer_javascript_section %}
-	    {% block footer_javascript_page %}{% endblock footer_javascript_page %}
+	    {% block footer_javascript_section %}
+            <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"/>
+            <script src="static/js/animatedModal.min.js"></script>
+            <script src="static/js/animatedModal.js"></script>
+        {% endblock footer_javascript_section %}
+	    {% block footer_javascript_page %}
+            <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"/>
+            <script src="static/js/animatedModal.min.js"></script>
+            <script src="static/js/animatedModal.js"></script>
+        {% endblock footer_javascript_page %}
 	{% endblock footer_javascript %}
 </html>
