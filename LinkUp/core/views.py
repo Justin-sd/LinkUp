@@ -19,3 +19,18 @@ def event_page(request, event_id):
 
 	context = {"event_title": event_title, "event_description": event_description}
 	return render(request, "core/event_page.html", context)
+
+
+def my_events(request, user_name):
+	all_events = Event.objects.all()
+	number_of_events = Event.objects.count()
+
+	if number_of_events < 1:
+		return render(request, "core/error_page", {})
+
+	context = {"all_events": all_events, "user_name": user_name, "number_of_events": number_of_events}
+	return render(request, "core/my_events.html", context)
+
+
+def attendees_page(request):
+	return render(request, "core/attendees.html", {})

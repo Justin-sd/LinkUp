@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+{% block title %}LinkUp {% endblock title %} //modifying the title
+{% block nav-style %} {% endblock nav-style %}
+
+{% block content %}
+    <div class="section">
+        <div class="columns">
+            <aside class="column is-2">
+                <nav class="menu">
+                    <p class="menu-label">
+                        General
+                    </p>
+                    <ul class="menu-list">
+                        <li><a href="/event_dashboard"> Event Dashboard </a></li>
+                        <li><a class="is-active" href="/attendees"> Attendees </a> </li>
+                    </ul>
+                    <!-- TODO: Administration should only be available to admins of meetings -->
+                    <p class="menu-label">
+                      Administration
+                    </p>
+                    <ul class="menu-list">
+                        <li><a> Meeting Settings </a></li>
+                        <li>
+                            <a class="">Manage Your Team</a>
+                            <ul>
+                              <li><a>Members</a></li>
+                              <li><a>Invite a member</a></li>
+                            </ul>
+                      </li>
+                    </ul>
+                    <p class="menu-label">
+                        Availability
+                    </p>
+                    <ul class="menu-list">
+                        <li><a>Available Times</a></li>
+                        <li><a>Must Have Members</a></li>
+                        <li><a>Adjust Your Schedule</a></li>
+                    </ul>
+                </nav>
+            </aside>
+
+        <main class="column">
+
+            <div class="columns">
+                <div class="column is-two-thirds">
+                    <div class="panel-heading has-background-info"> Attendees </div>
+                    <div class="panel has-background-white">
+                        <div class="is-relative" style="position:relative; left:6%;">
+                            <br>
+                            <h3>Reuben Patrick</h3>
+                            <h3>Harold Velasquez</h3>
+                            <h3>Saqib Payne</h3>
+                            <h3>Blanche Monroe</h3>
+                            <h3>Alivia Bray</h3>
+                            <h3>Trevor Peralta</h3>
+                            <h3>Princess Horne</h3>
+                            <h3>Jaydon Frame</h3>
+                            <h3>Matt Chung</h3>
+                            <h3>Amrita Cordova</h3>
+                            <br>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="column is-one-third">
+                    <div class="panel-heading has-background-info">Invite Common Attendees</div>
+                        <div class="panel has-background-white">
+                            <div class="is-relative" style="position:relative; left:6%;">
+                                <!-- TODO: Need to add plus buttons that send email (or notification) -->
+                                <br>
+                                <h3>Alister Whitehead</h3>
+                                <h3>Shirley Harrington</h3>
+                                <h3>Tanvir Cortes</h3>
+                                <h3>Anoushka Mccarty</h3>
+                                <br>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="column is-centered">
+                <figure class="image container is-256x256">
+                    <img src="/static/images/attendees-icon.png">
+                </figure>
+            </div>
+            <div class="columns is-multiline">
+                <div class="column">
+                    <div class="heading">Responses</div>
+                    <hr/>
+                    <div class="title is-size-1 has-text-centered">6/10</div>
+                    <div class="level">
+                        <div class="level-item  is-pulled-right">
+                            <div class=" is-pulled-right">
+                                <div class="heading">Yet To Respond</div>
+                                <div class="title is-5 is-pulled-right">Tony, Beth, Abel</div>
+                            </div>
+                        </div>
+                        <div class="level-item">
+                            <div class="">
+                                <a class="button is-info is-small">Send Reminders</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="columns is-multiline">
+                    <div class="column">
+                        <div class="panel">
+                            <p class="panel-heading">
+                                Combined Schedule
+                            </p>
+                            <div class="panel-block">
+                                <figure class="image">
+                                    <img src="https://placehold.it/1920x1080"/>
+                                </figure>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="columns is-multiline">
+                    <div class="column is-6">
+                        <div class="panel">
+                            <p class="panel-heading">
+                                Maybe a Breakdown Feature
+                            </p>
+                            <div class="panel-block">
+                                <figure class="image is-16x9">
+                                    <img src="https://placehold.it/1280x720"/>
+                                </figure>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column is-6">
+                        <div class="panel">
+                            <p class="panel-heading">
+                                Bar Graph of Top Available times
+                            </p>
+                            <div class="panel-block">
+                                <figure class="image is-16x9">
+                                    <img src="https://placehold.it/1280x720"/>
+                                </figure>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+{% endblock content %}

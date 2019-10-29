@@ -1,27 +1,27 @@
 {# HTML5 declaration #}
 <!DOCTYPE html>
 <html class="has-navbar-fixed-top">
-    {# Make modifiable head elements #}
-    <head>
-        <title>{% block title %} Home {% endblock title %} </title>
-        {% block head_favicon %}
-            <link rel="icon" type="image/png"
-                  href="{{ STATIC_URL }}images/favicon.ico">
-        {% endblock head_favicon %}
-        {% block head_meta %}
+	{# Make modifiable head elements #}
+	<head>
+		<title>{% block title %} Home {% endblock title %} </title>
+		{% block head_favicon %}
+		<link rel="icon" type="image/png"
+			href="{{ STATIC_URL }}images/favicon.ico">
+		{% endblock head_favicon %}
+		{% block head_meta %}
             {% block head_meta_charset %}
-                <meta http-equiv="Content-Type"
-                      content="text/html; charset=utf-8" />
+            <meta http-equiv="Content-Type"
+                content="text/html; charset=utf-8" />
             {% endblock head_meta_charset %}
             {% block head_meta_contentlanguage %}
-                <meta http-equiv="Content-Language" value="en-US" />
+            <meta http-equiv="Content-Language" value="en-US" />
             {% endblock head_meta_contentlanguage %}
             {% block head_meta_viewport %}
-                <meta name="viewport"
-                      content="width=device-width, initial-scale=1.0">
+            <meta name="viewport"
+                content="width=device-width, initial-scale=1.0">
             {% endblock head_meta_viewport %}
-        {% endblock head_meta %}
-        {% block head_css %}
+		{% endblock head_meta %}
+		{% block head_css %}
             {% block head_css_site %}
                 <link rel="stylesheet" href="https://cdn.jsdelivr.net/combine/npm/bulma@0.8.0/css/bulma.min.css,npm/bulma@0.8.0/css/bulma.min.css">
                 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
@@ -30,92 +30,87 @@
             {% endblock head_css_site %}
             {% block head_css_section %}{% endblock head_css_section %}
             {% block head_css_page %}{% endblock head_css_page %}
-        {% endblock head_css %}
-    </head>
-    <body>
-        {# Navigation Menu #}
-        <header>
-            {% block nav-style %} {% endblock %}
-            <nav class="navbar is-fixed-top is-light" role="navigation" aria-label="main navigation">
-                <div class="navbar-brand">
-                    <a class="" href="/">
-                        <img src="/static/images/LinkUpWchainbox.png" height="140px" width="180px">
-                    </a>
-
-                    <a role="button" class="navbar-burger burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
-                      <span aria-hidden="true"></span>
-                      <span aria-hidden="true"></span>
-                      <span aria-hidden="true"></span>
-                    </a>
-                </div>
-                <div id="navbar" class="navbar-menu">
-                    <div class="navbar-start">
-                        <a class="navbar-item" href="/"> Home </a>
-                        <a class="navbar-item" href="/my_events"> My Events </a>
-                        <div class="navbar-item has-dropdown is-hoverable">
-                            <a class="navbar-link"> More </a>
-                            <div class="navbar-dropdown">
-                                <a class="navbar-item"> About </a>
-                                <a class="navbar-item"> My Account </a>
-                                <a class="navbar-item"> Support </a>
-                                <hr class="navbar-divider">
-                                <a class="navbar-item"> Report an issue </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="navbar-end">
-                        <div class="navbar-item">
-                            <div class="buttons">
-                                <a class="button is-info">
-                                    <strong>Sign up</strong>
-                                </a>
-
-                                <a class="button is-light"> Log in </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-        </header>
-        {# The Document Body #}
-        <div id="site-wrapper">
-            {% block content %}
-                if you see this, something is wrong!
-            {% endblock content %}
-        </div>
-        {# The Footer #}
-        <div class="footer">
-            <nav class="level">
-              <p class="level-item has-text-centered">
-                <a class="link is-info">About Us</a>
-              </p>
-              <p class="level-item has-text-centered">
-                <a class="link is-info">Donate</a>
-              </p>
-              <p class="level-item has-text-centered">
-                <img src="/static/images/LinkUpWchainbox.png" alt="" height="140px" width="180px">
-              </p>
-              <p class="level-item has-text-centered">
-                <a class="link is-info">Contact</a>
-              </p>
-              <p class="level-item has-text-centered">
-                <a class="link is-info">Report An Issue</a>
-              </p>
-            </nav>
-
-
-            <hr/>
-
-        </div>
-    </body>
-    {# Set of blocks that can be used to display JavaScript files #}
-    {% block footer_javascript %}
-        {% block footer_javascript_site %}
+		{% endblock head_css %}
+	</head>
+	<body>
+		{# Navigation Menu #}
+		<header>
+			{% block nav-style %} {% endblock %}
+			<nav class="navbar is-fixed-top is-light" role="navigation" aria-label="main navigation">
+				<div class="navbar-brand">
+					<a class="" href="/">
+					<img src="/static/images/LinkUpWchainbox.png" height="140px" width="180px">
+					</a>
+					<a role="button" class="navbar-burger burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+					<span aria-hidden="true"></span>
+					<span aria-hidden="true"></span>
+					<span aria-hidden="true"></span>
+					</a>
+				</div>
+				<div id="navbar" class="navbar-menu">
+					<div class="navbar-start">
+						<a class="navbar-item" href="/"> Home </a>
+						<a class="navbar-item" href="/my_events/{{ user_name }}"> My Events </a>
+						<div class="navbar-item has-dropdown is-hoverable">
+							<a class="navbar-link"> More </a>
+							<div class="navbar-dropdown">
+								<a class="navbar-item"> About </a>
+								<a class="navbar-item" href="/my_account"> My Account </a>
+								<a class="navbar-item"> Support </a>
+								<hr class="navbar-divider">
+								<a class="navbar-item"> Report an issue </a>
+							</div>
+						</div>
+					</div>
+					<div class="navbar-end">
+						<div class="navbar-item">
+							<div class="buttons">
+								<a class="button is-info">
+								<strong>Sign up</strong>
+								</a>
+								<a class="button is-light"> Log in </a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</nav>
+		</header>
+		{# The Document Body #}
+		<div id="site-wrapper">
+			{% block content %}
+			if you see this, something is wrong!
+			{% endblock content %}
+		</div>
+		{# The Footer #}
+		<div class="footer">
+			<nav class="level">
+				<p class="level-item has-text-centered">
+					<a class="link is-info">About Us</a>
+				</p>
+				<p class="level-item has-text-centered">
+					<a class="link is-info">Donate</a>
+				</p>
+				<p class="level-item has-text-centered">
+					<img src="/static/images/LinkUpWchainbox.png" alt="" height="140px" width="180px">
+				</p>
+				<p class="level-item has-text-centered">
+					<a class="link is-info">Contact</a>
+				</p>
+				<p class="level-item has-text-centered">
+					<a class="link is-info">Report An Issue</a>
+				</p>
+			</nav>
+			<hr/>
+		</div>
+	</body>
+	{# Set of blocks that can be used to display JavaScript files #}
+	{% block footer_javascript %}
+	    {% block footer_javascript_site %}
             <script src="static/js/jquery.min.js"></script>
             <script src="static/js/bootstrap.min.js"></script>
             <script src="static/js/app.js"></script>
-        {% endblock footer_javascript_site %}
-        {% block footer_javascript_section %}{% endblock footer_javascript_section %}
-        {% block footer_javascript_page %}{% endblock footer_javascript_page %}
-    {% endblock footer_javascript %}
+	    {% endblock footer_javascript_site %}
+	    {% block footer_javascript_section %}{% endblock footer_javascript_section %}
+	    {% block footer_javascript_page %}{% endblock footer_javascript_page %}
+	{% endblock footer_javascript %}
 </html>
