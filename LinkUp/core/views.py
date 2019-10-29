@@ -34,3 +34,6 @@ def my_events(request, user_name):
 
 def attendees_page(request):
 	return render(request, "core/attendees.html", {})
+
+def login_page(request):
+	return render(request, "core/login_page.html", {})
