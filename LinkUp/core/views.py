@@ -24,11 +24,11 @@ def event_page(request, event_id):
 def my_events(request):
 	user = request.user
 
-	user_name = user.first_name
-	users_events = Event.objects.filter(owner=user)
-	user_event_count = users_events.count()
+	user_name = user.username
+	user_events = Event.objects.filter(members=user)
+	user_event_count = user_events.count()
 
-	context = {"users_events": users_events, "user_name": user_name, "user_event_count": user_event_count}
+	context = {"user_events": user_events, "user_name": user_name, "user_event_count": user_event_count}
 	return render(request, "core/my_events.html", context)
 
 
