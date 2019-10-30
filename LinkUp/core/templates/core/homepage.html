@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
-{% block title %}LinkUp {% endblock title %} //modifying the title
+{% load socialaccount %}
+{% providers_media_js %}
+{% block title %}LinkUp - Make Your Meeting{% endblock title %} //modifying the title
 {% block nav-style %} {% endblock nav-style %}
-
 {% block content %}
-    <section class="hero is-medium is-$hsl(192, 100%, 96%); is-bold">
+    <section class="hero is-medium is-bold">
         <div class="hero-body ">
             <div class="container">
                 <div style="text-align: center;">
@@ -14,17 +15,32 @@
 
                     {% else %}
                     <div class="buttons is-inline">
-                            <a class="button is-info">
-                                <strong>Sign Up</strong>
-                            </a>
-                            <a class="button is-light" href="/login_page/">
-                                Log in
-                            </a>
+                        <a class="button is-info" id="signUp" href="#signUpModal">
+                        <strong>Sign Up Now!</strong>
+                        </a>
+                        <a class="button is-light" id="login" href="#loginModal">
+                        <strong>Login</strong>
+                        </a>
+                        <div id="signUpModal">
+                            <div class="close-signUpModal"><span class="fa fa-close"></span>X</div>
+                            <div class="modal-content">
+                                <div class="thum">
+                                    <a href="{% provider_login_url "google" %}">Log in with Google</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="loginModal">
+                            <div class="close-loginModal"><span class="fa fa-close"></span>X</div>
+                            <div class="modal-content">
+                                <div class="thum">
+                                    <a href="{% provider_login_url "google" %}">Log in with Google</a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     {% endif %}
                 </div>
             </div>
-          </div>
+        </div>
     </section>
-
 {% endblock content %}
