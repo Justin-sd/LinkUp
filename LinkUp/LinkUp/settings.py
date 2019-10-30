@@ -39,8 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'core.apps.CoreConfig',
-    'social_django',
-
 
     #used for google auth
     'allauth',
@@ -135,11 +133,13 @@ STATICFILES_DIRS = (
 
 #Django all auth settings
 AUTHENTICATION_BACKENDS = {
-    
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
-
 }
+
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
 
 SITE_ID = 1
 
