@@ -21,6 +21,7 @@ urlpatterns = [
     path('', views.home),
     path('event_page/<str:event_id>', views.event_page),
     path('my_events/<str:user_name>', views.my_events),
-    path('attendees/', views.attendees_page)
+    path('attendees/', views.attendees_page),
     path('login_page/', TemplateView.as_view(template_name="core/login_page.html")),
+    path('/accounts/logout', TemplateView.as_view()),
 ]

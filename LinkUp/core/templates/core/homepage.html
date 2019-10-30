@@ -10,14 +10,18 @@
                     <img src="static/images/LinkUpLogoTransBack.png" width="700" height="800"/>
                 </div>
                 <div style="text-align: center;">
+                    {% if user.is_authenticated %}
+
+                    {% else %}
                     <div class="buttons is-inline">
                             <a class="button is-info">
-                                <strong>Sign up</strong>
+                                <strong>Sign Up</strong>
                             </a>
-                            <a class="button is-light">
+                            <a class="button is-light" href="/login_page/">
                                 Log in
                             </a>
                     </div>
+                    {% endif %}
                 </div>
             </div>
           </div>
