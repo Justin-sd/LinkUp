@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from .models import Event
+from .apis import calendar_api
 from django.contrib.auth.models import User
 
 
@@ -31,6 +32,13 @@ def my_events(request):
 
 	context = {"user_events": user_events, "user_name": user_name, "user_event_count": user_event_count}
 	return render(request, "core/my_events.html", context)
+
+
+def my_availability(request):
+	events = calendar_api.get_ten_events()
+
+	context = {"calendar_events": events}
+	return render(request, "core/my_availability.html", context)
 
 
 def attendees_page(request):
