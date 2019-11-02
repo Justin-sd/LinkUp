@@ -1,26 +1,72 @@
 {% extends 'base.html' %}
-{% block title %}LinkUp {% endblock title %} //modifying the title
+{% load socialaccount %}
+{% providers_media_js %}
+{% block title %}LinkUp - Make Your Meeting{% endblock title %} //modifying the title
 {% block nav-style %} {% endblock nav-style %}
-
 {% block content %}
-    <section class="hero is-medium is-$hsl(192, 100%, 96%); is-bold">
+    <section class="hero is-medium is-bold">
         <div class="hero-body ">
             <div class="container">
                 <div style="text-align: center;">
                     <img src="static/images/LinkUpLogoTransBack.png" width="700" height="800"/>
                 </div>
                 <div style="text-align: center;">
+                    {% if user.is_authenticated %}
+
+                    {% else %}
                     <div class="buttons is-inline">
-                            <a class="button is-info">
-                                <strong>Sign up</strong>
-                            </a>
-                            <a class="button is-light">
-                                Log in
-                            </a>
+                        <a class="button is-info" id="signUp" href="#signUpModal">
+                        <strong>Sign Up Now!</strong>
+                        </a>
+                        <a class="button is-light" id="login" href="#loginModal">
+                        <strong>Login</strong>
+                        </a>
+                        <div id="signUpModal">
+                            <div class="close-signUpModal has-text-centered"><span class="fa fa-close"></span>X</div>
+                            <div class="modal-body">
+                                <center><form>
+                                      <div class="form-group">
+                                        <label for="exampleInputEmail1" style="font-size:18px; padding-right:5px;">Email address:</label>
+                                        <input type="email" class="form-control" style="font-size:18px;" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+                                      </div><br>
+                                      <div class="form-group">
+                                        <label for="exampleInputPassword1" style="font-size:18px; padding-right:35px;">Password:</label>
+                                        <input type="password" class="form-control" style="font-size:18px;" id="exampleInputPassword1" placeholder="Password">
+                                      </div><br>
+                                      <button type="submit" class="btn btn-primary" style="font-size:18px;">Sign Up</button>
+                                </form></center>
+                            </div>
+
+                            <div class="modal-content">
+                                <div class="thum">
+                                    <a style="font-size:18px;" href="{% provider_login_url "google" %}">Sign up with Google</a>
+                                </div>
+					    </div>
+                        </div>
+                        <div id="loginModal">
+                            <div class="close-loginModal has-text-centered"><span class="fa fa-close"></span>X</div>
+                            <center><form>
+                                       <div class="form-group">
+                                        <label for="exampleInputEmail2" style="font-size:18px; padding-right:5px;">Email address:</label>
+                                        <input type="email" class="form-control" style="font-size:18px;" id="exampleInputEmail2" aria-describedby="emailHelp" placeholder="Enter email">
+                                      </div><br>
+                                      <div class="form-group">
+                                        <label for="exampleInputPassword2" style="font-size:18px; padding-right:35px;">Password:</label>
+                                        <input type="password" class="form-control" style="font-size:18px;" id="exampleInputPassword2" placeholder="Password">
+                                      </div><br>
+                                      <button type="submit" class="btn btn-primary" style="font-size:18px;">Log In</button>
+                                </form></center>
+
+                            <div class="modal-content">
+                                <div class="thum">
+                                    <a style="font-size:18px;" href="{% provider_login_url "google" %}">Log in with Google</a>
+                                </div>
+					</div>
+                        </div>
                     </div>
+                    {% endif %}
                 </div>
             </div>
-          </div>
+        </div>
     </section>
-
 {% endblock content %}
