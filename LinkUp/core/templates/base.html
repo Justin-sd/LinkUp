@@ -80,6 +80,7 @@
 								<a class="button" id="loginNav" href="#loginNavModal">
 								<strong>Login</strong>
 								</a>
+
 								{% endif %}
 							</div>
 						</div>
@@ -98,17 +99,43 @@
 			<nav class="level">
 				<div id="signUpNavModal">
 					<div class="close-signUpNavModal has-text-centered"><span class="fa fa-close"></span>X</div>
+					<div class="modal-body">
+						<center><form>
+							  <div class="form-group">
+								<label for="exampleInputEmail1" style="font-size:18px; padding-right:5px;">Email address:</label>
+								<input type="email" class="form-control" style="font-size:18px;" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+							  </div><br>
+							  <div class="form-group">
+								<label for="exampleInputPassword1" style="font-size:18px; padding-right:35px;">Password:</label>
+								<input type="password" class="form-control" style="font-size:18px;" id="exampleInputPassword1" placeholder="Password">
+							  </div><br>
+							  <button type="submit" class="btn btn-primary" style="font-size:18px;">Sign Up</button>
+						</form></center>
+					</div>
+
 					<div class="modal-content">
 						<div class="thum">
-							<a href="{% provider_login_url "google" %}">Log in with Google</a>
+							<a style="font-size:18px;" href="{% provider_login_url "google" %}">Sign up with Google</a>
 						</div>
 					</div>
 				</div>
 				<div id="loginNavModal">
 					<div class="close-loginNavModal has-text-centered"><span class="fa fa-close"></span>X</div>
+					<center><form>
+							   <div class="form-group">
+								<label for="exampleInputEmail2" style="font-size:18px; padding-right:5px;">Email address:</label>
+								<input type="email" class="form-control" style="font-size:18px;" id="exampleInputEmail2" aria-describedby="emailHelp" placeholder="Enter email">
+							  </div><br>
+							  <div class="form-group">
+								<label for="exampleInputPassword2" style="font-size:18px; padding-right:35px;">Password:</label>
+								<input type="password" class="form-control" style="font-size:18px;" id="exampleInputPassword2" placeholder="Password">
+							  </div><br>
+							  <button type="submit" class="btn btn-primary" style="font-size:18px;">Log In</button>
+					</form></center>
+
 					<div class="modal-content">
 						<div class="thum">
-							<a href="{% provider_login_url "google" %}">Log in with Google</a>
+							<a style="font-size:18px;" href="{% provider_login_url "google" %}">Log in with Google</a>
 						</div>
 					</div>
 				</div>
