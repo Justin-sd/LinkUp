@@ -11,7 +11,7 @@
 			</p>
 			<ul class="menu-list">
 				<li>
-					<a class="is-active" href="/my_events/{{ user_name }}"> My Events </a>
+					<a class="is-active" href="/my_events/"> My Events </a>
 					<ul>
 						{% for event in user_events %}
 							<li><a href="/event_page/{{ event.event_id }}">{{ event.title }}</a></li>
