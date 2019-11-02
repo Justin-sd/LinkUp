@@ -1,10 +1,39 @@
-<html>
-<head>
-</head>
-<body>
+{% extends 'base.html' %}
+{% load socialaccount %}
+{% providers_media_js %}
+{% block title %}LinkUp - Make Your Meeting{% endblock title %} //modifying the title
+{% block nav-style %} {% endblock nav-style %}
+{% block content %}
 <center>
-	<h1> Under Construction </h1>
-<h2>About US</h2>
+    <h5>About Us</h5>
+
+<div class="row">
+  <div class="column">
+    <img src="static/images/photo1.jpg"  style="width:25%">
+  </div>
+</div>
 </center>
-</body>
-</html>
+
+
+
+<div class="section">
+    <center>
+        <ul>
+            <li>  <a href="https://www.google.com">Kevin Rafferty - Project Manager</a>  </li>
+            <li>  <a>Eric Luong - Software Architect</a>  </li>
+            <li>    <a>Kyle Yokotake - Algorithm Specialist</a> </li>
+    <li>          <a>Emelie Ashdown - Senior System Analyst</a> </li>
+     <li>         <a>Ardel Alegre - Business Analyst</a>  </li>
+     <li>         <a>Aramis Conde - User Interface Specialist</a>   </li>
+      <li>        <a>Cole Tynan-Wood - User Interface Specialist</a>  </li>
+         <li>     <a>Justin Gross - Software Development Lead</a>  </li>
+          <li>    <a>Jason Avalos - Database Specialist</a>   </li>
+         <li>  <a>Atul Antil - Quality Assurance Lead</a>    </li>
+        </ul>
+    </center>
+</div>
+
+
+
+
+{% endblock content %}

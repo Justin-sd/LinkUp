@@ -25,3 +25,4 @@ class Event(models.Model):
 	potentialEndDate = models.DateTimeField()
 	finalStartDate = models.DateTimeField(blank=True, null=True)
 	finalEndDate = models.DateTimeField(blank=True, null=True)
+
