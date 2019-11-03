@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% for event in calendar_events %}
+    <h2>{{event.summary}}</h2>
+    <h3>{{event.start}}</h3>
+{% endfor %}
+
+{% endblock %}

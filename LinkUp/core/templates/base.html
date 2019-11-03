@@ -4,6 +4,30 @@
 <!DOCTYPE html>
 <html class="has-navbar-fixed-top">
 	{# Make modifiable head elements #}
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+     // Get all "navbar-burger" elements
+    const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+
+     // Check if there are any navbar burgers
+    if ($navbarBurgers.length > 0) {
+        // Add a click event on each of them
+        $navbarBurgers.forEach( el => {
+            el.addEventListener('click', () => {
+            // Get the target from the "data-target" attribute
+            const target = el.dataset.target;
+            const $target = document.getElementById(target);
+            // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+                el.classList.toggle('is-active');
+                $target.classList.toggle('is-active');
+            });
+        });
+    }
+        });
+    </script>
+
+
 	<head>
 		<title>{% block title %} Home {% endblock title %} </title>
 		{% block head_favicon %}
@@ -45,7 +69,7 @@
 					<a class="" href="/">
 					<img src="/static/images/LinkUpWchainbox.png" height="140px" width="180px">
 					</a>
-					<a role="button" class="navbar-burger burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+					<a role="button" class="navbar-burger burger" data-target="navbar" aria-label="menu" aria-expanded="false">
 					<span aria-hidden="true"></span>
 					<span aria-hidden="true"></span>
 					<span aria-hidden="true"></span>
@@ -54,15 +78,15 @@
 				<div id="navbar" class="navbar-menu">
 					<div class="navbar-start">
 						<a class="navbar-item" href="/"> Home </a>
-						<a class="navbar-item" href="/my_events/{{ user_name }}"> My Events </a>
+						<a class="navbar-item" href="/my_events/"> My Events </a>
 						<div class="navbar-item has-dropdown is-hoverable">
 							<a class="navbar-link"> More </a>
 							<div class="navbar-dropdown">
-								<a class="navbar-item"> About </a>
-								<a class="navbar-item" href="/my_account"> My Account </a>
-								<a class="navbar-item"> Support </a>
+								<a class="navbar-item" href="/about/"> About </a>
+								<a class="navbar-item" href="/my_account/"> My Account </a>
+								<a class="navbar-item" href="/support/"> Support </a>
 								<hr class="navbar-divider">
-								<a class="navbar-item"> Report an issue </a>
+								<a class="navbar-item" href="/reportanissue/"> Report an issue </a>
 							</div>
 						</div>
 					</div>
@@ -80,6 +104,7 @@
 								<a class="button" id="loginNav" href="#loginNavModal">
 								<strong>Login</strong>
 								</a>
+
 								{% endif %}
 							</div>
 						</div>
@@ -98,34 +123,60 @@
 			<nav class="level">
 				<div id="signUpNavModal">
 					<div class="close-signUpNavModal has-text-centered"><span class="fa fa-close"></span>X</div>
+					<div class="modal-body">
+						<center><form>
+							  <div class="form-group">
+								<label for="exampleInputEmail1" style="font-size:18px; padding-right:5px;">Email address:</label>
+								<input type="email" class="form-control" style="font-size:18px;" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+							  </div><br>
+							  <div class="form-group">
+								<label for="exampleInputPassword1" style="font-size:18px; padding-right:35px;">Password:</label>
+								<input type="password" class="form-control" style="font-size:18px;" id="exampleInputPassword1" placeholder="Password">
+							  </div><br>
+							  <button type="submit" class="btn btn-primary" style="font-size:18px;">Sign Up</button>
+						</form></center>
+					</div>
+
 					<div class="modal-content">
 						<div class="thum">
-							<a href="{% provider_login_url "google" %}">Log in with Google</a>
+							<a style="font-size:18px;" href="{% provider_login_url "google" %}">Sign up with Google</a>
 						</div>
 					</div>
 				</div>
 				<div id="loginNavModal">
 					<div class="close-loginNavModal has-text-centered"><span class="fa fa-close"></span>X</div>
+					<center><form>
+							   <div class="form-group">
+								<label for="exampleInputEmail2" style="font-size:18px; padding-right:5px;">Email address:</label>
+								<input type="email" class="form-control" style="font-size:18px;" id="exampleInputEmail2" aria-describedby="emailHelp" placeholder="Enter email">
+							  </div><br>
+							  <div class="form-group">
+								<label for="exampleInputPassword2" style="font-size:18px; padding-right:35px;">Password:</label>
+								<input type="password" class="form-control" style="font-size:18px;" id="exampleInputPassword2" placeholder="Password">
+							  </div><br>
+							  <button type="submit" class="btn btn-primary" style="font-size:18px;">Log In</button>
+					</form></center>
+
 					<div class="modal-content">
 						<div class="thum">
-							<a href="{% provider_login_url "google" %}">Log in with Google</a>
+							<a style="font-size:18px;" href="{% provider_login_url "google" %}">Log in with Google</a>
 						</div>
 					</div>
 				</div>
 				<p class="level-item has-text-centered">
-					<a class="link is-info">About Us</a>
+					<a class="link is-info" href="about">About Us</a>
 				</p>
 				<p class="level-item has-text-centered">
-					<a class="link is-info">Donate</a>
+					<a class="link is-info" href="donate">Donate</a>
 				</p>
 				<p class="level-item has-text-centered">
 					<img src="/static/images/LinkUpWchainbox.png" alt="" height="140px" width="180px">
 				</p>
 				<p class="level-item has-text-centered">
-					<a class="link is-info">Contact</a>
+					<a class="link is-info" href="contact">Contact</a>
 				</p>
 				<p class="level-item has-text-centered">
-					<a class="link is-info">Report An Issue</a>
+					<a class="link is-info" href="reportanissue">Report An Issue</a>
 				</p>
 			</nav>
 			<hr/>
