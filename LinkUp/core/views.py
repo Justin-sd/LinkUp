@@ -35,7 +35,7 @@ def my_events(request):
 
 
 def my_availability(request):
-	events = calendar_api.get_ten_events()
+	events = calendar_api.get_ten_events(request)
 
 	context = {"calendar_events": events}
 	return render(request, "core/my_availability.html", context)
@@ -48,17 +48,22 @@ def attendees_page(request):
 def login_page(request):
 	return render(request, "core/login_page.html", {})
 
+
 def contact(request):
 	return render(request, "core/contact.html", {})
+
 
 def donate(request):
 	return render(request, "core/donate.html", {})
 
+
 def report_an_issue(request):
 	return render(request, "core/reportanissue.html", {})
 
+
 def support(request):
 	return render(request, "core/support.html", {})
+
 
 def about(request):
 	return render(request, "core/about.html", {})
