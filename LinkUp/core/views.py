@@ -1,8 +1,6 @@
 from django.shortcuts import render
 from .models import Event
 from .apis import calendar_api
-from django.contrib.auth.models import User
-
 
 def home(request):
 	return render(request, "core/homepage.html", {})
@@ -67,5 +65,3 @@ def support(request):
 
 def about(request):
 	return render(request, "core/about.html", {})
-
-
