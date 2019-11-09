@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from .models import Event
 from .apis import calendar_api
+from django.utils import timezone
 
 def home(request):
 	return render(request, "core/homepage.html", {})
@@ -33,9 +34,9 @@ def my_events(request):
 
 
 def my_availability(request):
-	events = calendar_api.get_ten_events(request)
-
-	context = {"calendar_events": events}
+	busy_times = calendar_api.free_busy_three_months(request)
+	print(busy_times)
+	context = {"busy_times": busy_times}
 	return render(request, "core/my_availability.html", context)
 
 
