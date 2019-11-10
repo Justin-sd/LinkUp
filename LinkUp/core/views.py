@@ -2,6 +2,7 @@ from django.shortcuts import render
 from .models import Event
 from .apis import calendar_api
 
+
 def home(request):
 	return render(request, "core/homepage.html", {})
 
@@ -16,7 +17,6 @@ def event_page(request, event_id):
 
 	# User Object
 	user = request.user
-
 
 	if user in event.admins.all():
 		admin = True
@@ -39,7 +39,7 @@ def my_events(request):
 
 
 def my_availability(request):
-	busy_times = calendar_api.free_busy_three_months(request)
+	busy_times = calendar_api.free_busy_three_months(request.user)
 	context = {"busy_times": busy_times}
 	return render(request, "core/my_availability.html", context)
 
