@@ -3,95 +3,101 @@
 {% block nav-style %}{% endblock nav-style %} //sets the nav style
 
 {% block content %}
-
-     <section class="section has-background-light">
-        <div class="container">
-            <h3 class="is-size-2">{{event_title}}</h3>
-            <div class="columns">
-                <div class="column">
-                    <div class="notification is-info">
-                        <center>
-                            <p class="title"> Saturday 10pm-2am </p>
-                            <p>{{event_description}}</p>
-                            <a class="button is-info"> Edit Event </a>
-                        </center>
-                    </div>
-                </div>
-            </div>
-        </div>
-     </section>
-
-    <section class="section has-background-light">
-        <div class="container">
-            <h3 class="is-size-2">Admin Posts</h3>
-            <div class="columns">
-                <div class="column">
-                    <div class="notification is-info">
-                        <center>
-                            <p>Meeting starts at 9</p>
-                            <p>Please input your availability!</p>
-                            <p>Location: 123 Easy St, New York</p>
-                        </center>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="section has-background-light">
-        <div class="container">
-            <h3 class="is-size-2">Guest List</h3>
-            <div class="columns">
-                <div class="column">
-                    <div class="notification is-primary">
-                        <h4 class="title is-size-4">Can Make It!</h4>
-                        <center><p>Guest</p><p>Guest</p><p>Guest</p><p>Guest</p></center>
-                    </div>
-                </div>
-                <div class="column">
-                    <div class="notification is-danger">
-                        <h4 class="title is-size-4">Can't Make It!</h4>
-                        <center><p>Guest</p><p>Guest</p><p>Guest</p><p>Guest</p><center>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-     <section class="section has-background-light">
-        <div class="container">
-            <div class="columns is-multiline">
-                <div class="column">
-                    <div class="panel">
-                        <p class="panel-heading has-background-info">
-                            Combined Schedule
-                        </p>
-                        <div class="panel-block">
-                            <figure class="image">
-                                <img src="https://placehold.it/1920x1080"/>
-                            </figure>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-     </section>
-
-    <section class="section has-background-light">
-        <div class="container">
-            <h3 class="is-size-2"> Admin Controls </h3>
-            <div class="columns">
-                <div class="column">
+    {% if admin %}
+        <section class="section">
+            <div class="column">
+                <div class="box">
+                    <h2 class="">
+                        Admin Controls
+                    </h2>
+                    <hr/>
                     <div class="notification is-dark">
                         <center>
-                            <a class="button is-info"> Invite Guest </a>
-                            <a class="button is-info">  Add an Admin </a>
-                            <a class="button is-info"> Create SubEvent </a>
+                            <a class="button is-info">Invite Guest</a>
+                            <a class="button is-info">Add an Admin</a>
+                            <a class="button is-info">Create SubEvent</a>
                         </center>
+                    </div>
+                </div>
+            </div>
+        </section>
+    {% endif %}
+    <section class="section">
+        <div class="column">
+            <div class="box">
+                <h1 class="title">{{event.title}}</h1>
+                <hr/>
+                <div class="level">
+                    <div class="level-left">
+                        <a class="button is-info">Set Availability</a>
+                    </div>
+                </div>
+                <div class="level">
+                    <div class="level-item">
+
+                        <!--  THIS IS WHERE CALENDAR SHOULD GO -->
+
+                        <figure class="image is-16x9">
+                            <img src="https://placehold.it/1280x720"/>
+                        </figure>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="section">
+        <div class="columns is-multiline">
+            <div class="column">
+                <div class="panel">
+                    <p class="panel-heading has-background-info">
+                        Event Description
+                    </p>
+                    <div class="panel-block">
+                        {{ event.description }}
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
+    <section class="section">
+        <div class="columns">
+            <div class="column">
+                <div class="panel">
+                    <p class="panel-heading has-background-info">
+                        <a class="button is-pulled-right is-small">+ Add Members</a> <!--TODO-->
+                        Attendees
+                    </p>
+                    {% for members in event.members.all %}
+                    <div class="panel-block">
+                        {{ members }}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="columns is-multiline">
+                    <!--TODO-->
+            <div class="column is-6">
+                <div class="panel">
+                    <p class="panel-heading has-background-info">
+                        Available
+                    </p>
+                    <div class="panel-block">
+                        Unsure how to handle
+                    </div>
+                </div>
+            </div>
+            <div class="column is-6">
+                <div class="panel">
+                    <p class="panel-heading has-background-info">
+                        Not Available
+                    </p>
+                    <div class="panel-block">
+                        Unsure how to handle
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock content %}

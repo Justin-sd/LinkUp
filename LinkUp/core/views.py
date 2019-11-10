@@ -2,7 +2,6 @@ from django.shortcuts import render
 from .models import Event
 from .apis import calendar_api
 
-
 def home(request):
 	return render(request, "core/homepage.html", {})
 
@@ -12,12 +11,19 @@ def event_page(request, event_id):
 	if event_query_set.count() != 1:
 		return render(request, "core/error_page", {})
 
+	# Event Objects
 	event = event_query_set[0]
 
-	event_title = event.title
-	event_description = event.description
+	# User Object
+	user = request.user
 
-	context = {"event_title": event_title, "event_description": event_description}
+
+	if user in event.admins.all():
+		admin = True
+	else:
+		admin = False
+
+	context = {"event": event, "admin": admin, "user": user}
 	return render(request, "core/event_page.html", context)
 
 
