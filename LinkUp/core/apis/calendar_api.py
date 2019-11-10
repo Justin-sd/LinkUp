@@ -49,6 +49,20 @@ def get_ten_events(request):
     return events_result.get('items', [])
 
 
+def get_users_preferred_timezone(request):
+    """
+    Determines the users preferred timezone by checking what timezone they use for their primary google calendar
+    :return: A string representation of the timezone:
+
+        - "Etc/GMT+8"
+    """
+    service = get_service(request)
+
+    primary_calendar = service.calendarList().get(calendarId='primary').execute()
+
+    return primary_calendar['timeZone']
+
+
 def free_busy_three_months(request):
     """
     Finds all the periods in all the users google calendars in which the user is BUSY
@@ -73,5 +87,6 @@ def free_busy_three_months(request):
             dt_end = parse_datetime(times["end"])
             result.append({'start': dt_start, 'end': dt_end})
 
-    timezone.activate("Etc/GMT+8")
+    preferred_timezone = get_users_preferred_timezone(request)
+    timezone.activate(preferred_timezone)
     return result
