@@ -38,17 +38,6 @@ def get_service(request):
     return build('calendar', 'v3', credentials=creds)
 
 
-def get_ten_events(request):
-    service = get_service(request)
-    # Call the Calendar API
-    now = datetime.utcnow().isoformat() + 'Z'  # 'Z' indicates UTC time
-    print('Getting the upcoming 10 events')
-    events_result = service.events().list(calendarId='primary', timeMin=now,
-                                          maxResults=10, singleEvents=True,
-                                          orderBy='startTime').execute()
-    return events_result.get('items', [])
-
-
 def get_users_preferred_timezone(request):
     """
     Determines the users preferred timezone by checking what timezone they use for their primary google calendar
@@ -61,6 +50,20 @@ def get_users_preferred_timezone(request):
     primary_calendar = service.calendarList().get(calendarId='primary').execute()
 
     return primary_calendar['timeZone']
+
+
+def get_calendar_id_list(request):
+    """
+    :return: A list of all the users calendar IDs
+    """
+    service = get_service(request)
+
+    calendars = service.calendarList().list().execute()["items"]
+    # If the user has a ton of calendars, there may be a second page to the
+    # query in calendars["nextPageToken"]. People with this many calendars do
+    # not deserve a scheduling app, however.
+
+    return [calendar["id"] for calendar in calendars]
 
 
 def free_busy_three_months(request):
@@ -78,7 +81,17 @@ def free_busy_three_months(request):
     min_time = min_time.isoformat() + 'Z'  # 'Z' indicates UTC time
     max_time = max_time.isoformat() + 'Z'  # 'Z' indicates UTC time
 
-    body = {'items': [{'id': 'primary'}], "timeMin": min_time, "timeMax": max_time}
+    body = {"items": [], "timeMin": min_time, "timeMax": max_time}
+    # body also needs to specify which calendar ids, we want them all. This is the format it needs:
+    #   "items": [  # List of calendars and/or groups to query.
+    #         {
+    #             "id": "A String",  # The identifier of a calendar or a group.
+    #         },
+    #   ]
+    calendar_ids = get_calendar_id_list(request)
+    for calendar_id in calendar_ids:
+        body["items"].append({"id": calendar_id})
+
     free_busy_result_calendars = service.freebusy().query(body=body).execute()['calendars']
 
     for cal in free_busy_result_calendars.values():
