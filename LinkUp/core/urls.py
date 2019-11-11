@@ -34,4 +34,3 @@ urlpatterns = [
     path('donate/', views.donate),
     path('support/', views.support),
 ]
-
