@@ -60,13 +60,5 @@ def donate(request):
 	return render(request, "core/donate.html", {})
 
 
-def report_an_issue(request):
-	return render(request, "core/reportanissue.html", {})
-
-
-def support(request):
-	return render(request, "core/support.html", {})
-
-
 def about(request):
 	return render(request, "core/about.html", {})
