@@ -49,10 +49,12 @@
 		{% endblock head_meta %}
 		{% block head_css %}
 		{% block head_css_site %}
+		{% load static %}
+			<link rel="stylesheet" href="{% static 'css/animatedModal.css' %}">
+		{% load static %}
+			<link rel="stylesheet" href="{% static 'css/bulmaHelper.css' %}">
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/combine/npm/bulma@0.8.0/css/bulma.min.css,npm/bulma@0.8.0/css/bulma.min.css">
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
-            <link rel="stylesheet" href="/static/css/bulmaHelper.css">
-            <link rel="stylesheet" href="/static/css/animatedModal.css">
             <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.2.0/animate.min.css">
 		{% endblock head_css_site %}
 		{% block head_css_section %}{% endblock head_css_section %}
@@ -172,7 +174,7 @@
 									  </div>
 									  <div class="modal-body">
 										<div class="row">
-										  <div class="col-md-8 col-md-offset-2">
+										  <div class="col-md-8 center">
 										  <p id="loginerror"></p>
 											<form class="login-form" id="loginform">{% csrf_token %}
 											  <div class="form-group">
@@ -198,7 +200,7 @@
 										</div>
 										<hr/>
 										<div class="row">
-										  <div class="col-md-8 col-md-offset-2 text-center">
+										  <div class="col-md-8 text-center">
 											<a href="#" onclick="openForgotPassword()"><b>Forgot Password</b></a>&nbsp;<a
 											  href="#">or</a>&nbsp;<a href="#" onclick="openRegister()"><b>Register</b></a>
 										  </div>
