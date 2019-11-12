@@ -12,12 +12,18 @@ def event_page(request, event_id):
 	if event_query_set.count() != 1:
 		return render(request, "core/error_page", {})
 
+	# Event Objects
 	event = event_query_set[0]
 
-	event_title = event.title
-	event_description = event.description
+	# User Object
+	user = request.user
 
-	context = {"event_title": event_title, "event_description": event_description}
+	if user in event.admins.all():
+		admin = True
+	else:
+		admin = False
+
+	context = {"event": event, "admin": admin, "user": user}
 	return render(request, "core/event_page.html", context)
 
 
@@ -33,7 +39,7 @@ def my_events(request):
 
 
 def my_availability(request):
-	busy_times = calendar_api.free_busy_three_months(request)
+	busy_times = calendar_api.free_busy_three_months(request.user)
 	context = {"busy_times": busy_times}
 	return render(request, "core/my_availability.html", context)
 
@@ -52,14 +58,6 @@ def contact(request):
 
 def donate(request):
 	return render(request, "core/donate.html", {})
-
-
-def report_an_issue(request):
-	return render(request, "core/reportanissue.html", {})
-
-
-def support(request):
-	return render(request, "core/support.html", {})
 
 
 def about(request):

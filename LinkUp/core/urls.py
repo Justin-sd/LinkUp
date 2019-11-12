@@ -30,7 +30,5 @@ urlpatterns = [
     path('my_availability/', views.my_availability),
     path('about/', views.about),
     path('contact/', views.contact),
-    path('reportanissue/', views.report_an_issue),
     path('donate/', views.donate),
-    path('support/', views.support),
 ]

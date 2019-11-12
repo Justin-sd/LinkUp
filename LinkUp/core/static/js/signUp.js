@@ -1,4 +1,3 @@
-
 $(document).ready(function() {
 
   //signUpNav
@@ -100,7 +99,4 @@ $(document).ready(function() {
       $(".thumb").hide();
     }
   });
-
-
-
 });// end document ready
