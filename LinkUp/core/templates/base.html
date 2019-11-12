@@ -252,10 +252,11 @@
 	{% block footer_javascript %}
 	{% block footer_javascript_site %}
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script> <script src="static/js/bootstrap.min.js"></script>
-        <script src="static/js/app.js"></script>
-        <script src="static/js/animatedModal.min.js"></script>
-        <script src="static/js/animatedModal.js"></script>
-        <script src="static/js/signUp.js"></script>
+	{% load static %}
+        <script src="{% static 'js/app.js' %}"></script>
+        <script src="{% static 'js/animatedModal.min.js' %}"></script>
+        <script src="{% static 'js/animatedModal.js' %}"></script>
+        <script src="{% static 'js/signUp.js' %}"></script>
 	{% endblock footer_javascript_site %}
 	{% block footer_javascript_section %}
 	{% endblock footer_javascript_section %}
