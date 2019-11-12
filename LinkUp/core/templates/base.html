@@ -49,11 +49,12 @@
 		{% endblock head_meta %}
 		{% block head_css %}
 		{% block head_css_site %}
+		{% load static %}
+			<link rel="stylesheet" href="{% static 'css/animatedModal.css' %}">
+		{% load static %}
+			<link rel="stylesheet" href="{% static 'css/bulmaHelper.css' %}">
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/combine/npm/bulma@0.8.0/css/bulma.min.css,npm/bulma@0.8.0/css/bulma.min.css">
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
-            <link rel="stylesheet" href="httpma@0.8.0/css/bulma.min.css">
-            <link rel="stylesheet" href="static/css/bulmaHelper.css">
-            <link rel="stylesheet" href="static/css/animatedModal.css">
             <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.2.0/animate.min.css">
 		{% endblock head_css_site %}
 		{% block head_css_section %}{% endblock head_css_section %}
@@ -62,12 +63,12 @@
 	</head>
 	<body>
 		{# Navigation Menu #}
-		<header>
+		<header style="display: block">
 			{% block nav-style %} {% endblock %}
 			<nav class="navbar is-fixed-top is-light" style="min-height: 80px;" role="navigation" aria-label="main navigation">
 				<div class="navbar-brand">
-					<a class="" href="/">
-					<img src="/static/images/LinkUpWchainbox.png" height="140px" width="180px">
+					<a href="/">
+						<img src="/static/images/LinkUpWchainbox.png" height="140px" width="180px" href="/">
 					</a>
 					<a role="button" class="navbar-burger burger" data-target="navbar" aria-label="menu" aria-expanded="false">
 					<span aria-hidden="true"></span>
@@ -99,7 +100,7 @@
 								</a>
 								{% else %}
 								<a class="button big-register" data-toggle="modal" href="javascript:void(0)" onclick="openLoginModal();">
-								<strong>Login</strong>
+									<strong>Login</strong>
 								</a>
 								<a class="button big-login" data-toggle="modal" href="javascript:void(0)" onclick="openRegisterModal();">
 								<strong>Register</strong>
@@ -173,7 +174,7 @@
 									  </div>
 									  <div class="modal-body">
 										<div class="row">
-										  <div class="col-md-8 col-md-offset-2">
+										  <div class="col-md-8 center">
 										  <p id="loginerror"></p>
 											<form class="login-form" id="loginform">{% csrf_token %}
 											  <div class="form-group">
@@ -199,7 +200,7 @@
 										</div>
 										<hr/>
 										<div class="row">
-										  <div class="col-md-8 col-md-offset-2 text-center">
+										  <div class="col-md-8 text-center">
 											<a href="#" onclick="openForgotPassword()"><b>Forgot Password</b></a>&nbsp;<a
 											  href="#">or</a>&nbsp;<a href="#" onclick="openRegister()"><b>Register</b></a>
 										  </div>
@@ -248,11 +249,8 @@
 	{# Set of blocks that can be used to display JavaScript files #}
 	{% block footer_javascript %}
 	{% block footer_javascript_site %}
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script> <script src="static/js/bootstrap.min.js"></script>
-        <script src="static/js/app.js"></script>
-        <script src="static/js/animatedModal.min.js"></script>
-        <script src="static/js/animatedModal.js"></script>
-        <script src="static/js/signUp.js"></script>
+        <script src="/static/js/jquery-1.10.2.js"></script>
+		<script src="/static/js/bootstrap.js"></script>
 	{% endblock footer_javascript_site %}
 	{% block footer_javascript_section %}
 	{% endblock footer_javascript_section %}
