@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 class Availability(models.Model):
@@ -25,3 +27,4 @@ class Event(models.Model):
 	potentialEndDate = models.DateTimeField()
 	finalStartDate = models.DateTimeField(blank=True, null=True)
 	finalEndDate = models.DateTimeField(blank=True, null=True)
+

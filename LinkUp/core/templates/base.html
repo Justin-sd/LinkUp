@@ -64,7 +64,7 @@
 		{# Navigation Menu #}
 		<header>
 			{% block nav-style %} {% endblock %}
-			<nav class="navbar is-fixed-top is-light" role="navigation" aria-label="main navigation">
+			<nav class="navbar is-fixed-top is-light" style="min-height: 80px;" role="navigation" aria-label="main navigation">
 				<div class="navbar-brand">
 					<a class="" href="/">
 					<img src="/static/images/LinkUpWchainbox.png" height="140px" width="180px">
@@ -78,15 +78,15 @@
 				<div id="navbar" class="navbar-menu">
 					<div class="navbar-start">
 						<a class="navbar-item" href="/"> Home </a>
-						<a class="navbar-item" href="/my_events/{{ user_name }}"> My Events </a>
+						<a class="navbar-item" href="/my_events/"> My Events </a>
 						<div class="navbar-item has-dropdown is-hoverable">
 							<a class="navbar-link"> More </a>
 							<div class="navbar-dropdown">
-								<a class="navbar-item" href="about"> About </a>
-								<a class="navbar-item" href="/my_account"> My Account </a>
-								<a class="navbar-item" href="support"> Support </a>
+								<a class="navbar-item" href="/about/"> About </a>
+								<a class="navbar-item" href="/my_account/"> My Account </a>
+								<a class="navbar-item" href="/contact/"> Contact Us </a>
 								<hr class="navbar-divider">
-								<a class="navbar-item" href="reportanissue"> Report an issue </a>
+								<a class="navbar-item" href="https://github.com/Justin-sd/LinkUp/issues"> Report an issue </a>
 							</div>
 						</div>
 					</div>
@@ -98,13 +98,118 @@
 										<strong>Log out, {{user.username}}</strong>
 								</a>
 								{% else %}
-								<a class="button is-info" id="signUpNav" href="#signUpNavModal">
-								<strong>Sign Up</strong>
-								</a>
-								<a class="button" id="loginNav" href="#loginNavModal">
+								<a class="button big-register" data-toggle="modal" href="javascript:void(0)" onclick="openLoginModal();">
 								<strong>Login</strong>
 								</a>
+								<a class="button big-login" data-toggle="modal" href="javascript:void(0)" onclick="openRegisterModal();">
+								<strong>Register</strong>
+								</a>
+								<!-- Registration modal -->
+								<div class="modal fade" id="register-modal" tabindex="-1" role="dialog">
+								  <div class="modal-dialog" role="document">
+									<div class="modal-content">
+									  <div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-
+										  hidden="true">Close</span></button>
+										<h4 class="modal-title text-center" id="registerModelLabel">Register</h4>
+									  </div>
+									  <div class="modal-body">
+										<div class="row">
+										  <div class="col-md-6 col-md-offset-3">
+										  <p id="loginerror"></p>
+											<form id="signupForm">{% csrf_token %}
+											  <div class="form-group">
+												<input type="text" class="form-control" id="username" name="name"
+													placeholder="Full Name" required="required" />
+											  </div>
+											  <div class="form-group">
+												<input type="text" class="form-control" id="phone" name="phone"
+												  placeholder="Mobile Number" maxlength="10" size="10" required="required" />
+												<p class="text-danger text-center" id="user-phone-exists-error"
+												 style="display:none;">Phone already registered.</p>
+											  </div>
+											  <div class="form-group">
+												<input type="text" class="form-control" id="email" name="email"
+												 placeholder="Email" required="required" />
+												<p class="text-danger text-center" id="user-email-exists-error"
+												 style="display:none;">Email already registered.</p>
+											  </div>
+											  <div class="form-group">
+												<input type="password" class="form-control" id="password" name="password"
+												   placeholder="Password" required="required" />
+											  </div>
+											  <div class="form-group">
+												<input type="password" class="form-control" id="confirm_password"
+												  name="confirm_password" placeholder="Confirm Password" required="required" />
+											  </div>
+											  <div class="form-group text-center">
+												<input type="submit" value="Sign Up" class="btn  btn-lg btn-block btn-cakemporos"
+													id="signUp-submit">
+											  </div>
+											</form>
+										  </div>
+										</div>
+										<hr/>
+										<div class="row">
+										  <div class="col-md-8 col-md-offset-2 text-center">
+											<a href="#" onclick="openLogin()"><b>Login</b></a>
+										  </div>
+										</div>
+									  </div>
+									</div>
+								  </div>
+								</div>
+								<!-- End of Registration Modal -->
 
+
+								<!--  Login Form Modal -->
+								<div class="modal fade" id="login-modal" tabindex="-1" role="dialog">
+								  <div class="modal-dialog" role="document">
+									<div class="modal-content">
+									  <div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-
+										  hidden="true">Close</span></button>
+										<h4 class="modal-title text-center" id="loginModelLabel">Login</h4>
+									  </div>
+									  <div class="modal-body">
+										<div class="row">
+										  <div class="col-md-8 col-md-offset-2">
+										  <p id="loginerror"></p>
+											<form class="login-form" id="loginform">{% csrf_token %}
+											  <div class="form-group">
+												<input type="name" name="phone" id="login-username" class="form-control"
+												 placeholder="Phone Number" required="required" maxlength="10" size="10"/>
+												<label id="no-pno-label" class="control-label" for="login-username"
+												 style="display:none;">Please enter Phone Number.</label>
+											  </div>
+											  <p class="text-danger text-center" id="no-user-error" style="display:none;">We
+												 didn't find you! Please Register</p>
+											  <div class="form-group">
+												<input type="password" name="password" id="login-password" class="form-control"
+												 placeholder="Password" required="required" />
+											  </div>
+											  <p class="text-danger text-center" id="password-error" style="display:none;">Wrong
+												Password!</p>
+											  <div class="form-group text-center">
+												<input type="submit" value="Login" class="btn  btn-lg btn-block btn-cakemporos"
+												 id="signUp-Submit">
+											  </div>
+											</form>
+										  </div>
+										</div>
+										<hr/>
+										<div class="row">
+										  <div class="col-md-8 col-md-offset-2 text-center">
+											<a href="#" onclick="openForgotPassword()"><b>Forgot Password</b></a>&nbsp;<a
+											  href="#">or</a>&nbsp;<a href="#" onclick="openRegister()"><b>Register</b></a>
+										  </div>
+										</div>
+									  </div>
+
+									</div>
+								  </div>
+								</div>
+								<!-- End of Login Modal -->
 								{% endif %}
 							</div>
 						</div>
@@ -121,48 +226,6 @@
 		{# The Footer #}
 		<div class="footer">
 			<nav class="level">
-				<div id="signUpNavModal">
-					<div class="close-signUpNavModal has-text-centered"><span class="fa fa-close"></span>X</div>
-					<div class="modal-body">
-						<center><form>
-							  <div class="form-group">
-								<label for="exampleInputEmail1" style="font-size:18px; padding-right:5px;">Email address:</label>
-								<input type="email" class="form-control" style="font-size:18px;" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-							  </div><br>
-							  <div class="form-group">
-								<label for="exampleInputPassword1" style="font-size:18px; padding-right:35px;">Password:</label>
-								<input type="password" class="form-control" style="font-size:18px;" id="exampleInputPassword1" placeholder="Password">
-							  </div><br>
-							  <button type="submit" class="btn btn-primary" style="font-size:18px;">Sign Up</button>
-						</form></center>
-					</div>
-
-					<div class="modal-content">
-						<div class="thum">
-							<a style="font-size:18px;" href="{% provider_login_url "google" %}">Sign up with Google</a>
-						</div>
-					</div>
-				</div>
-				<div id="loginNavModal">
-					<div class="close-loginNavModal has-text-centered"><span class="fa fa-close"></span>X</div>
-					<center><form>
-							   <div class="form-group">
-								<label for="exampleInputEmail2" style="font-size:18px; padding-right:5px;">Email address:</label>
-								<input type="email" class="form-control" style="font-size:18px;" id="exampleInputEmail2" aria-describedby="emailHelp" placeholder="Enter email">
-							  </div><br>
-							  <div class="form-group">
-								<label for="exampleInputPassword2" style="font-size:18px; padding-right:35px;">Password:</label>
-								<input type="password" class="form-control" style="font-size:18px;" id="exampleInputPassword2" placeholder="Password">
-							  </div><br>
-							  <button type="submit" class="btn btn-primary" style="font-size:18px;">Log In</button>
-					</form></center>
-
-					<div class="modal-content">
-						<div class="thum">
-							<a style="font-size:18px;" href="{% provider_login_url "google" %}">Log in with Google</a>
-						</div>
-					</div>
-				</div>
 				<p class="level-item has-text-centered">
 					<a class="link is-info" href="about">About Us</a>
 				</p>
@@ -173,10 +236,10 @@
 					<img src="/static/images/LinkUpWchainbox.png" alt="" height="140px" width="180px">
 				</p>
 				<p class="level-item has-text-centered">
-					<a class="link is-info" href="contact">Contact</a>
+					<a class="link is-info" href="/contact/">Contact Us</a>
 				</p>
 				<p class="level-item has-text-centered">
-					<a class="link is-info" href="reportanissue">Report An Issue</a>
+					<a class="link is-info" href="https://github.com/Justin-sd/LinkUp/issues">Report An Issue</a>
 				</p>
 			</nav>
 			<hr/>
