@@ -30,18 +30,17 @@ def format_user_availability_calendar(user_id):
 
     fb_converted = convert_to_local_time(fb)
 
-    for date_key, busy_periods in fb_converted.items():
-        for times in busy_periods:
-            start = timezone.localtime(times["start"])
-            end = timezone.localtime(times["end"])
-            index = start.hour * 2
-            if start.minute >= 30:
-                index += 1
+    for times in fb_converted:
+        start = timezone.localtime(times["start"])
+        end = timezone.localtime(times["end"])
+        index = start.hour * 2
+        if start.minute >= 30:
+            index += 1
 
-            while start < end:
-                busy_times[index][(start.day - today.day)] = True
-                index += 1
-                start = start + timedelta(minutes=30)
+        while start < end:
+            busy_times[index][(start.day - today.day)] = True
+            index += 1
+            start = start + timedelta(minutes=30)
 
     # Change dictionary keys to dates
     result = {}
@@ -53,6 +52,26 @@ def format_user_availability_calendar(user_id):
     return result
 
 
+def convert_to_local_time(fb):
+    """
+    Converts to local time and splits up busy periods over multiple dates
+    """
+    split_fb = []
+    for times in fb:
+        start = timezone.localtime(times["start"])
+        end = timezone.localtime(times["end"])
+
+        while start.day != end.day:
+            dt_halfway = datetime.combine(start, datetime.max.time()).replace(tzinfo=end.tzinfo)
+            split_time = {"start": start, "end": timezone.localtime(dt_halfway)}
+            split_fb.append(split_time)
+            start = datetime.combine(start + timedelta(days=1), datetime.min.time()).replace(tzinfo=end.tzinfo)
+
+        split_fb.append({"start": start, "end": end})
+
+    return split_fb
+
+
 def get_list_of_next_n_days(num_days):
     """
     :return: A list of datetime objects from today to thirty days from now (exclusive)
@@ -60,33 +79,10 @@ def get_list_of_next_n_days(num_days):
     """
     dates = []
 
-    today = datetime.utcnow()
-    today = datetime(today.year, today.month, today.day, tzinfo=UTC)
+    today = datetime.utcnow().replace(tzinfo=UTC)
     next_month = today + timedelta(days=num_days)
     while today < next_month:
-        dates.append(today)
+        dates.append(timezone.localtime(today))
         today = today + timedelta(days=1)
 
     return dates
-
-
-def convert_to_local_time(fb):
-    """
-    Converts to local time and splits up busy periods over multiple dates
-    """
-    split_fb = dict.fromkeys(fb.keys(), [])
-    for date_key, busy_periods in fb.items():
-        for times in busy_periods:
-            start = timezone.localtime(times["start"])
-            end = timezone.localtime(times["end"])
-
-            while start.day != end.day:
-                print(start, end)
-                dt_halfway = datetime.combine(start, datetime.max.time()).replace(tzinfo=end.tzinfo)
-                split_time = {"start": start, "end": timezone.localtime(dt_halfway)}
-                split_fb[date_key].append(split_time)
-                start = datetime.combine(start + timedelta(days=1), datetime.min.time()).replace(tzinfo=end.tzinfo)
-
-            split_fb[date_key].append({"start": start, "end": end})
-
-    return split_fb

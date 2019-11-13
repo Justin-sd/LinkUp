@@ -85,10 +85,15 @@
 		</div>
 		<div class="columns is-multiline">
 			<div class="column" style="max-height: 350px; overflow-y: scroll;">
-				{% include "core/availability_calendar.html" %}
+				 <div class="panel">
+					<p class="panel-heading has-background-info">
+						My Availability
+					</p>
+					{% include "core/availability_calendar.html" %}
+				</div>
 			</div>
 
-			<div class="columns is-multiline">
+			<div class="columns is-multiline" style="margin-top: 24px;">
 				<div class="column is-6">
 					<div class="panel">
 						<p class="panel-heading has-background-info">

@@ -84,8 +84,6 @@ def free_busy_month(user):
                 ...
              }'
     """
-    result = {}
-
     service = get_service(user)
     min_time = datetime.utcnow() - timedelta(days=1)
     max_time = min_time + timedelta(days=31)
@@ -106,17 +104,12 @@ def free_busy_month(user):
 
     free_busy_result_calendars = service.freebusy().query(body=body).execute()['calendars']
 
+    result = []
     for cal in free_busy_result_calendars.values():
         for times in cal['busy']:
             dt_start = parse_datetime(times["start"])
             dt_end = parse_datetime(times["end"])
-            dt_key = datetime(year=dt_start.year, month=dt_start.month, day=dt_start.day, tzinfo=dt_start.tzinfo)
-            try:
-                result[dt_key]
-            except KeyError:
-                result[dt_key] = []
-
-            result[dt_key].append({'start': dt_start, 'end': dt_end})
+            result.append({'start': dt_start, 'end': dt_end})
 
     preferred_timezone = get_users_preferred_timezone(user)
     timezone.activate(preferred_timezone)
