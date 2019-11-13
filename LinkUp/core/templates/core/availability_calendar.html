@@ -1,0 +1,45 @@
+<div class="panel">
+    <p class="panel-heading has-background-info">
+        Events
+    </p>
+        <div class="table-container" style="overflow-y:scroll; overflow-x:scroll;">
+        <table class="table is-bordered is-fullwidth">
+            <thead>
+                <tr>
+                    <th>Hour</th>
+                    {% for date in availability_dates %}
+                        <th>{{date|date}}</th>
+                    {% endfor %}
+                </tr>
+                {% for time, dates in busy_times.items %}
+                    <tr>
+                        <th>{{time}}</th>
+                        {% for date in dates %}
+                            {% if date %}
+                                <td style="background: red;"></td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </thead>
+            <tbody class="availability_calendar_body">
+            </tbody>
+        </table>
+        </div>
+    {% for event in user_events %}
+    <div class="panel-body">
+        <a class="has-text-black" href="/event_page/{{ event.event_id }}">
+            <div class="notification">
+                <h1 class="title">
+                    {{ event.title }}
+                </h1>
+                <h2 class="subtitle">
+                    {{ event.description }}
+                </h2>
+            </div>
+        </a>
+    </div><br>
+    {% endfor %}
+</div>

@@ -71,19 +71,24 @@ def get_calendar_id_list(user):
     return [calendar["id"] for calendar in calendars]
 
 
-def free_busy_three_months(user):
+def free_busy_month(user):
     """
     :param user: Django User object for the user whose calendar is being accessed
 
     Finds all the periods in all the users google calendars in which the user is BUSY
-    :return: A list of dictionaries with keys 'start' and 'end' datetime representing a range of time where the user is
-             busy on their primary google calendar
+    :return: A dictionary keyed by date strings and with values of lists of dictionaries with keys 'start' and 'end' that
+             are datetimes representing a range of time where the user is busy on any of their google calendars
+
+             {
+                '11/12/2019': [{'start': datetime(..., hour=4, minute=30), 'end': datetime(..., hour=6, minute=30)}]
+                ...
+             }'
     """
-    result = []
+    result = {}
 
     service = get_service(user)
-    min_time = datetime.utcnow()
-    max_time = min_time + timedelta(days=90)
+    min_time = datetime.utcnow() - timedelta(days=1)
+    max_time = min_time + timedelta(days=31)
 
     min_time = min_time.isoformat() + 'Z'  # 'Z' indicates UTC time
     max_time = max_time.isoformat() + 'Z'  # 'Z' indicates UTC time
@@ -105,7 +110,13 @@ def free_busy_three_months(user):
         for times in cal['busy']:
             dt_start = parse_datetime(times["start"])
             dt_end = parse_datetime(times["end"])
-            result.append({'start': dt_start, 'end': dt_end})
+            dt_key = datetime(year=dt_start.year, month=dt_start.month, day=dt_start.day, tzinfo=dt_start.tzinfo)
+            try:
+                result[dt_key]
+            except KeyError:
+                result[dt_key] = []
+
+            result[dt_key].append({'start': dt_start, 'end': dt_end})
 
     preferred_timezone = get_users_preferred_timezone(user)
     timezone.activate(preferred_timezone)

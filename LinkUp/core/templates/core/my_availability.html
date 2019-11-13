@@ -2,11 +2,11 @@
 
 {% block content %}
 
-<div class="availability-container">
-    <br><br>
-    {% for time in busy_times %}
-        <h2>{{time.start}} to {{time.end}}</h2>
-    {% endfor %}
-</div>
 
+<div class="column">
+    <div class="availability-container">
+        <br><br>
+        {% include "core/availability_calendar.html" %}
+    </div>
+</div>
 {% endblock %}
