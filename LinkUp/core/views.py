@@ -1,12 +1,13 @@
 from django.shortcuts import render
 from .apis import availability_calendar_api
 from .models import Event
+from django.contrib.auth.decorators import login_required
 
 
 def home(request):
     return render(request, "core/homepage.html", {})
 
-
+@login_required()
 def event_page(request, event_id):
     event_query_set = Event.objects.filter(event_id=event_id)
     if event_query_set.count() != 1:
@@ -26,7 +27,7 @@ def event_page(request, event_id):
     context = {"event": event, "admin": admin, "user": user}
     return render(request, "core/event_page.html", context)
 
-
+@login_required()
 def my_events(request):
     user = request.user
 
@@ -47,7 +48,7 @@ def my_events(request):
 
     return render(request, "core/my_events.html", context)
 
-
+@login_required()
 def my_availability(request):
     busy_times = availability_calendar_api.format_user_availability_calendar(request.user.id)
     availability_dates = availability_calendar_api.get_list_of_next_n_days(30)
@@ -55,7 +56,7 @@ def my_availability(request):
     context = {"busy_times": busy_times, "availability_dates": availability_dates}
     return render(request, "core/my_availability.html", context)
 
-
+@login_required()
 def attendees_page(request):
     return render(request, "core/attendees.html", {})
 
