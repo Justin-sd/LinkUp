@@ -1,0 +1,11 @@
+.busy-time {
+    background: red;
+}
+
+#btn-import-from-google-calendar {
+    background: limegreen;
+}
+
+#btn-save-availability {
+    background: lightblue;
+}
