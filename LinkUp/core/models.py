@@ -2,15 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-class Availability(models.Model):
-	availability = models.CharField(max_length=1500)
-
-
-class Schedule(Availability):
-	user = models.ForeignKey(User, on_delete=models.CASCADE)
-
-
-class Event(models.Model): 
+class Event(models.Model):
 	"""
 	title - The title of the event
 	"""
@@ -26,3 +18,11 @@ class Event(models.Model):
 	finalStartDate = models.DateTimeField(blank=True, null=True)
 	finalEndDate = models.DateTimeField(blank=True, null=True)
 
+
+class Schedule(models.Model):
+	availability = models.CharField(max_length=1500)
+	user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+
+
+class EventSchedule(Schedule):
+	event = models.ForeignKey(Event, on_delete=models.DO_NOTHING)
