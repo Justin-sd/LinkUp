@@ -1,11 +1,40 @@
-.busy-time {
-    background: red;
-}
-
 #btn-import-from-google-calendar {
     background: limegreen;
 }
 
 #btn-save-availability {
     background: lightblue;
+}
+
+.header tbody{
+    display:block;
+    overflow-y:scroll;
+    overflow-x: scroll;
+    height:500px;
+}
+
+.header thead tr{
+    height:20px;
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+.header td, th, tr {
+    width:120px;
+}
+
+.header table {
+    border-collapse: collapse;
+}
+
+.header tbody tr{
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+.header td.busy-time {
+    background-color: #f6352a;
+    border-bottom: 1px double #f6352a;
 }
