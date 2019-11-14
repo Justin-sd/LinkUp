@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from .models import Event
 from .apis import calendar_api
-from django.contrib.auth.models import User
 
 
 def home(request):
@@ -9,17 +8,22 @@ def home(request):
 
 
 def event_page(request, event_id):
-	id_name = event_id
 	event_query_set = Event.objects.filter(event_id=event_id)
 	if event_query_set.count() != 1:
 		return render(request, "core/error_page", {})
 
+	# Event Objects
 	event = event_query_set[0]
 
-	event_title = event.title
-	event_description = event.description
+	# User Object
+	user = request.user
 
-	context = {"event_title": event_title, "event_description": event_description}
+	if user in event.admins.all():
+		admin = True
+	else:
+		admin = False
+
+	context = {"event": event, "admin": admin, "user": user}
 	return render(request, "core/event_page.html", context)
 
 
@@ -35,9 +39,8 @@ def my_events(request):
 
 
 def my_availability(request):
-	events = calendar_api.get_ten_events(request)
-
-	context = {"calendar_events": events}
+	busy_times = calendar_api.free_busy_three_months(request.user)
+	context = {"busy_times": busy_times}
 	return render(request, "core/my_availability.html", context)
 
 
@@ -67,5 +70,3 @@ def support(request):
 
 def about(request):
 	return render(request, "core/about.html", {})
-
-
