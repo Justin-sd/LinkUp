@@ -1,0 +1,60 @@
+.header {
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+.header tbody {
+  display:block;
+  width: 100%;
+  overflow: auto;
+  height: 600px;
+}
+
+.header thead tr {
+  display: block;
+}
+
+.header thead {
+  background: #a5a5a5;
+}
+
+.header th, .header td {
+  padding: 5px;
+  text-allign: left;
+  width: 200px;
+}
+
+table td.highlighted {
+  background-color: #f6352a;
+  border-bottom: 1px solid #f6352a;
+}
+
+/*
+table td {
+  text-align:center;
+  vertical-align:middle;
+  background-color:#ccc;
+  border: 1px solid #000000;
+}
+
+table tr {
+  vertical-align:top;
+  font-size: small;
+  height:10px;
+}
+
+tr.hour td {
+  border-bottom-color: #666666;
+}
+
+
+table td.busy {
+  background-color: #000000;
+  border-bottom: 1px solid #000000;
+}
+
+table td.event {
+  background-color: #f8ea00;
+}
+ */
+
