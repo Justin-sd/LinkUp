@@ -9,6 +9,7 @@ from .models import Event
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
+from .apis import contact_us_api
 
 
 def home(request):
@@ -107,5 +108,8 @@ def login_user(request):
 
 
 def send_email(request):
-	sendEmail_api.send_invite_email('google.com', ['kraffert@ucsd.edu'])
+	sendEmail_api.send_invite_email(invite_link, [invite_email])
 	return render(request, "core/homepage.html", {})
+
+def send_contact(request):
+    send_contact_email(name, message, email)
