@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from .models import Event
 from .apis import calendar_api
+from .apis import sendEmail_api
 
 
 def home(request):
@@ -62,3 +63,7 @@ def donate(request):
 
 def about(request):
 	return render(request, "core/about.html", {})
+
+def send_email(request):
+	sendEmail_api.send_invite_email('google.com', ['kraffert@ucsd.edu'])
+	return render(request, "core/homepage.html", {})

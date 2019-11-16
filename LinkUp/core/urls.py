@@ -31,4 +31,5 @@ urlpatterns = [
     path('about/', views.about),
     path('contact/', views.contact),
     path('donate/', views.donate),
+    path('send_email/', views.send_email),
 ]
