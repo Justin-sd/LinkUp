@@ -107,7 +107,7 @@
 							<div class="buttons">
 								{% if user.is_authenticated %}
 								<a class="button is-info" href="/accounts/logout/">
-										<strong>Log out, {{user.username}}</strong>
+										<strong>Log out, {{user.first_name}}</strong>
 								</a>
 								{% else %}
 								<a class="button big-register" data-toggle="modal" href="javascript:void(0)" onclick="openLoginModal();">

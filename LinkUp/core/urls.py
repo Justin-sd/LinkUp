@@ -32,4 +32,6 @@ urlpatterns = [
     path('donate/', views.donate),
     # availability
     path('my_availability/', views.my_availability),
+    path('create_user/', views.createUser),
+    path('login_user/', views.login_user),
 ]
