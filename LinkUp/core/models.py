@@ -20,7 +20,7 @@ class Event(models.Model):
 
 
 class Schedule(models.Model):
-	availability = models.CharField(max_length=1500)
+	availability = models.CharField(max_length=50000)
 	user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
 
 
