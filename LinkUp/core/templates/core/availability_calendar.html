@@ -1,0 +1,31 @@
+{% load static %}
+<script src="{% static 'js/availabilityCalendar.js' %}"></script>
+<link href="{% static 'css/availabilityCalendar.css' %}" rel="stylesheet" />
+
+
+<div class="table-container" style="overflow-y:scroll; overflow-x:scroll;">
+    <table id="calendar_table" class="header table is-bordered is-fullwidth">
+        <thead>
+            <tr>
+                <th>Hour</th>
+                {% for date in availability_dates %}
+                    <th>{{date|date:"M d"}}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody class="availability_calendar_body">
+            {% for time, dates in busy_times.items %}
+                <tr>
+                    <th>{{time}}</th>
+                    {% for date in dates %}
+                        {% if date %}
+                            <td class="busy-time"></td>
+                        {% else %}
+                            <td class="free-time"></td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

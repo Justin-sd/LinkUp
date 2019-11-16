@@ -2,11 +2,22 @@
 
 {% block content %}
 
-<div class="availability-container">
-    <br><br>
-    {% for time in busy_times %}
-        <h2>{{time.start}} to {{time.end}}</h2>
-    {% endfor %}
-</div>
+<br><br>
 
+<div class="column">
+    <div class="has-text-centered">
+        <button id="btn-import-from-google-calendar" class="button has-text-centered">Import From Google Calendar</button>
+        <button id="btn-save-availability" class="button has-text-centered">Save Availability</button>
+    </div>
+
+    <div class="availability-container">
+        <br><br>
+        <div class="panel">
+            <p class="panel-heading has-background-info">
+                My Availability
+            </p>
+            {% include "core/availability_calendar.html" %}
+        </div>
+    </div>
+</div>
 {% endblock %}

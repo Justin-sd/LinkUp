@@ -27,9 +27,10 @@ urlpatterns = [
     path('my_events/', views.my_events),
     path('attendees/', views.attendees_page),
     path('login_page/', TemplateView.as_view(template_name="core/login_page.html")),
-    path('my_availability/', views.my_availability),
     path('about/', views.about),
     path('contact/', views.contact),
     path('donate/', views.donate),
     path('send_email/', views.send_email),
+    # availability
+    path('my_availability/', views.my_availability),
 ]
