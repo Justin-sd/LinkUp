@@ -7,6 +7,8 @@ from .apis import sendEmail_api
 from django.contrib.auth.decorators import login_required
 from .models import Event
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login
 
 
 def home(request):
@@ -84,10 +86,26 @@ def donate(request):
 
 
 def about(request):
-	return render(request, "core/about.html", {})
+    return render(request, "core/about.html", {})
+
+def createUser(request):
+    if request.method == "POST":
+        user = User.objects.create_user(first_name=request.POST.get("first_name"),
+                                        last_name=request.POST.get("last_name"),
+                                        email=request.POST.get("email"),
+                                        password=request.POST.get("password"),
+                                        username=request.POST.get("email"))
+        user = authenticate(request, username=request.POST.get("email"), password=request.POST.get("password"))
+        login(request, user)
+    return render(request, "core/homepage.html", {})
+
+def login_user(request):
+    if request.method == "POST":
+        user = authenticate(request, username=request.POST.get("email"), password=request.POST.get("password"))
+        login(request, user)
+    return render(request, "core/homepage.html", {})
+
 
 def send_email(request):
 	sendEmail_api.send_invite_email('google.com', ['kraffert@ucsd.edu'])
 	return render(request, "core/homepage.html", {})
-
-
