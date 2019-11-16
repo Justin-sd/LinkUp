@@ -33,4 +33,5 @@ urlpatterns = [
     path('send_email/', views.send_email),
     # availability
     path('my_availability/', views.my_availability),
+
 ]

@@ -1,7 +1,10 @@
 from django.shortcuts import render
 from .apis import availability_calendar_api
+from .models import Event
+from .apis import availability_calendar_api
 from .apis import calendar_api
 from .apis import sendEmail_api
+from django.contrib.auth.decorators import login_required
 from .models import Event
 from django.contrib.auth.decorators import login_required
 
@@ -81,8 +84,10 @@ def donate(request):
 
 
 def about(request):
-    return render(request, "core/about.html", {})
+	return render(request, "core/about.html", {})
 
 def send_email(request):
-    sendEmail_api.send_invite_email('google.com', ['kraffert@ucsd.edu'])
-    return render(request, "core/homepage.html", {})
+	sendEmail_api.send_invite_email('google.com', ['kraffert@ucsd.edu'])
+	return render(request, "core/homepage.html", {})
+
+
