@@ -1,13 +1,18 @@
 from datetime import datetime, timedelta
 from django.contrib.auth.models import User
+from django.utils.dateparse import parse_datetime
+
+from ..models import Schedule
 from .calendar_api import free_busy_month
 from django.utils import timezone
 from pytz import UTC
+import json
 
 
-def format_user_availability_calendar(user_id):
+def format_google_calendar_availability(user_id):
     """
-    The user availability calendar is the thirty day calendar from which the user sets their availability
+    Takes the next thirty days of the user's google calendar data and puts it into a format compatible with the
+    availability calendar template
 
     :param user_id: The id of the user we are formatting the availability calendar for
     :return: A dictionary keyed on string hours (12 AM, 12:30 AM, ..., 11:30 PM) with values that are lists of booleans
@@ -86,3 +91,34 @@ def get_list_of_next_n_days(num_days):
         today = today + timedelta(days=1)
 
     return dates
+
+
+def get_users_saved_schedule(user):
+    """
+    :param user: The users whose availability is being returned
+    :return: The users availability converted into standard format:
+
+                [{'start': datetime(..., hour=4, minute=30), 'end': datetime(..., hour=6, minute=30)}, ...]
+    """
+    schedule_query = Schedule.objects.filter(user=user)
+    if schedule_query.count() == 0:
+        return None
+
+    users_availability_string = schedule_query[0].availability
+
+    # Decode the availability
+    users_availability = json.loads(users_availability_string)
+    for time_range in users_availability:
+        for time in time_range.keys():
+            time_range[time] = parse_datetime(time_range[time]).replace(tzinfo=UTC)
+
+    return users_availability
+
+
+def json_datetime_handler(obj):
+    if hasattr(obj, 'isoformat'):
+        return obj.isoformat()
+    elif isinstance(obj, ...):
+        return ...
+    else:
+        raise TypeError('Object of type %s with value of %s is not JSON serializable' % (type(obj), repr(obj)))

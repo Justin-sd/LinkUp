@@ -76,13 +76,11 @@ def free_busy_month(user):
     :param user: Django User object for the user whose calendar is being accessed
 
     Finds all the periods in all the users google calendars in which the user is BUSY
-    :return: A dictionary keyed by date strings and with values of lists of dictionaries with keys 'start' and 'end' that
-             are datetimes representing a range of time where the user is busy on any of their google calendars
+    :return: A list of dictionaries with keys 'start' and 'end' that are datetimes representing a range of time where
+             the user is busy on any of their google calendars:
 
-             {
-                '11/12/2019': [{'start': datetime(..., hour=4, minute=30), 'end': datetime(..., hour=6, minute=30)}]
-                ...
-             }'
+                [{'start': datetime(..., hour=4, minute=30), 'end': datetime(..., hour=6, minute=30)}, ...]
+
     """
     service = get_service(user)
     min_time = datetime.utcnow() - timedelta(days=1)

@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 def home(request):
     return render(request, "core/homepage.html", {})
 
+
 @login_required()
 def event_page(request, event_id):
     event_query_set = Event.objects.filter(event_id=event_id)
@@ -27,6 +28,7 @@ def event_page(request, event_id):
     context = {"event": event, "admin": admin, "user": user}
     return render(request, "core/event_page.html", context)
 
+
 @login_required()
 def my_events(request):
     user = request.user
@@ -35,7 +37,7 @@ def my_events(request):
     user_events = Event.objects.filter(members=user)
     user_event_count = user_events.count()
 
-    busy_times = availability_calendar_api.format_user_availability_calendar(request.user.id)
+    busy_times = availability_calendar_api.format_google_calendar_availability(request.user.id)
     availability_dates = availability_calendar_api.get_list_of_next_n_days(30)
 
     context = {
@@ -48,13 +50,16 @@ def my_events(request):
 
     return render(request, "core/my_events.html", context)
 
+
 @login_required()
 def my_availability(request):
-    busy_times = availability_calendar_api.format_user_availability_calendar(request.user.id)
+    # Load busy times from database
+    busy_times = availability_calendar_api.format_google_calendar_availability(request.user.id)
     availability_dates = availability_calendar_api.get_list_of_next_n_days(30)
 
     context = {"busy_times": busy_times, "availability_dates": availability_dates}
     return render(request, "core/my_availability.html", context)
+
 
 @login_required()
 def attendees_page(request):
@@ -75,4 +80,3 @@ def donate(request):
 
 def about(request):
     return render(request, "core/about.html", {})
-
