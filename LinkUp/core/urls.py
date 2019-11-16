@@ -35,4 +35,5 @@ urlpatterns = [
     path('my_availability/', views.my_availability),
     path('create_user/', views.createUser),
     path('login_user/', views.login_user),
+    path('send_contact_email/', views.send_contact),
 ]
