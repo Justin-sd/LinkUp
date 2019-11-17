@@ -17,11 +17,13 @@ span.onclick = function() {
   modal.style.display = "none";
 };
 
+
+
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
-  if (event.target === modal) {
-    modal.style.display = "none";
-  }
+    if (event.target === modal) {
+        modal.style.display = "none";
+    }
 };
 
 
@@ -36,3 +38,5 @@ function Create() { // create an event popup when create event button is clicked
       link.action = "/eventcreation/"+P+"/"+T+"/"+des+"/"+start+"/"+end+"/"+duration; //+"/"+H+"/"+M;
        window.open("/event_page/"+P);
 }
+
+

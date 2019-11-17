@@ -20,7 +20,7 @@ def home(request):
 def event_page(request, event_id):
     for i in range(10000):
         event_query_set = Event.objects.filter(event_id=event_id)
-        if event_query_set.count() == 1:
+        if event_query_set.count() == 1 and event_query_set[0].admins.count() >= 1:
             break
 
     if event_query_set.count() != 1:
@@ -41,8 +41,8 @@ def event_page(request, event_id):
     busy_times = availability_calendar_api.format_event_availability_calendar(user, event_id)
     available_dates = availability_calendar_api.get_event_availability_dates(event_id)
 
-    context = {"event": event, "admin": admin, "user": user , 'busy_times': busy_times,
-     "availability_dates": available_dates}
+    context = {"event": event, "admin": admin, "user": user, 'busy_times': busy_times,
+               "availability_dates": available_dates}
     return render(request, "core/event_page.html", context)
 
 
@@ -126,6 +126,7 @@ def send_email(request):
 def send_contact(request):
     send_contact_email(name, message, email)
 
+
 def eventcreation(request, idd, title, description, start,
                   end, duration):
     userr = request.user
@@ -133,6 +134,6 @@ def eventcreation(request, idd, title, description, start,
                                  description=description,
                                  owner=userr, potential_start_date=start,
                                  potential_end_date=end, duration=int(duration))
-    event.members.add(userr)  # creator is also a member
     event.admins.add(userr)  # creator is admin
+    event.members.add(userr)  # creator is also a member
     return event_page(request, event.event_id)
