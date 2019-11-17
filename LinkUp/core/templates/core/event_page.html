@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% block title %}LinkUp {% endblock title %} //modifying the title
-{% block nav-style %}{% endblock nav-style %} //sets the nav style
 
 {% block content %}
     {% if admin %}
@@ -32,15 +31,11 @@
                         <a class="button is-info">Set Availability</a>
                     </div>
                 </div>
-                <div class="level">
-                    <div class="level-item">
-
-                        <!--  THIS IS WHERE CALENDAR SHOULD GO -->
-
-                        <figure class="image is-16x9">
-                            <img src="https://placehold.it/1280x720"/>
-                        </figure>
-                    </div>
+                <div class="panel">
+                    <p class="panel-heading has-background-info">
+                        My Availability for {{event.title}}
+                    </p>
+                    {% include "core/availability_calendar.html" %}
                 </div>
             </div>
         </div>

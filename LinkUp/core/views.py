@@ -25,7 +25,12 @@ def event_page(request, event_id):
     else:
         admin = False
 
-    context = {"event": event, "admin": admin, "user": user}
+    # Get the users event schedule
+    busy_times = availability_calendar_api.format_event_availability_calendar(user, event_id)
+    available_dates = availability_calendar_api.get_event_availability_dates(event_id)
+
+    context = {"event": event, "admin": admin, "user": user, 'busy_times': busy_times,
+               "availability_dates": available_dates}
     return render(request, "core/event_page.html", context)
 
 
