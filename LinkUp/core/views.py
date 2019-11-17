@@ -18,7 +18,11 @@ def home(request):
 
 @login_required()
 def event_page(request, event_id):
-    event_query_set = Event.objects.filter(event_id=event_id)
+    for i in range(10000):
+        event_query_set = Event.objects.filter(event_id=event_id)
+        if event_query_set.count() == 1:
+            break
+
     if event_query_set.count() != 1:
         return render(request, "core/error_page", {})
 
@@ -37,8 +41,8 @@ def event_page(request, event_id):
     busy_times = availability_calendar_api.format_event_availability_calendar(user, event_id)
     available_dates = availability_calendar_api.get_event_availability_dates(event_id)
 
-    context = {"event": event, "admin": admin, "user": user, 'busy_times': busy_times,
-               "availability_dates": available_dates}
+    context = {"event": event, "admin": admin, "user": user , 'busy_times': busy_times,
+     "availability_dates": available_dates}
     return render(request, "core/event_page.html", context)
 
 
@@ -94,6 +98,7 @@ def donate(request):
 def about(request):
     return render(request, "core/about.html", {})
 
+
 def createUser(request):
     if request.method == "POST":
         user = User.objects.create_user(first_name=request.POST.get("first_name"),
@@ -105,6 +110,7 @@ def createUser(request):
         login(request, user)
     return render(request, "core/homepage.html", {})
 
+
 def login_user(request):
     if request.method == "POST":
         user = authenticate(request, username=request.POST.get("email"), password=request.POST.get("password"))
@@ -113,8 +119,20 @@ def login_user(request):
 
 
 def send_email(request):
-	sendEmail_api.send_invite_email(invite_link, [invite_email])
-	return render(request, "core/homepage.html", {})
+    sendEmail_api.send_invite_email(invite_link, [invite_email])
+    return render(request, "core/homepage.html", {})
+
 
 def send_contact(request):
     send_contact_email(name, message, email)
+
+def eventcreation(request, idd, title, description, start,
+                  end, duration):
+    userr = request.user
+    event = Event.objects.create(event_id=idd, title=title,
+                                 description=description,
+                                 owner=userr, potential_start_date=start,
+                                 potential_end_date=end, duration=int(duration))
+    event.members.add(userr)  # creator is also a member
+    event.admins.add(userr)  # creator is admin
+    return event_page(request, event.event_id)

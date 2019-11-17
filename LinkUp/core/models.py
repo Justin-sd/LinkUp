@@ -7,7 +7,7 @@ class Event(models.Model):
 	title - The title of the event
 	"""
 	event_id = models.CharField(max_length=32, primary_key=True)
-	owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='event_owner')
+	owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='event_owner', null=True)
 	admins = models.ManyToManyField(User, related_name='event_admins')
 	members = models.ManyToManyField(User, related_name='event_members')
 	title = models.CharField(max_length=250)
