@@ -30,6 +30,7 @@ urlpatterns = [
     path('login_page/', TemplateView.as_view(template_name="core/login_page.html")),
     path('login_user/', views.login_user),
     path('accounts/logout', TemplateView.as_view()),
+    path('signup_page/', TemplateView.as_view(template_name ="core/signup.html")),
     # Contact
     path('send_contact_email/', views.send_contact),
     path('send_email/', views.send_email),

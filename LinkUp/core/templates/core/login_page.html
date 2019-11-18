@@ -16,23 +16,15 @@
                         <figure class="avatar">
                             <img src="/static/images/LinkUpLogoTransBack.png" width="150" height="200">
                         </figure>
-                        <form>
-                            <div class="field">
-                                <div class="control">
-                                    <input class="input is-large" type="email" placeholder="Email" autofocus="">
-                                </div>
-                            </div>
-
-                            <div class="field">
-                                <div class="control">
-                                    <input class="input is-large" type="password" placeholder="Password">
-                                </div>
-                            </div>
-                            <div class="field">
-
-                            </div>
-                            <button class="button is-block is-info is-large is-fullwidth">Login <i class="fa fa-sign-in" aria-hidden="true"></i></button>
-                        </form>
+                         <div class="error"></div>
+                        <div class="form loginBox">
+                            <form method="post" action="/login_user/" accept-charset="UTF-8">
+                                {% csrf_token %}
+                                <input id="email" class="form-control" type="text" placeholder="Email" name="email">
+                                <input id="password" class="form-control" type="password" placeholder="Password" name="password">
+                                <input class="btn btn-default btn-login" type="submit" value="Login" >
+                            </form>
+                        </div>
                     </div>
                        <div class="box">
                            <div class="content">
