@@ -1,15 +1,10 @@
 from django.shortcuts import render
 from .apis import availability_calendar_api
-from .models import Event
-from .apis import availability_calendar_api
-from .apis import calendar_api
 from .apis import sendEmail_api
-from django.contrib.auth.decorators import login_required
 from .models import Event
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
-from .apis import contact_us_api
 
 
 def home(request):
@@ -54,7 +49,7 @@ def my_events(request):
     user_events = Event.objects.filter(members=user)
     user_event_count = user_events.count()
 
-    busy_times = availability_calendar_api.format_google_calendar_availability(request.user.id)
+    busy_times = availability_calendar_api.format_general_availability_calendar(request.user)
     availability_dates = availability_calendar_api.get_list_of_next_n_days(30)
 
     context = {
@@ -70,8 +65,17 @@ def my_events(request):
 
 @login_required()
 def my_availability(request):
-    # Load busy times from database
-    busy_times = availability_calendar_api.format_google_calendar_availability(request.user.id)
+    # Load users general availability from database
+    busy_times = availability_calendar_api.format_general_availability_calendar(request.user)
+    availability_dates = availability_calendar_api.get_list_of_next_n_days(30)
+
+    context = {"busy_times": busy_times, "availability_dates": availability_dates}
+    return render(request, "core/my_availability.html", context)
+
+
+@login_required()
+def import_google_calendar_data(request):
+    busy_times = availability_calendar_api.format_google_calendar_availability(request.user)
     availability_dates = availability_calendar_api.get_list_of_next_n_days(30)
 
     context = {"busy_times": busy_times, "availability_dates": availability_dates}
