@@ -1,5 +1,4 @@
 from datetime import datetime, timedelta
-from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from pytz import UTC
@@ -189,7 +188,10 @@ def get_users_event_schedule(user, event):
     """
     event_schedule_query = EventSchedule.objects.filter(user=user, event=event)
     if event_schedule_query.count() == 0:
-        raise Exception("Users EventSchedule does not exist")
+        general_schedule = get_users_saved_schedule(user=user)
+        availability = json.dumps(general_schedule, default=json_datetime_handler)
+        EventSchedule.objects.create(user=user, event=event, availability=availability)
+        return general_schedule
     return decode_availability(event_schedule_query[0].availability)
 
 
