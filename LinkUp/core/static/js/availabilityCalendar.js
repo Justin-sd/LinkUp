@@ -54,7 +54,6 @@ function update() {
             }
         }
     });
-
 }
 
 function convert(idx) {

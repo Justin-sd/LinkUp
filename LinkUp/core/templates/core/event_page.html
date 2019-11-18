@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% block title %}LinkUp {% endblock title %} //modifying the title
-{% block nav-style %}{% endblock nav-style %} //sets the nav style
 
 {% block content %}
     {% if admin %}
@@ -13,8 +12,8 @@
                     <hr/>
                     <div class="notification is-dark">
                         <center>
-                            <a class="button is-info">Invite Guest</a>
-                            <a class="button is-info">Add an Admin</a>
+                            <a class="button is-info" id="invitebutton">Invite Guest</a>
+                            <a class="button is-info" id="addadmin">Add an Admin</a>
                             <a class="button is-info">Create SubEvent</a>
                         </center>
                     </div>
@@ -32,15 +31,11 @@
                         <a class="button is-info">Set Availability</a>
                     </div>
                 </div>
-                <div class="level">
-                    <div class="level-item">
-
-                        <!--  THIS IS WHERE CALENDAR SHOULD GO -->
-
-                        <figure class="image is-16x9">
-                            <img src="https://placehold.it/1280x720"/>
-                        </figure>
-                    </div>
+                <div class="panel">
+                    <p class="panel-heading has-background-info">
+                        My Availability for {{event.title}}
+                    </p>
+                    {% include "core/availability_calendar.html" %}
                 </div>
             </div>
         </div>
@@ -100,4 +95,75 @@
             </div>
         </div>
     </section>
+
+      <!-- The Modal Add an Admin -->
+      <div id="AdminModal" class="modal">
+         <!-- Modal content -->
+         <div class="modal-content" id="AdminContent">
+            <div class="modal-header" id="AdminHeader" >
+               <span class="close"></span>
+               <center>
+                  <h1  style="font-size: x-large">Add Administrator for the Event</h1>
+               </center>
+               <br>
+            </div>
+            <div class="modal-body" id="AdminBody">
+
+            <div class="row">
+            <div class="col-sm-6">
+                <br>
+       <p>Choose Admins from the following list:</p>
+            </div>
+            <div class="col-sm-6">
+
+                    {% for members in event.members.all %}
+                    <div class="panel-block">
+                        <label class="checkbox">
+                        <input type="checkbox">
+                               {{ members }}
+                            </label>
+                     </div>
+                    {% endfor %}
+            </div>
+         </div>   <! -- end of row -->
+            <div class="row">
+                <p>--------------------------------------------------- or -----------------------------------------------------------</p>
+                <center>
+                             <a class="button is-info is-size-6-touch" style="background-color: orange">Add</a>
+                </center>
+            </div> <! -- End of second row -->
+
+            </div> <! --- End of modal content-->
+
+            <div class="modal-footer" id="AdminFooter">
+               <h3></h3>
+            </div>
+         </div>
+      </div>
+      <!-- End modal -->
+
+ <!-- Invite Guest Modal -->
+      <div id="InviteModal" class="modal" >
+         <!-- Modal content -->
+         <div class="modal-content" id="InviteContent">
+            <div class="modal-header" id="InviteHeader" >
+               <span class="close"></span>
+               <center>
+                  <h1  style="font-size: x-large">Modal Title</h1>
+               </center>
+               <br>
+            </div>
+            <div class="modal-body" id="InviteBody">
+               <center>
+                   <p>Modal content goes here ! Inside modal-body class</p>
+               </center>
+            </div>
+            <div class="modal-footer" id="InviteFooter">
+               <h3></h3>
+            </div>
+         </div>
+      </div>
+      <!-- End modal -->
+
+
 {% endblock content %}
