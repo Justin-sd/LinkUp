@@ -175,9 +175,9 @@ def get_users_saved_schedule(user):
     """
     schedule_query = Schedule.objects.filter(user=user)
     if schedule_query.count() == 0:
-        return None
-
-    users_availability_string = schedule_query[0].availability
+        users_availability_string = "[]"
+    else:
+        users_availability_string = schedule_query[0].availability
     return decode_availability(users_availability_string)
 
 
