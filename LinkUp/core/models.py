@@ -21,10 +21,13 @@ class Event(models.Model):
 
 class Schedule(models.Model):
     availability = models.CharField(max_length=50000)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
 
 
 class EventSchedule(models.Model):
     availability = models.CharField(max_length=50000)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('user', 'event')
