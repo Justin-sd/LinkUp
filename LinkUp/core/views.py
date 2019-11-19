@@ -142,5 +142,14 @@ def eventcreation(request, idd, title, description, start,
     event.members.add(userr)  # creator is also a member
     return event_page(request, event.event_id)
 
+@login_required()
 def my_account(request):
     return render(request, "core/my_account.html", {})
+
+@login_required()
+def password_change(request):
+    return render(request, "core/password_change.html", {})
+
+@login_required()
+def privacy_policy(request):
+    return render(request, "core/privacy_policy.html", {})

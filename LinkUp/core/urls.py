@@ -39,5 +39,7 @@ urlpatterns = [
     path('event_page/<str:event_id>', views.event_page),
     path('attendees/', views.attendees_page),
     path('eventcreation/<str:idd>/<str:title>/<str:description>/<str:start>/<str:end>/<str:duration>/', views.eventcreation),
-    path('my_account/', views.my_account)
+    path('my_account/', views.my_account),
+    path('password_change/', views.password_change),
+    path('privacy_policy/', views.privacy_policy)
 ]
