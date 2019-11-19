@@ -4,7 +4,7 @@ from .apis import sendEmail_api
 from .models import Event
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 
 
 def home(request):
@@ -153,3 +153,12 @@ def password_change(request):
 @login_required()
 def privacy_policy(request):
     return render(request, "core/privacy_policy.html", {})
+
+
+def logout_user(request):
+    """
+    Log the user out
+    """
+    logout(request)
+    return render(request, "core/homepage.html", {})
+
