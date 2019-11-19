@@ -141,3 +141,6 @@ def eventcreation(request, idd, title, description, start,
     event.admins.add(userr)  # creator is admin
     event.members.add(userr)  # creator is also a member
     return event_page(request, event.event_id)
+
+def my_account(request):
+    return render(request, "core/my_account.html", {})
