@@ -10,6 +10,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from .apis import contact_us_api
+from .apis import sendEmail_api
+from django.http import HttpResponse
 
 
 def home(request):
@@ -41,8 +43,7 @@ def event_page(request, event_id):
     busy_times = availability_calendar_api.format_event_availability_calendar(user, event_id)
     available_dates = availability_calendar_api.get_event_availability_dates(event_id)
 
-    context = {"event": event, "admin": admin, "user": user, 'busy_times': busy_times,
-               "availability_dates": available_dates}
+    context = {"event": event, "admin": admin, "user": user, 'busy_times': busy_times, "availability_dates": available_dates}
     return render(request, "core/event_page.html", context)
 
 
@@ -119,12 +120,18 @@ def login_user(request):
 
 
 def send_email(request):
-    sendEmail_api.send_invite_email(invite_link, [invite_email])
-    return render(request, "core/homepage.html", {})
+    data = request.POST
+    print(data)
+    invitee_email = data["invitee_email"]
+    event_id = data["event_id"]
+    event_url = "https//:LinkUp.com/event_page/" + event_id
+    sendEmail_api.send_invite_email(event_url, invitee_email)
+    return HttpResponse("Success")
 
 
 def send_contact(request):
-    send_contact_email(name, message, email)
+
+    return render(request, "core/homepage.html", {})
 
 
 def eventcreation(request, idd, title, description, start,
