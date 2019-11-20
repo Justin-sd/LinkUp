@@ -1,5 +1,4 @@
 from datetime import datetime, timedelta
-from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from pytz import UTC
@@ -9,12 +8,12 @@ from ..models import Event, Schedule, EventSchedule
 from .calendar_api import free_busy_month, get_users_preferred_timezone
 
 
-def format_google_calendar_availability(user_id):
+def format_google_calendar_availability(user):
     """
     Takes the next thirty days of the user's google calendar data and puts it into a format compatible with the
     availability calendar template
 
-    :param user_id: The id of the user we are formatting the availability calendar for
+    :param user: The user we are formatting the google availability calendar for
     :return: A dictionary keyed on string hours (12 AM, 12:30 AM, ..., 11:30 PM) with values that are lists of booleans
             each representing a day of the month for which the user is busy on the keyed time, or is not (True if busy)
 
@@ -24,18 +23,84 @@ def format_google_calendar_availability(user_id):
                 '10:00 AM': [False, False, False, ..., True, True, ..., False]
             }
     """
-    user = User.objects.get(id=user_id)
     fb = free_busy_month(user)
+    number_of_days = 30  # About one month of google calendar data
+    start_date = timezone.localtime(datetime.utcnow().replace(tzinfo=UTC))
+    availability = convert_to_local_time(fb, user)
 
-    today = timezone.localtime(datetime.utcnow().replace(tzinfo=UTC))
+    return format_availabilities(availability, start_date, number_of_days)
 
+
+def format_general_availability_calendar(user):
+    """
+    Formats the users general availability calendar, which works as a starting point for all their new event
+    availabilities
+
+    :param user: The user we are formatting the general availability calendar for
+    :return: A dictionary keyed on string hours (12 AM, 12:30 AM, ..., 11:30 PM) with values that are lists of booleans
+            each representing a day of the month for which the user is busy on the keyed time, or is not (True if busy)
+
+            {
+                '12:00 AM': [False] * 30
+                ...
+                '10:00 AM': [False, False, False, ..., True, True, ..., False]
+            }
+    """
+    fb = get_users_saved_schedule(user)
+    number_of_days = 30  # Support one month of general availability for now
+    start_date = timezone.localtime(datetime.utcnow().replace(tzinfo=UTC))
+    availability = convert_to_local_time(fb, user)
+
+    return format_availabilities(availability, start_date, number_of_days)
+
+
+def format_event_availability_calendar(user, event_id):
+    """
+    Formats the availability calendar for the user and a specific event the user is in
+
+    :return: A dictionary keyed on string hours (12 AM, 12:30 AM, ..., 11:30 PM) with values that are lists of booleans
+            each representing a day of the month for which the user is busy on the keyed time, or is not (True if busy)
+            {
+                '12:00 AM': [False] * 30
+                ...
+                '10:00 AM': [False, False, False, ..., True, True, ..., False]
+            }
+    """
+    event = Event.objects.get(event_id=event_id)
+    availability = get_users_event_schedule(user, event)
+    availability = convert_to_local_time(availability, user)
+
+    # Filter out availability dates that are not part of the event
+    start_date = timezone.localtime(event.potential_start_date)
+    end_date = timezone.localtime(event.potential_end_date)
+    availability = filter_availability(availability, start_date, end_date)
+    number_of_days = (end_date - start_date).days + 1
+
+    return format_availabilities(availability, start_date, number_of_days)
+
+
+def format_availabilities(availability, start_date, number_of_days):
+    """
+    Handles the formatting of all availability calendars
+    :param availability:    A list of dictionary objects containing start and end times representing time ranges in which
+                            the user is busy
+    :param start_date:      The first day for which availability is displayed
+    :param number_of_days:  The number of days we are showing availability for
+
+    :return: A dictionary keyed on string hours (12 AM, 12:30 AM, ..., 11:30 PM) with values that are lists of booleans
+            each representing a day of the month for which the user is busy on the keyed time, or is not (True if busy)
+            {
+                '12:00 AM': [False] * 30
+                ...
+                '10:00 AM': [False, False, False, ..., True, True, ..., False]
+            }
+
+    """
     busy_times = {}
     for half_hour_periods in range(48):
-        busy_times[half_hour_periods] = [False] * 30
+        busy_times[half_hour_periods] = [False] * number_of_days
 
-    fb_converted = convert_to_local_time(fb)
-
-    for times in fb_converted:
+    for times in availability:
         start = timezone.localtime(times["start"])
         end = timezone.localtime(times["end"])
         index = start.hour * 2
@@ -43,7 +108,7 @@ def format_google_calendar_availability(user_id):
             index += 1
 
         while start < end:
-            busy_times[index][(start.day - today.day)] = True
+            busy_times[index][(start.day - start_date.day)] = True
             index += 1
             start = start + timedelta(minutes=30)
 
@@ -57,10 +122,18 @@ def format_google_calendar_availability(user_id):
     return result
 
 
-def convert_to_local_time(fb):
+def convert_to_local_time(fb, user):
     """
     Converts to local time and splits up busy periods over multiple dates
+    :param: fb:     The list of free busy dictionaries containing datetimes in UTC time
+    :param: user:   The user whose timezone we are converting to. This timezone is taken from their google calendar.
+                    Maybe it would be better to calculate it from their browser using javascript?
     """
+    # Must do this for timezone.localtime to work!
+    # Set users timezone
+    preferred_timezone = get_users_preferred_timezone(user)
+    timezone.activate(preferred_timezone)
+
     split_fb = []
     for times in fb:
         start = timezone.localtime(times["start"])
@@ -101,9 +174,9 @@ def get_users_saved_schedule(user):
     """
     schedule_query = Schedule.objects.filter(user=user)
     if schedule_query.count() == 0:
-        return None
-
-    users_availability_string = schedule_query[0].availability
+        users_availability_string = "[]"
+    else:
+        users_availability_string = schedule_query[0].availability
     return decode_availability(users_availability_string)
 
 
@@ -115,7 +188,10 @@ def get_users_event_schedule(user, event):
     """
     event_schedule_query = EventSchedule.objects.filter(user=user, event=event)
     if event_schedule_query.count() == 0:
-        raise Exception("Users EventSchedule does not exist")
+        general_schedule = get_users_saved_schedule(user=user)
+        availability = json.dumps(general_schedule, default=json_datetime_handler)
+        EventSchedule.objects.create(user=user, event=event, availability=availability)
+        return general_schedule
     return decode_availability(event_schedule_query[0].availability)
 
 
@@ -146,51 +222,6 @@ def filter_availability(availability, start_date, end_date):
             filtered_availability.append(time_range)
 
     return filtered_availability
-
-
-def format_event_availability_calendar(user, event_id):
-    """
-    Given availability, format into google calendar
-    """
-    # Must do this for timezone.localtime to work!
-    # Set users timezone
-    preferred_timezone = get_users_preferred_timezone(user)
-    timezone.activate(preferred_timezone)
-
-    event = Event.objects.get(event_id=event_id)
-    availability = get_users_event_schedule(user, event)
-    availability = convert_to_local_time(availability)
-
-    # Filter out availability dates that are not part of the event
-    start_date = timezone.localtime(event.potential_start_date)
-    end_date = timezone.localtime(event.potential_end_date)
-    availability = filter_availability(availability, start_date, end_date)
-    number_of_days = (end_date - start_date).days + 1
-
-    busy_times = {}
-    for half_hour_periods in range(48):
-        busy_times[half_hour_periods] = [False] * number_of_days
-
-    for times in availability:
-        start = timezone.localtime(times["start"])
-        end = timezone.localtime(times["end"])
-        index = start.hour * 2
-        if start.minute >= 30:
-            index += 1
-
-        while start < end:
-            busy_times[index][(start.day - start_date.day)] = True
-            index += 1
-            start = start + timedelta(minutes=30)
-
-    # Change dictionary keys to dates
-    result = {}
-    dt = datetime(year=1, month=1, day=1)
-    for half_hour_period in range(48):
-        result[dt.strftime("%I:%M %p")] = busy_times[half_hour_period]
-        dt = dt + timedelta(minutes=30)
-
-    return result
 
 
 def get_event_availability_dates(event_id):
