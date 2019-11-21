@@ -2,6 +2,25 @@
 {% block title %}LinkUp {% endblock title %} //modifying the title
 
 {% block content %}
+<head>
+    <script type='text/javascript'>
+        function sendEmail() {
+            let invitee_email = $("#invitee_email").val();
+            let data = {"invitee_email": invitee_email, "event_id": {{event.event_id}}};
+
+            const token = "{{csrf_token}}";
+            $.ajax({
+                headers: {"X-CSRFToken": token},
+                type: "POST",
+                url: "/send_email/",
+                data: data,
+            }).done(function (res) {
+                // clear text
+                $("#invitee_email").val('');
+            });
+        }
+    </script>
+</head>
     {% if admin %}
         <section class="section">
             <div class="column">
@@ -149,13 +168,18 @@
             <div class="modal-header" id="InviteHeader" >
                <span class="close"></span>
                <center>
-                  <h1  style="font-size: x-large">Modal Title</h1>
+                  <h1  style="font-size: x-large">Invite Guests</h1>
                </center>
                <br>
             </div>
+
             <div class="modal-body" id="InviteBody">
                <center>
-                   <p>Modal content goes here ! Inside modal-body class</p>
+                   <h3>Guest Email:</h3>
+                    <form method="" id="container" onsubmit="sendEmail()">
+                        <input id="invitee_email" type="email"/>
+                        <input type="submit" value="Send Email"/>
+                    </form>
                </center>
             </div>
             <div class="modal-footer" id="InviteFooter">

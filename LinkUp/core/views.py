@@ -4,10 +4,17 @@ from .apis import sendEmail_api
 from .models import Event
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import authenticate, login
+<<<<<<< HEAD
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
+=======
+from .apis import contact_us_api
+from .apis import sendEmail_api
+from django.http import HttpResponse
+>>>>>>> 5c28b24aa0bf63b75a95da0af57d781d0c022a4b
 
 
 def home(request):
@@ -126,8 +133,13 @@ def login_user(request):
 
 
 def send_email(request):
-    sendEmail_api.send_invite_email(invite_link, [invite_email])
-    return render(request, "core/homepage.html", {})
+    data = request.POST
+    print(data)
+    invitee_email = data["invitee_email"]
+    event_id = data["event_id"]
+    event_url = "https//:LinkUp.com/event_page/" + event_id
+    sendEmail_api.send_invite_email(event_url, invitee_email)
+    return HttpResponse("Success")
 
 
 def send_contact(request):
@@ -173,3 +185,12 @@ def password_change(request):
     return render(request, 'core/password_change.html', {
         'form': form
     })
+
+def logout_user(request):
+    """
+    Log the user out
+    """
+    logout(request)
+    return render(request, "core/homepage.html", {})
+
+

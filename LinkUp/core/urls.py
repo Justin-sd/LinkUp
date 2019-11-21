@@ -30,7 +30,7 @@ urlpatterns = [
     path('create_user/', views.createUser),
     path('login_page/', TemplateView.as_view(template_name="core/login_page.html")),
     path('login_user/', views.login_user),
-    path('accounts/logout', TemplateView.as_view()),
+    path('accounts/logout_user/', views.logout_user),
     path('signup_page/', TemplateView.as_view(template_name ="core/signup.html")),
     path('my_account/', views.my_account),
     path('password_change/', views.password_change),

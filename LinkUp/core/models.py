@@ -6,7 +6,7 @@ class Event(models.Model):
     """
     title - The title of the event
     """
-    event_id = models.CharField(max_length=32, primary_key=True)
+    event_id = models.CharField(max_length=32, primary_key=True, unique=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='event_owner', null=True)
     admins = models.ManyToManyField(User, related_name='event_admins')
     members = models.ManyToManyField(User, related_name='event_members')
@@ -21,10 +21,13 @@ class Event(models.Model):
 
 class Schedule(models.Model):
     availability = models.CharField(max_length=50000)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
 
 
 class EventSchedule(models.Model):
     availability = models.CharField(max_length=50000)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('user', 'event')
