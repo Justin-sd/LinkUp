@@ -1,20 +1,14 @@
 from django.shortcuts import render, redirect
-from .apis import availability_calendar_api
+from .apis import availability_calendar_api, sendEmail_api
 from .apis import sendEmail_api
 from .models import Event
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth import authenticate, login
-<<<<<<< HEAD
 from django.contrib.auth.forms import PasswordChangeForm
-from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib import messages
-=======
 from .apis import contact_us_api
-from .apis import sendEmail_api
 from django.http import HttpResponse
->>>>>>> 5c28b24aa0bf63b75a95da0af57d781d0c022a4b
 
 
 def home(request):
