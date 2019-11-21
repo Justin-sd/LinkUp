@@ -14,6 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path
+from django.conf.urls import url
 from . import views
 from django.views.generic import TemplateView
 
@@ -31,6 +32,9 @@ urlpatterns = [
     path('login_user/', views.login_user),
     path('accounts/logout', TemplateView.as_view()),
     path('signup_page/', TemplateView.as_view(template_name ="core/signup.html")),
+    path('my_account/', views.my_account),
+    path('password_change/', views.password_change),
+    path('privacy_policy/', views.privacy_policy),
     # Contact
     path('send_contact_email/', views.send_contact),
     path('send_email/', views.send_email),
@@ -38,8 +42,5 @@ urlpatterns = [
     path('my_events/', views.my_events),
     path('event_page/<str:event_id>', views.event_page),
     path('attendees/', views.attendees_page),
-    path('eventcreation/<str:idd>/<str:title>/<str:description>/<str:start>/<str:end>/<str:duration>/', views.eventcreation),
-    path('my_account/', views.my_account),
-    path('password_change/', views.password_change),
-    path('privacy_policy/', views.privacy_policy)
+    path('eventcreation/<str:idd>/<str:title>/<str:description>/<str:start>/<str:end>/<str:duration>/', views.eventcreation)
 ]

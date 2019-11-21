@@ -1,10 +1,13 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .apis import availability_calendar_api
 from .apis import sendEmail_api
 from .models import Event
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
+from django.contrib import messages
 
 
 def home(request):
@@ -146,10 +149,27 @@ def eventcreation(request, idd, title, description, start,
 def my_account(request):
     return render(request, "core/my_account.html", {})
 
-@login_required()
-def password_change(request):
-    return render(request, "core/password_change.html", {})
+#@login_required()
+#def password_change(request):
+ #   return render(request, "core/password_change.html", {})
 
 @login_required()
 def privacy_policy(request):
     return render(request, "core/privacy_policy.html", {})
+
+@login_required()
+def password_change(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('change_password')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'core/password_change.html', {
+        'form': form
+    })
