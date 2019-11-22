@@ -155,10 +155,6 @@ def eventcreation(request, idd, title, description, start,
 def my_account(request):
     return render(request, "core/my_account.html", {})
 
-#@login_required()
-#def password_change(request):
- #   return render(request, "core/password_change.html", {})
-
 @login_required()
 def privacy_policy(request):
     return render(request, "core/privacy_policy.html", {})
@@ -171,7 +167,7 @@ def password_change(request):
             user = form.save()
             update_session_auth_hash(request, user)  # Important!
             messages.success(request, 'Your password was successfully updated!')
-            return redirect('change_password')
+            return redirect('password_change')
         else:
             messages.error(request, 'Please correct the error below.')
     else:

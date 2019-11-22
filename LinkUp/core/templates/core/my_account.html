@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}LinkUp {% endblock title %} //modifying the title
 {% block content %}
+<!-- Need to make different versions of page for google vs email account -->
 <section class="section">
     <div class="section">
         <div class="columns is-8">
@@ -23,21 +24,22 @@
                 <p class="heading is-size-1 is-centered text-center">
                     Your Profile
                 </p>
+                <hr/>
                 <div class="columns">
                     <aside class="column"><p></p></aside>
                     <aside class="column text-center is-centered">
-                        <hr/>
-                        <p class="text-left" style="font-size: 14px">
-                            Display name: {{user.first_name}}
-                        </p>
-                        <a class="button is-info">Change Name</a>
-                        <hr/>
-                        <p class="text-left" style="font-size: 14px">
-                            <br>
-                            Email: {{user.email}}
-                        </p>
-                        <a class="button is-info">Change Email</a>
-
+                        <div class="box">
+                            <p class="text-left" style="font-size: 14px">
+                                Display name: {{user.first_name}}
+                            </p>
+                            <a class="button is-info">Change Name</a>
+                            <hr/>
+                            <p class="text-left" style="font-size: 14px">
+                                <br>
+                                Email: {{user.email}}
+                            </p>
+                            <a class="button is-info">Change Email</a>
+                        </div>
                     </aside>
                     <aside class="column"><p></p></aside>
                 </div>
