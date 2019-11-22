@@ -17,11 +17,13 @@ from django.urls import path
 from . import views
 from django.views.generic import TemplateView
 
+
 urlpatterns = [
     path('', views.home),
     path('about/', views.about),
     path('contact/', views.contact),
     path('donate/', views.donate),
+    path('redirect/', views.password_change),
     # availability
     path('my_availability/', views.my_availability),
     path('my_availability/google_calendar/', views.import_google_calendar_data),

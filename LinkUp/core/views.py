@@ -117,10 +117,14 @@ def createUser(request):
     return render(request, "core/homepage.html", {})
 
 
-def login_user(request):
+
+
+
+def login_user(request, backend='django.contrib.auth.backends.ModelBackend'):
     if request.method == "POST":
         user = authenticate(request, username=request.POST.get("email"), password=request.POST.get("password"))
-        login(request, user)
+        user.is_active = True
+        login(request, user, backend)
     return render(request, "core/homepage.html", {})
 
 
@@ -159,7 +163,6 @@ def privacy_policy(request):
     return render(request, "core/privacy_policy.html", {})
 
 
-@login_required()
 def password_change(request):
     if request.method == 'POST':
         form = PasswordChangeForm(request.user, request.POST)
@@ -167,7 +170,7 @@ def password_change(request):
             user = form.save()
             update_session_auth_hash(request, user)  # Important!
             messages.success(request, 'Your password was successfully updated!')
-            return redirect('password_change')
+            return redirect('/my_account/')
         else:
             messages.error(request, 'Please correct the error below.')
     else:
