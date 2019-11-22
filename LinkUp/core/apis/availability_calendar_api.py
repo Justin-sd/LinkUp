@@ -252,9 +252,8 @@ def activate_users_saved_timezone(user):
         timezone.activate(UserTimezone.objects.get(user=user).timezone_str)
 
     except ObjectDoesNotExist:
-        # Can maybe handle this some other way? This should not happen though
-        raise Exception("User somehow does not have a timezone")
-        pass
+        # If we can't find it, just make it LA for now
+        timezone.activate('America/Los_Angeles')
 
 
 def json_datetime_handler(obj):
