@@ -14,7 +14,6 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path
-from django.conf.urls import url
 from . import views
 from django.views.generic import TemplateView
 
@@ -26,6 +25,7 @@ urlpatterns = [
     # availability
     path('my_availability/', views.my_availability),
     path('my_availability/google_calendar/', views.import_google_calendar_data),
+    path('update_timezone/', views.update_timezone),
     # Users
     path('create_user/', views.createUser),
     path('login_page/', TemplateView.as_view(template_name="core/login_page.html")),

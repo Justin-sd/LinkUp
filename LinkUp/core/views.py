@@ -1,13 +1,11 @@
 from django.shortcuts import render, redirect
 from .apis import availability_calendar_api, sendEmail_api
-from .apis import sendEmail_api
-from .models import Event
+from .models import Event, UserTimezone
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib import messages
-from .apis import contact_us_api
 from django.http import HttpResponse
 
 
@@ -151,17 +149,16 @@ def eventcreation(request, idd, title, description, start,
     event.members.add(userr)  # creator is also a member
     return event_page(request, event.event_id)
 
+
 @login_required()
 def my_account(request):
     return render(request, "core/my_account.html", {})
 
-#@login_required()
-#def password_change(request):
- #   return render(request, "core/password_change.html", {})
 
 @login_required()
 def privacy_policy(request):
     return render(request, "core/privacy_policy.html", {})
+
 
 @login_required()
 def password_change(request):
@@ -180,6 +177,7 @@ def password_change(request):
         'form': form
     })
 
+
 def logout_user(request):
     """
     Log the user out
@@ -188,3 +186,12 @@ def logout_user(request):
     return render(request, "core/homepage.html", {})
 
 
+def update_timezone(request):
+    """
+    :param: request: Request contains POST data containing time zone from the user's browser
+    Update the users timezone by detecting it from the browser so we can display time ranges in their timezone
+    """
+    user_timezone = request.POST.get("time_zone")
+    user = request.user
+    UserTimezone.objects.update(user=user, timezone_str=user_timezone)
+    return HttpResponse("Success")

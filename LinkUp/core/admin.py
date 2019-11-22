@@ -5,3 +5,4 @@ from .models import *
 admin.site.register(Schedule)
 admin.site.register(EventSchedule)
 admin.site.register(Event)
+admin.site.register(UserTimezone)

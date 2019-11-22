@@ -31,3 +31,8 @@ class EventSchedule(models.Model):
 
     class Meta:
         unique_together = ('user', 'event')
+
+
+class UserTimezone(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    timezone_str = models.CharField(max_length=50)
