@@ -16,7 +16,7 @@ def get_best(event_id):
     # make all these in minutes
     duration = int(event.duration)
 
-    st = event.potentialStartDate
+    st = event.potential_start_date
     # round up the potential starting minutes
     if st.minute > 30:
         new_st = st.replace(minute=0)
@@ -27,7 +27,7 @@ def get_best(event_id):
         new_st = st
     start = convert_to_minutes(new_st, new_st)
 
-    et = event.potentialEndDate
+    et = event.potential_end_date
     # round down potential ending minutes
     if et.minute > 30:
         new_et = et.replace(minute=30)
@@ -50,10 +50,10 @@ def get_best(event_id):
 
     # have a list of all users times
     for u in users:
-        user_sched = free_busy_month(u)
-        schedule = json.dumps(user_sched, default=json_datetime_handler)
+        # user_sched = free_busy_month(u)
+        # schedule = json.dumps(user_sched, default=json_datetime_handler)
 
-        Schedule.objects.create(user=u, availability=schedule)
+        # Schedule.objects.create(user=u, availability=schedule)
 
         # get user's schedules in datetime format
         for times in get_users_saved_schedule(u):
