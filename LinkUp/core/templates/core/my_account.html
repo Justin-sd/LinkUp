@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %}LinkUp {% endblock title %} //modifying the title
+{% block content %}
+<!-- Need to make different versions of page for google vs email account -->
+<section class="section">
+    <div class="section">
+        <div class="columns is-8">
+            <aside class="column is-3">
+                <nav class="menu">
+                    <div class="is-centered">
+                        <p class="menu-label is-size-1 text-center">
+                            Account Options
+                        </p>
+                    </div>
+                    <hr/>
+                    <ul class="menu-list">
+                        <li><a class="is-active is-size-4" href="/my_account">Profile</a></li>
+                        <li><a class="is-size-4" href="/password_change">Change Password</a></li>
+                        <li><a class="is-size-4" href="/privacy_policy">Privacy Policy</a></li>
+                    </ul>
+                </nav>
+            </aside>
+            <aside class="column">
+                <p class="heading is-size-1 is-centered text-center">
+                    Your Profile
+                </p>
+                <hr/>
+                <div class="columns">
+                    <aside class="column"><p></p></aside>
+                    <aside class="column text-center is-centered">
+                        <div class="box">
+                            <p class="text-left" style="font-size: 14px">
+                                Display name: {{user.first_name}}
+                            </p>
+                            <a class="button is-info">Change Name</a>
+                            <hr/>
+                            <p class="text-left" style="font-size: 14px">
+                                <br>
+                                Email: {{user.email}}
+                            </p>
+                            <a class="button is-info">Change Email</a>
+                        </div>
+                    </aside>
+                    <aside class="column"><p></p></aside>
+                </div>
+
+            </aside>
+        </div>
+    </div>
+</section>
+{% endblock content %}
