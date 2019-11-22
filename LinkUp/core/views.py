@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from .apis import availability_calendar_api
+from .apis import algorithm_api
 from .models import Event
 from django.contrib.auth.decorators import login_required
 
@@ -16,6 +17,7 @@ def event_page(request, event_id):
 
     # Event Objects
     event = event_query_set[0]
+    time_list = algorithm_api.get_best(event_id)
 
     # User Object
     user = request.user
@@ -25,7 +27,7 @@ def event_page(request, event_id):
     else:
         admin = False
 
-    context = {"event": event, "admin": admin, "user": user}
+    context = {"event": event, "admin": admin, "user": user, "time_list": time_list}
     return render(request, "core/event_page.html", context)
 
 

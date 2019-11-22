@@ -25,4 +25,5 @@ class Schedule(models.Model):
 
 
 class EventSchedule(Schedule):
+	times = models.CharField(max_length=50000)
 	event = models.ForeignKey(Event, on_delete=models.DO_NOTHING)

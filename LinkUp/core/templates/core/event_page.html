@@ -84,7 +84,10 @@
                         Available
                     </p>
                     <div class="panel-block">
-                        Unsure how to handle
+                        Optimal starting times from best to worst:<br />
+                        {% for a,b in time_list %}
+                            {{a}} with members {{b}}<br />
+                        {% endfor %}
                     </div>
                 </div>
             </div>
