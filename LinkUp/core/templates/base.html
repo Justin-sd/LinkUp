@@ -33,6 +33,10 @@
       {% block head_css_site %}
       <script type="text/javascript" src="{% static '/js/jquery-1.10.2.js' %}"></script>
       <script type="text/javascript" src="{% static '/js/bootstrap.js' %}"></script>
+      <script type="text/javascript" src="{% static '/js/timezoneHandler.js' %}"></script>
+      <script>
+         const CSRF_TOKEN = "{{csrf_token}}";
+      </script>
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css"/>
       <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css"/>
       <link rel="stylesheet" href="{% static '/css/login-register.css' %}"/>

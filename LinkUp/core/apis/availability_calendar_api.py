@@ -1,11 +1,13 @@
 from datetime import datetime, timedelta
+
+from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from pytz import UTC
 import json
 
-from ..models import Event, Schedule, EventSchedule
-from .calendar_api import free_busy_month, get_users_preferred_timezone
+from ..models import Event, Schedule, EventSchedule, UserTimezone
+from .calendar_api import free_busy_month
 
 
 def format_google_calendar_availability(user):
@@ -131,8 +133,7 @@ def convert_to_local_time(fb, user):
     """
     # Must do this for timezone.localtime to work!
     # Set users timezone
-    preferred_timezone = get_users_preferred_timezone(user)
-    timezone.activate(preferred_timezone)
+    activate_users_saved_timezone(user)
 
     split_fb = []
     for times in fb:
@@ -239,6 +240,21 @@ def get_event_availability_dates(event_id):
         dt = dt + timedelta(days=1)
 
     return possible_dates
+
+
+def activate_users_saved_timezone(user):
+    """
+    Activates the timezone that the users browser supplies
+    :param user: The user whose timezone we are using to set the timezones
+    :return: None
+    """
+    try:
+        timezone.activate(UserTimezone.objects.get(user=user).timezone_str)
+
+    except ObjectDoesNotExist:
+        # Can maybe handle this some other way? This should not happen though
+        raise Exception("User somehow does not have a timezone")
+        pass
 
 
 def json_datetime_handler(obj):
