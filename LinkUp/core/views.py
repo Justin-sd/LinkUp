@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .apis import availability_calendar_api, sendEmail_api
+from .apis import availability_calendar_api, sendEmail_api, algorithm_api
 from .models import Event, UserTimezone
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -37,9 +37,10 @@ def event_page(request, event_id):
     # Get the users event schedule
     busy_times = availability_calendar_api.format_event_availability_calendar(user, event_id)
     available_dates = availability_calendar_api.get_event_availability_dates(event_id)
+    time_list = algorithm_api.get_best(event_id)
 
     context = {"event": event, "admin": admin, "user": user, 'busy_times': busy_times,
-               "availability_dates": available_dates}
+               "availability_dates": available_dates, "time_list": time_list}
     return render(request, "core/event_page.html", context)
 
 
