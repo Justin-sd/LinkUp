@@ -1,14 +1,36 @@
 //to change event title
-const editable2 = document.getElementById('EventTitle');
-editable2.addEventListener('blur', function() {
+const eventTitle = document.getElementById('EventTitle');
+
+eventTitle.addEventListener('blur', function() {
     const eventID = window.location.pathname.split("/").pop();
-$.ajax({
-  type: "POST",
-  url:   "changeeventtitle/",
-  data: { newTitle: editable2.innerText , eventid: eventID },
-  csrfmiddlewaretoken: '{{ csrf_token }}'
+    $.ajax({
+        headers: {"X-CSRFToken": CSRF_TOKEN},
+        type: "POST",
+        url:   "change_event_title/",
+        data: { "new_title": eventTitle.innerText , "event_id": eventID },
+    }).success(function (){
+        alert('Event title changed!');
+    }).fail(function () {
+        alert('Failed to change event title!');
+    });
 });
-    alert('Change of Name Sucessful !')
+
+
+//to change event description
+const eventDescription = document.getElementById('EventDescription');
+
+eventDescription.addEventListener('blur', function() {
+    const eventID = window.location.pathname.split("/").pop();
+    $.ajax({
+        headers: {"X-CSRFToken": CSRF_TOKEN},
+        type: "POST",
+        url:   "change_event_description/",
+        data: { "new_description": eventDescription.innerText , "event_id": eventID },
+    }).success(function (){
+        alert('Event description changed!');
+    }).fail(function () {
+        alert('Failed to change event Description');
+    });
 });
 
 

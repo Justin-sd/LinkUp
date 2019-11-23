@@ -1,6 +1,4 @@
 from django.shortcuts import render, redirect
-from django.views.decorators.csrf import csrf_exempt
-
 from .apis import availability_calendar_api, sendEmail_api, algorithm_api
 from .models import Event, UserTimezone
 from django.contrib.auth.decorators import login_required
@@ -229,9 +227,16 @@ def update_timezone(request):
         UserTimezone.objects.create(user=user, timezone_str=user_timezone)
     return HttpResponse("Success")
 
-@csrf_exempt
-def changeEventTitle(request):
+
+def change_event_title(request):
     if request.method == 'POST':
-        event = Event.objects.filter(event_id=request.POST.get('eventid'))
-        event.update(title=request.POST.get('newTitle'))
+        event = Event.objects.filter(event_id=request.POST.get('event_id'))
+        event.update(title=request.POST.get('new_title'))
+    return HttpResponse("Success")
+
+
+def change_event_description(request):
+    if request.method == 'POST':
+        event = Event.objects.filter(event_id=request.POST.get('event_id'))
+        event.update(description=request.POST.get('new_description'))
     return HttpResponse("Success")
