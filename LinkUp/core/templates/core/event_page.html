@@ -135,7 +135,7 @@
                     </p>
                     {% for members in event.members.all %}
                     <div class="panel-block">
-                        {{ members }}
+                        {{ user.first_name }} {{ user.last_name }}
                     </div>
                     {% endfor %}
                 </div>
