@@ -9,12 +9,13 @@ from django.contrib import messages
 from django.http import HttpResponse
 
 
+@login_required()
 def home(request):
     user = request.user
     user_events = Event.objects.filter(members=user)
-    no_user_events = False;
+    no_user_events = False
     if user_events.count() is 0:
-        no_user_events = True;
+        no_user_events = True
 
     context = {
         "user_events": user_events,
