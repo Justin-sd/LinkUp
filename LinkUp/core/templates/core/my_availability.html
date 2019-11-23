@@ -1,24 +1,74 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<br><br>
+<section class="section">
+   <div class="section">
+      <div class="columns">
+        <aside class="column is-2">
+            <nav class="menu">
+               <p class="menu-label is-size-5">
+                  General
+               </p>
+               <hr/>
+               <ul class="menu-list">
+                  <li>
+                     <a class="is-size-4" href="/my_events">
+                     My Events
+                     </a>
+                     <ul>
+                        {% for event in user_events %}
+                        <li>
+                           <a class="is-size-4" href="/event_page/{{ event.event_id }}">{{ event.title }}</a>
+                        </li>
+                        {% endfor %}
+                     </ul>
+                     <a class="button is-size-4" > + Create An Event</a>
+                  </li>
+               </ul>
+               <p class="menu-label is-size-5">
+                  Availability
+               </p>
+               <ul class="menu-list">
+                  <li>
+                     <a class="is-active is-size-4" href="/my_availability">
+                     Adjust Your Availability
+                     </a>
+                      <ul>
+                        <li>
+                            <a href="google_calendar/" class="is-size-4">
+                                Import From Google Calendar
+                            </a>
+                        </li>
+                          <li>
+                              <a class="is-size-4">Save Availability</a>
+                          </li>
+                     </ul>
+                  </li>
+               </ul>
+            </nav>
+        </aside>
+      <div class="column is-four-fifths">
+          <div class="card">
+              <header class="card-header has-background-info">
+                <p class="card-header-title is-size-3">
+                  My Availability
+                </p>
+              </header>
+              <div class="card-content">
+                <div class="content">
+                  {% include "core/availability_calendar.html" %}
+                </div>
+              </div>
+              <footer class="card-footer">
+                    <a href="google_calendar/" id="a-import-from-google-calendar" class="card-footer-item is-size-4">
+                            Import From Google Calendar
+                    </a>
+                  <button id="btn-save-availability" class="card-footer-item is-pulled-right is-size-4">Save Availability</button>
+              </footer>
+          </div>
+      </div>
 
-<div class="column">
-    <div class="has-text-centered">
-        <a href="google_calendar/" id="a-import-from-google-calendar" class="button has-text-centered">
-            Import From Google Calendar
-        </a>
-        <button id="btn-save-availability" class="button has-text-centered">Save Availability</button>
-    </div>
-
-    <div class="availability-container">
-        <br><br>
-        <div class="panel">
-            <p class="panel-heading has-background-info">
-                My Availability
-            </p>
-            {% include "core/availability_calendar.html" %}
-        </div>
-    </div>
-</div>
+      </div>
+   </div>
+</section>
 {% endblock %}

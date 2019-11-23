@@ -10,8 +10,19 @@ from django.contrib import messages
 from django.http import HttpResponse
 
 
+@login_required()
 def home(request):
-    return render(request, "core/homepage.html", {})
+    user = request.user
+    user_events = Event.objects.filter(members=user)
+    no_user_events = False
+    if user_events.count() is 0:
+        no_user_events = True
+
+    context = {
+        "user_events": user_events,
+        "no_user_events": no_user_events,
+    }
+    return render(request, "core/homepage.html", context)
 
 
 @login_required()
@@ -23,12 +34,12 @@ def event_page(request, event_id):
 
     if event_query_set.count() != 1:
         return render(request, "core/error_page", {})
+    # User Object
+    user = request.user
 
     # Event Objects
     event = event_query_set[0]
-
-    # User Object
-    user = request.user
+    user_events = Event.objects.filter(members=user)
 
     if user in event.admins.all():
         admin = True
@@ -41,7 +52,8 @@ def event_page(request, event_id):
     time_list = algorithm_api.get_best(event_id)
 
     context = {"event": event, "admin": admin, "user": user, 'busy_times': busy_times,
-               "availability_dates": available_dates, "time_list": time_list}
+               "availability_dates": available_dates, "time_list": time_list, "user_events": user_events,
+               "event_id": event_id}
     return render(request, "core/event_page.html", context)
 
 
@@ -70,11 +82,13 @@ def my_events(request):
 
 @login_required()
 def my_availability(request):
+    user = request.user
+    user_events = Event.objects.filter(members=user)
     # Load users general availability from database
     busy_times = availability_calendar_api.format_general_availability_calendar(request.user)
     availability_dates = availability_calendar_api.get_list_of_next_n_days(30)
 
-    context = {"busy_times": busy_times, "availability_dates": availability_dates}
+    context = {"user_events": user_events, "busy_times": busy_times, "availability_dates": availability_dates}
     return render(request, "core/my_availability.html", context)
 
 

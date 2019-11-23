@@ -1,15 +1,73 @@
 {% extends 'base.html' %}
+{% load static %}
 {% load socialaccount %}
 {% providers_media_js %}
-{% block title %}LinkUp - Make Your Meeting{% endblock title %} //modifying the title
-{% block nav-style %} {% endblock nav-style %}
 {% block content %}
-    <section class="hero is-medium is-bold">
+    <br>
+    <br>
+    <div class="columns">
+      <div class="column is-one-fifth">
+      {% if user.is_authenticated %}
+        <div class="card is-right">
+      <header class="card-header">
+        <p class="card-header-title is-capitalized">
+          Hello {{ user.username }}!
+        </p>
+        <a href="/my_account" class="card-header-icon" aria-label="more options">
+          <span class="icon">
+            <img src="{% static '/images/myAccountIcon.png' %}"/>
+          </span>
+        </a>
+      </header>
+      <div class="card-content">
+        <div class="content">
+            {% if no_user_events %}
+                <br>
+                <p class="has-text-centered">
+                    It looks like you aren't apart of any events!
+                    <br>
+                    Please create your first event!
+                </p>
+                <br>
+            {% else %}
+                {% for event in user_events %}
+                     <ul>
+                        <li>
+                           <a class="is-size-3" href="/event_page/{{ event.event_id }}">
+                           {{ event.title }}
+                           </a>
+                            <p>{{ event.description }}</p>
+                        </li>
+                     </ul>
+                {% endfor %}
+          {% endif %}
+        </div>
+      </div>
+      <footer class="card-footer">
+        <a id="createEvent" class="card-footer-item is-capitalized">
+            Click Here To Create A New Event!
+        </a>
+      </footer>
+    </div>
+      {% endif %}
+      </div>
+      <div class="column">
+            <section class="hero is-medium is-bold">
         <div class="hero-body ">
             <div class="container">
                 <div style="text-align: center;">
                     <img src="/static/images/LinkUpLogoTransBack.png" width="700" height="800"/>
                 </div>
+            </div>
+        </div>
+    </section>
+      </div>
+      <div class="column">
+      </div>
+    </div>
+
+    {% include 'core/create_event_modal.html' %}
+
                 <div style="text-align: center;">
                     {% if user.is_authenticated %}
 
@@ -107,8 +165,5 @@
                 </body>
             </div>
             {% endif %}
-        </div>
-    </div>
-    </div>
-</section>
+
 {% endblock content %}
