@@ -26,6 +26,7 @@ urlpatterns = [
     path('redirect/', views.password_change),
     # availability
     path('my_availability/', views.my_availability),
+    path('save_availability/', views.save_availability),
     path('my_availability/google_calendar/', views.import_google_calendar_data),
     path('update_timezone/', views.update_timezone),
     # Users
@@ -38,7 +39,7 @@ urlpatterns = [
     path('password_change/', views.password_change),
     path('privacy_policy/', views.privacy_policy),
     # Contact
-    path('send_contact_email/', views.send_contact),
+    #path('send_contact_email/', views.send_contact),
     path('send_email/', views.send_email),
     # Events
     path('my_events/', views.my_events),

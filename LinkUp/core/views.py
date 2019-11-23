@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
-from .apis import availability_calendar_api, sendEmail_api, algorithm_api
-from .models import Event, UserTimezone
+
+from .apis import availability_calendar_api, sendEmail_api, algorithm_api, contact_us_api
+from .models import Event, Schedule, UserTimezone
 from .forms import EventForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -121,6 +122,22 @@ def about(request):
     return render(request, "core/about.html", {})
 
 
+def save_availability(request):
+    #Get user and local timezone
+    user = request.user
+    new_availability_dates = availability_calendar_api.convert_user_calendar_to_normal(request, user)
+
+    query = Schedule.objects.filter(user=user)
+    if query.count() == 0:
+        Schedule.objects.create(availability=new_availability_dates, user=user)
+    else:
+        schedule = query[0]
+        schedule.availability = new_availability_dates
+        schedule.save()
+
+    return render(request, "core/availability_calendar.html", {})
+
+
 def createUser(request):
     if request.method == "POST":
         user = User.objects.create_user(first_name=request.POST.get("first_name"),
@@ -163,8 +180,8 @@ def send_email(request):
     return HttpResponse("Success")
 
 
-def send_contact(request):
-    send_contact_email(name, message, email)
+#def send_contact(request):
+    #contact_us_api.send_contact_email(name, message, email)
 
 
 def get_create_event_form(request):

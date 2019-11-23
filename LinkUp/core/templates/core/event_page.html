@@ -18,6 +18,9 @@
             });
         }
     </script>
+    {% load static %}
+    <script type="text/javascript" src="{% static '/js/EditEvent.js' %}"></script>
+    <script type="text/javascript" src="{% static '/js/InviteGuestTrigger.js' %}"></script>
 
     <section class="section">
        <div class="section">
@@ -89,7 +92,7 @@
             <div class="box">
                 {% if admin %}
                     <i class="fa fa-gear fa-spin" ></i>
-                 <h1 class="title" contenteditable="true" id="EventTitle" >{{event.title}}</h1>
+                 <h1 class="title" contenteditable="true" id="EventTitle">{{event.title}}</h1>
                 {% else %}
                     <h1 class="title"  >{{event.title}}</h1>
                 {% endif %}

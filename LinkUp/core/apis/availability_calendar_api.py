@@ -1,9 +1,12 @@
-from datetime import datetime, timedelta
-
-from django.core.exceptions import ObjectDoesNotExist
-from django.utils import timezone
+from datetime import datetime, timedelta, timezone
+from django.contrib.auth.models import User
 from django.utils.dateparse import parse_datetime
-from pytz import UTC
+
+from ..models import Schedule
+from .calendar_api import free_busy_month, get_users_preferred_timezone
+from django.utils import timezone
+from pytz import UTC, timezone as pytz_timezone
+from django.utils.dateparse import parse_datetime
 import json
 
 from ..models import Event, Schedule, EventSchedule, UserTimezone
@@ -262,3 +265,36 @@ def json_datetime_handler(obj):
         return ...
     else:
         raise TypeError('Object of type %s with value of %s is not JSON serializable' % (type(obj), repr(obj)))
+
+def convert_user_calendar_to_normal(calendar, user) :
+    """
+    :param calendar: The formatted calendar given in JS
+    :return: The users availability converted into standard format:
+            [{'start': datetime(..., hour=4, minute=30), 'end': datetime(..., hour=6, minute=30)}, ...]
+    """
+    local_tz = get_user_timezone(user)
+    new_calendar = json.load(calendar)
+    converted_calendar = []
+    for hours in new_calendar :
+        i = 0
+        for day in new_calendar[hours] :
+            today =(datetime.now() + timedelta(days=i))
+            hour = hours.split('-')
+
+            if day is True :
+                converted_calendar.append({'start': datetime(today.year, today.month, today.day, int(hour[0]), int(hour[1]), tzinfo=local_tz).astimezone(UTC),
+                                             'end': (datetime(today.year, today.month, today.day, int(hour[0]), int(hour[1]), tzinfo=local_tz) + timedelta(minutes = 30)).astimezone(UTC) })
+            i = i + 1
+
+    return json.dumps(converted_calendar, default=json_datetime_handler)
+
+
+def get_user_timezone(user):
+    # Get User's Timezone
+    query = UserTimezone.objects.filter(user=user)
+    if query.count() == 0:
+        #USE AS DEFAULT FOR NOW
+        local_tz = pytz_timezone("America/Los_Angeles")
+    else:
+        local_tz = pytz_timezone(query[0].timezone_str)
+    return local_tz

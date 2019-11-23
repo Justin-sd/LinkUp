@@ -1,36 +1,32 @@
-//to change event title
-const eventTitle = document.getElementById('EventTitle');
+$(document).ready(function(){
+    // To change event title
+    $('#EventTitle').on('blur', function() {
+        const eventID = window.location.pathname.split("/").pop();
+        $.ajax({
+            headers: {"X-CSRFToken": CSRF_TOKEN},
+            type: "POST",
+            url:   "change_event_title/",
+            data: { "new_title": $('#EventTitle').text(), "event_id": eventID },
+        }).success(function (){
+            alert('Event title changed!');
+        }).fail(function () {
+            alert('Failed to change event title!');
+        });
+    });
 
-eventTitle.addEventListener('blur', function() {
-    const eventID = window.location.pathname.split("/").pop();
-    $.ajax({
-        headers: {"X-CSRFToken": CSRF_TOKEN},
-        type: "POST",
-        url:   "change_event_title/",
-        data: { "new_title": eventTitle.innerText , "event_id": eventID },
-    }).success(function (){
-        alert('Event title changed!');
-    }).fail(function () {
-        alert('Failed to change event title!');
+    // To change event description
+    $('#EventDescription').on('blur', function() {
+        const eventID = window.location.pathname.split("/").pop();
+        $.ajax({
+            headers: {"X-CSRFToken": CSRF_TOKEN},
+            type: "POST",
+            url:   "change_event_description/",
+            data: { "new_description": $('#EventDescription').text() , "event_id": eventID },
+        }).success(function (){
+            alert('Event description changed!');
+        }).fail(function () {
+            alert('Failed to change event Description');
+        });
     });
 });
-
-
-//to change event description
-const eventDescription = document.getElementById('EventDescription');
-
-eventDescription.addEventListener('blur', function() {
-    const eventID = window.location.pathname.split("/").pop();
-    $.ajax({
-        headers: {"X-CSRFToken": CSRF_TOKEN},
-        type: "POST",
-        url:   "change_event_description/",
-        data: { "new_description": eventDescription.innerText , "event_id": eventID },
-    }).success(function (){
-        alert('Event description changed!');
-    }).fail(function () {
-        alert('Failed to change event Description');
-    });
-});
-
 
