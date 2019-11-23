@@ -33,12 +33,12 @@ def event_page(request, event_id):
 
     if event_query_set.count() != 1:
         return render(request, "core/error_page", {})
+    # User Object
+    user = request.user
 
     # Event Objects
     event = event_query_set[0]
-
-    # User Object
-    user = request.user
+    user_events = Event.objects.filter(members=user)
 
     if user in event.admins.all():
         admin = True
@@ -51,7 +51,8 @@ def event_page(request, event_id):
     time_list = algorithm_api.get_best(event_id)
 
     context = {"event": event, "admin": admin, "user": user, 'busy_times': busy_times,
-               "availability_dates": available_dates, "time_list": time_list}
+               "availability_dates": available_dates, "time_list": time_list, "user_events": user_events,
+               "event_id": event_id}
     return render(request, "core/event_page.html", context)
 
 

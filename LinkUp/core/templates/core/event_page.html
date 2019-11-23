@@ -2,7 +2,6 @@
 {% block title %}LinkUp {% endblock title %} //modifying the title
 
 {% block content %}
-<head>
     <script type='text/javascript'>
         function sendEmail() {
             let invitee_email = $("#invitee_email").val();
@@ -20,30 +19,79 @@
             });
         }
     </script>
-</head>
-    {% if admin %}
-        <section class="section">
-            <div class="column">
-                <div class="box">
-                    <h2 class="">
-                        Admin Controls
-                    </h2>
-                    <hr/>
-                    <div class="notification is-dark">
-                        <center>
-                            <a class="button is-info" id="invitebutton">Invite Guest</a>
-                            <a class="button is-info" id="addadmin">Add an Admin</a>
-                            <a class="button is-info">Create SubEvent</a>
-                        </center>
-                    </div>
-                </div>
-            </div>
-        </section>
-    {% endif %}
+
     <section class="section">
+       <div class="section">
+    <div class="columns">
+        <aside class="column is-2">
+            <nav class="menu">
+               <p class="menu-label is-size-5">
+                  General
+               </p>
+               <hr/>
+               <ul class="menu-list">
+                  <li>
+                     <a class="is-size-4" href="/my_events">
+                     My Events
+                     </a>
+                     <ul>
+                        {% for event in user_events %}
+                        <li>
+                            {% if event.event_id is event_id %}
+                                <p>{{ event.event_id }}</p>
+                                <p>{{ event_id }}</p>
+                                <a class="is-active is-size-4" href="/event_page/{{ event.event_id }}">{{ event.title }}</a>
+                            {% else %}
+                                <p>{{ event.event_id }}</p>
+                                <p>{{ event_id }}</p>
+                                <a class="is-size-4" href="/event_page/{{ event.event_id }}">{{ event.title }}</a>
+                            {% endif %}
+                        </li>
+                        {% endfor %}
+                     </ul>
+                     <a class="button is-size-4" > + Create An Event</a>
+                  </li>
+               </ul>
+               <p class="menu-label is-size-5">
+                  Availability
+               </p>
+               <ul class="menu-list">
+                  <li>
+                     <a class="is-size-4" href="/my_availability">
+                     Adjust Your Availability
+                     </a>
+                      <ul>
+                        <li>
+                            <a href="google_calendar/" class="is-size-4">
+                                Import From Google Calendar
+                            </a>
+                        </li>
+                   </ul>
+                  </li>
+               </ul>
+
+                {% if admin %}
+                <p class="menu-label is-size-5">
+                  Admin Controls
+                </p>
+                    <ul class="menu-list">
+                  <li>
+                     <a class="is-size-4" id="invitebutton">
+                        Invite Guest
+                     </a>
+                  </li>
+                    <li>
+                       <a class="is-size-4" id="addadmin">
+                        Add An Admin
+                     </a>
+                   </li>
+               </ul>
+    {% endif %}
+            </nav>
+         </aside>
         <div class="column">
             <div class="box">
-                <h1 class="title">{{event.title}}</h1>
+                <h1 class="title is-size-2">{{event.title}}</h1>
                 <hr/>
                 <div class="level">
                     <div class="level-left">
@@ -58,6 +106,8 @@
                 </div>
             </div>
         </div>
+    </div>
+       </div>
     </section>
     <section class="section">
         <div class="columns is-multiline">
