@@ -30,3 +30,48 @@ $(document).ready(function(){
     });
 });
 
+
+
+
+//// Add Admin
+function Search() {
+  document.getElementById("myDropdown").classList.toggle("show");
+}
+
+function filterFunction() {
+  var input, filter, ul, li, a, i;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+    let div = document.getElementById("myDropdown");
+  a = div.getElementsByTagName("a");
+  for (i = 0; i < a.length; i++) {
+    txtValue = a[i].textContent || a[i].innerText;
+    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+      a[i].style.display = "";
+    } else {
+      a[i].style.display = "none";
+    }
+  }
+}
+
+function AddAdmin(){
+
+    const newAdmin = document.getElementById("member").innerText;
+
+    const eventID = window.location.pathname.split("/").pop();
+    $.ajax({
+        headers: {"X-CSRFToken": CSRF_TOKEN},
+        type: "POST",
+        url:   "add_event_admin/",
+        data: { "new_admin": newAdmin , "event_id": eventID },
+    }).success(function (){
+        alert('Event Admin Added!');
+    }).fail(function () {
+        alert('Event Admin not Added');
+    });
+
+}//end of function
+
+////Add admin
+
+
