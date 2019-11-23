@@ -233,3 +233,10 @@ def change_event_title(request):
         event = Event.objects.filter(event_id=request.POST.get('event_id'))
         event.update(title=request.POST.get('new_title'))
     return HttpResponse("Success")
+
+
+def change_event_description(request):
+    if request.method == 'POST':
+        event = Event.objects.filter(event_id=request.POST.get('event_id'))
+        event.update(description=request.POST.get('new_description'))
+    return HttpResponse("Success")
