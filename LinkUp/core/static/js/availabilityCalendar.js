@@ -38,6 +38,7 @@ $(function () {
       lastIdx = -1;
     });
 });
+
 function update() {
     let calendar = {};
     //Loop over every hour
@@ -46,7 +47,7 @@ function update() {
         calendar[convert(row)] = [];
         //Loop over every day for that hour
         for (let i = 0; i < $tds.length; i++) {
-            if($tds.eq(i).attr('class') === "busy-time") {
+            if ($tds.eq(i).attr('class') === "busy-time") {
                 calendar[convert(row)].push(true);
             } else {
                 calendar[convert(row)].push(false);
@@ -55,17 +56,16 @@ function update() {
     });
 
     $.ajax({
-        headers: { 'X-CSRFToken': token },
+        headers: {'X-CSRFToken': token},
         url: "/save_availability/",
         type: "POST",
         data: JSON.stringify(calendar),
         contentType: "application/json",
-        success: function(result) {
+        success: function (result) {
             alert("saved");
         }
     });
 }
-
 
 function convert(idx) {
     switch(idx) {

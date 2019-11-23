@@ -1,4 +1,4 @@
-#btn-import-from-google-calendar {
+#a-import-from-google-calendar {
     background: limegreen;
 }
 
@@ -6,35 +6,45 @@
     background: lightblue;
 }
 
-.header tbody{
+tbody{
     display:block;
     overflow-y:scroll;
     overflow-x: scroll;
     height:500px;
 }
 
-.header thead tr{
+thead tr{
     height:20px;
     display: table;
     width: 100%;
     table-layout: fixed;
 }
 
-.header td, th, tr {
-    width:120px;
-}
-
-.header table {
+table {
     border-collapse: collapse;
 }
 
-.header tbody tr{
+th, td {
+    width: 120px;
+}
+
+tbody tr{
     display: table;
     width: 100%;
     table-layout: fixed;
 }
 
-.header td.busy-time {
+td.busy-time {
     background-color: #f6352a;
     border-bottom: 1px double #f6352a;
+}
+
+.hide-scroll {
+    overflow-y: scroll;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+}
+.hide-scroll::-webkit-scrollbar { /* WebKit */
+    width: 0;
+    height: 0;
 }

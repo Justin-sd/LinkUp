@@ -1,127 +1,151 @@
 {% extends 'base.html' %}
 {% block title %}LinkUp {% endblock title %} //modifying the title
-{% block nav-style %} {% endblock nav-style %}
 {% block content %}
-<div class="section">
-<div class="columns">
-	<aside class="column is-2">
-		<nav class="menu">
-			<p class="menu-label">
-				General
-			</p>
-			<ul class="menu-list">
-				<li>
-					<a class="is-active" href="/my_events/"> My Events </a>
-					<ul>
-						{% for event in user_events %}
-							<li><a href="/event_page/{{ event.event_id }}">{{ event.title }}</a></li>
-						{% endfor %}
-					</ul>
-				</li>
-			</ul>
-			<!-- TODO: Administration should only be available to admins of meetings -->
-			<p class="menu-label">
-				Administration
-			</p>
-			<ul class="menu-list">
-				<li><a> Meeting Settings </a></li>
-				<li>
-					<a class="">Manage Your Team</a>
-					<ul>
-						<li><a>Members</a></li>
-						<li><a>Invite a member</a></li>
-					</ul>
-				</li>
-			</ul>
-			<p class="menu-label">
-				Availability
-			</p>
-			<ul class="menu-list">
-				<li><a href="/my_availability/">Available Times</a></li>
-				<li><a>Must Have Members</a></li>
-				<li><a>Adjust Your Schedule</a></li>
-			</ul>
-		</nav>
-	</aside>
-	<main class="column" style="overflow-x: scroll;">
-		<div class="level">
-			<div class="level-left">
-				<div class="level-item">
-					<div class="title">My Events</div>
-				</div>
-			</div>
-			<div class="level-right">
-				<div class="level-item">
-					<a class="button" href="/my_account/{{ user_name }}">Welcome {{ user_name }}!</a>
-				</div>
-			</div>
-		</div>
-		<div class="columns is-multiline">
-			<div class="column">
-				<div class="box">
-					<div class="heading">Number of Events</div>
-					<hr/>
-					<div class="title is-size-1 has-text-centered">
-						{{ user_event_count }}
-					</div>
-					<div class="level">
-						<div class="level-item">
-							<div class="">
-								<a class="button is-info">Create A New Event</a>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="column">
-				<div class="box">
-					<div class="heading">Most Commom Meeting Members</div>
-					<hr/>
-					{% for event in user_events %}
-					<div class="title is-5">Needs to be implemented<a class="button is-small is-pulled-right is-info">Create Event w/ User</a></div>
-					{% endfor %}
-				</div>
-			</div>
-		</div>
-		<div class="columns is-multiline">
-			<div class="column" style="overflow-y: scroll;">
-				 <div class="panel">
-					<p class="panel-heading has-background-info">
-						My Availability
-					</p>
-					{% include "core/availability_calendar.html" %}
-				</div>
-			</div>
-
-			<div class="columns is-multiline" style="margin-top: 24px;">
-				<div class="column is-6">
-					<div class="panel">
-						<p class="panel-heading has-background-info">
-							Maybe a Breakdown Feature
-						</p>
-						<div class="panel-block">
-							<figure class="image is-16x9">
-								<img src="https://placehold.it/1280x720"/>
-							</figure>
-						</div>
-					</div>
-				</div>
-				<div class="column is-6">
-					<div class="panel">
-						<p class="panel-heading has-background-info">
-							Bar Graph of Top Available times
-						</p>
-						<div class="panel-block">
-							<figure class="image is-16x9">
-								<img src="https://placehold.it/1280x720"/>
-							</figure>
-						</div>
-					</div>
-				</div>
-			</div>
-        </div>
-	</main>
+<section class="section">
+   <div class="section">
+      <div class="columns">
+         <aside class="column is-2">
+            <nav class="menu">
+               <p class="menu-label is-size-5">
+                  General
+               </p>
+               <hr/>
+               <ul class="menu-list">
+                  <li>
+                     <a class="is-active is-size-4" href="/my_events">
+                     My Events
+                     </a>
+                     <ul>
+                        {% for event in user_events %}
+                        <li>
+                           <a class="is-size-4" href="/event_page/{{ event.event_id }}">{{ event.title }}</a>
+                        </li>
+                        {% endfor %}
+                     </ul>
+                     <a class="button is-size-4" > + Create An Event</a>
+                  </li>
+               </ul>
+               <p class="menu-label is-size-5">
+                  Availability
+               </p>
+               <ul class="menu-list">
+                  <li>
+                     <a class="is-size-4" href="/my_availability">
+                     Adjust Your Availability
+                     </a>
+                  </li>
+               </ul>
+            </nav>
+         </aside>
+         <main class="column" style="overflow-x: scroll;">
+            <div class="column">
+               <div class="level">
+                  <div class="level-left">
+                     <div class="level-item">
+                        <div class="title is-size-1">
+                           My Events
+                        </div>
+                     </div>
+                  </div>
+                  <div class="level-right">
+                     <div class="level-item">
+                        <a class="button is-size-3" href="my_account/">
+                        Welcome {{ user_name }}!
+                        </a>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <br/>
+            <br/>
+            <div class="columns is-multiline">
+               <div class="column">
+                  <div class="box">
+                     <div class="is-size-3">Number of Events</div>
+                     <hr/>
+                     <div class="title has-text-centered" style="font-size: 100px">
+                        {{ user_event_count }}
+                     </div>
+                     <div class="level">
+                        <div class="level-item">
+                           <div class="">
+                              <a class="button is-info is-size-3" id="myBtn">
+                              + Create An Event
+                              </a>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="column" style="text-align: center;">
+                  <img src="/static/images/LinkUpLogoTransBack.png" width="300" height="400"/>
+               </div>
+            </div>
+            <div class="columns is-multiline">
+               <div class="column">
+                  <div class="box">
+                     <div class="is-size-3">Events</div>
+                     <hr/>
+                     {% for event in user_events %}
+                     <ul>
+                        {% for event in user_events %}
+                        <li>
+                           <a class="is-size-3" href="/event_page/{{ event.event_id }}">
+                           {{ event.title }}
+                           </a>
+                        </li>
+                        {% endfor %}
+                     </ul>
+                     {% endfor %}
+                  </div>
+               </div>
+            </div>
+            <div class="columns is-multiline">
+               <div class="column" style="overflow-y: scroll;">
+                  <div class="panel">
+                     <p class="panel-heading has-background-info">
+                        My Availability
+                     </p>
+                     {% include "core/availability_calendar.html" %}
+                  </div>
+               </div>
+            </div>
+         </main>
+      </div>
+   </div>
+</section>
+<!-- The Modal  Create a new event-->
+<div id="myModal" class="modal" >
+   <!-- Modal content -->
+   <div class="modal-content" id="createcontent">
+      <div class="modal-header" id="create header">
+         <span class="close" ></span>
+         <h2 style="font-size: larger" >Create a New Event</h2>
+      </div>
+      <div class="modal-body" id="createbody">
+         <center>
+            <strong>Event Title:</strong><span class="red-star">*</span> <br> <input type="text" id="EventTitle" >
+            <br> <br>
+            <strong>Event ID:</strong><span class="red-star">*</span><br> <input type="text" id="EventID">
+            <br>
+            <br> <strong>Event Duration:</strong><span class="red-star">*</span><br> Minutes Only <input type="number" name="quantity" min="0" max="1000" id="minutes">
+            <br> <br>
+            <strong>Event Description:</strong><span class="red-star">*</span><br>
+            <textarea rows="4" cols="50" id="description"></textarea>
+            <br> <br>
+            <strong> Potential Start Date:</strong><span class="red-star">*</span><br> <input type="date" id="start"> <br>
+            <strong>Potential End Date</strong><span class="red-star">*</span><br> <input type="date" id="end">
+            <br> <br>
+            <form id="create" action="" onclick="Create()">
+               <button id="button" href="" class="button is-info is-size-5-fullhd">Create Event</button>
+            </form>
+         </center>
+      </div>
+      <div class="modal-footer" id="createfooter">
+         <h3></h3>
+      </div>
+   </div>
 </div>
-</div>
+<!-- End modal -->
 {% endblock content %}
 
