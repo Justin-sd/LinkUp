@@ -250,7 +250,6 @@ def activate_users_saved_timezone(user):
     """
     try:
         timezone.activate(UserTimezone.objects.get(user=user).timezone_str)
-
     except ObjectDoesNotExist:
         # If we can't find it, just make it LA for now
         timezone.activate('America/Los_Angeles')
