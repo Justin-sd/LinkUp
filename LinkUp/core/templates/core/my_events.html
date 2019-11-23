@@ -22,7 +22,8 @@
                         </li>
                         {% endfor %}
                      </ul>
-                     <a class="button is-size-4" > + Create An Event</a>
+                     <a id="createEvent" class="button is-size-4" > + Create An Event</a>
+                      {% include 'core/create_event_modal.html' %}
                   </li>
                </ul>
                <p class="menu-label is-size-5">
@@ -33,6 +34,13 @@
                      <a class="is-size-4" href="/my_availability">
                      Adjust Your Availability
                      </a>
+                      <ul>
+                        <li>
+                            <a href="google_calendar/" class="is-size-4">
+                                Import From Google Calendar
+                            </a>
+                        </li>
+                   </ul>
                   </li>
                </ul>
             </nav>
@@ -86,17 +94,16 @@
                   <div class="box">
                      <div class="is-size-3">Events</div>
                      <hr/>
-                     {% for event in user_events %}
+                      {% for event in user_events %}
                      <ul>
-                        {% for event in user_events %}
                         <li>
                            <a class="is-size-3" href="/event_page/{{ event.event_id }}">
                            {{ event.title }}
                            </a>
+                            <p>{{ event.description }}</p>
                         </li>
-                        {% endfor %}
                      </ul>
-                     {% endfor %}
+                      {% endfor %}
                   </div>
                </div>
             </div>
