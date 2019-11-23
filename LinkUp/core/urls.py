@@ -32,4 +32,5 @@ urlpatterns = [
     path('donate/', views.donate),
     # availability
     path('my_availability/', views.my_availability),
+    path('save_availability/', views.save_availability),
 ]
