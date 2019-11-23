@@ -46,5 +46,5 @@ urlpatterns = [
     path('attendees/', views.attendees_page),
     path('eventcreation/<str:idd>/<str:title>/<str:description>/<str:start>/<str:end>/<str:duration>/', views.eventcreation),
     path('failed_login/', views.failed_login),
-    path('event_page/changeeventtitle/', views.changeEventTitle)
+    path('event_page/change_event_title/', views.change_event_title),
 ]
