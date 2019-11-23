@@ -10,7 +10,17 @@ from django.http import HttpResponse
 
 
 def home(request):
-    return render(request, "core/homepage.html", {})
+    user = request.user
+    user_events = Event.objects.filter(members=user)
+    no_user_events = False;
+    if user_events.count() is 0:
+        no_user_events = True;
+
+    context = {
+        "user_events": user_events,
+        "no_user_events": no_user_events,
+    }
+    return render(request, "core/homepage.html", context)
 
 
 @login_required()

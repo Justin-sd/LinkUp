@@ -86,17 +86,16 @@
                   <div class="box">
                      <div class="is-size-3">Events</div>
                      <hr/>
-                     {% for event in user_events %}
+                      {% for event in user_events %}
                      <ul>
-                        {% for event in user_events %}
                         <li>
                            <a class="is-size-3" href="/event_page/{{ event.event_id }}">
                            {{ event.title }}
                            </a>
+                            <p>{{ event.description }}</p>
                         </li>
-                        {% endfor %}
                      </ul>
-                     {% endfor %}
+                      {% endfor %}
                   </div>
                </div>
             </div>
