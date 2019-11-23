@@ -65,7 +65,6 @@ def my_events(request):
     user_events = Event.objects.filter(members=user)
     user_event_count = user_events.count()
 
-    #busy_times = availability_calendar_api.convert_stored_calendar_to_UI(request.user.id)
     busy_times = availability_calendar_api.format_general_availability_calendar(request.user)
     availability_dates = availability_calendar_api.get_list_of_next_n_days(30)
 
@@ -123,6 +122,7 @@ def about(request):
 
 
 def save_availability(request):
+    #Get user and local timezone
     user = request.user
     new_availability_dates = availability_calendar_api.convert_user_calendar_to_normal(request, user)
 
@@ -135,6 +135,7 @@ def save_availability(request):
         schedule.save()
 
     return render(request, "core/availability_calendar.html", {})
+
 
 def createUser(request):
     if request.method == "POST":

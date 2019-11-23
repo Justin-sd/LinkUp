@@ -28,44 +28,42 @@ $(function () {
       isMouseDown = false;
       strtTime = convert(firstIdx);
       endTime = convert(lastIdx);
-      if(  (firstIdx !== -1) && (lastIdx !== -1) && (lastIdx !== firstIdx)) {
-        if ( confirm("Confirm: Do you want to set unavailability from: " + strtTime + " to: " + endTime) ) {
-            update();
-        }
-      }
+
       //Reset values
       firstIdx = -1;
       lastIdx = -1;
     });
 });
 
-function update() {
-    let calendar = {};
-    //Loop over every hour
-    $("table tbody").find('tr').each(function (row) {
-        let $tds = $(this).find('td');
-        calendar[convert(row)] = [];
-        //Loop over every day for that hour
-        for (let i = 0; i < $tds.length; i++) {
-            if ($tds.eq(i).attr('class') === "busy-time") {
-                calendar[convert(row)].push(true);
-            } else {
-                calendar[convert(row)].push(false);
+$(document).ready(function() {
+    $('#btn-save-availability').click(function () {
+        let calendar = {};
+        //Loop over every hour
+        $("table tbody").find('tr').each(function (row) {
+            let $tds = $(this).find('td');
+            calendar[convert(row)] = [];
+            //Loop over every day for that hour
+            for (let i = 0; i < $tds.length; i++) {
+                if ($tds.eq(i).attr('class') === "busy-time") {
+                    calendar[convert(row)].push(true);
+                } else {
+                    calendar[convert(row)].push(false);
+                }
             }
-        }
-    });
+        });
 
-    $.ajax({
-        headers: {'X-CSRFToken': token},
-        url: "/save_availability/",
-        type: "POST",
-        data: JSON.stringify(calendar),
-        contentType: "application/json",
-        success: function (result) {
-            alert("saved");
-        }
+        $.ajax({
+            headers: {'X-CSRFToken': token},
+            url: "/save_availability/",
+            type: "POST",
+            data: JSON.stringify(calendar),
+            contentType: "application/json",
+            success: function (result) {
+                alert("SAVED")
+            }
+        });
     });
-}
+});
 
 function convert(idx) {
     switch(idx) {
@@ -169,3 +167,4 @@ function convert(idx) {
             return "null";
     }
 }
+
