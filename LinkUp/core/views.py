@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .apis import availability_calendar_api, sendEmail_api, algorithm_api
 from .models import Event, UserTimezone
+from .forms import EventForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordChangeForm
@@ -60,7 +61,8 @@ def my_events(request):
         "user_name": user_name,
         "user_event_count": user_event_count,
         "busy_times": busy_times,
-        "availability_dates": availability_dates
+        "availability_dates": availability_dates,
+        "create_event_form": EventForm(),
     }
 
     return render(request, "core/my_events.html", context)
@@ -118,9 +120,6 @@ def createUser(request):
     return render(request, "core/homepage.html", {})
 
 
-
-
-
 def login_user(request, backend='django.contrib.auth.backends.ModelBackend'):
     if request.method == "POST":
         try:
@@ -155,9 +154,27 @@ def send_contact(request):
     send_contact_email(name, message, email)
 
 
-def eventcreation(request, idd, title, description, start,
-                  end, duration):
-    userr = request.user
+def get_create_event_form(request):
+    # If POST request, process the form
+    if request.method == 'POST':
+        form = EventForm(request.POST)
+
+        # If form is valid, save the event
+        if form.is_valid():
+            form.save()
+            return HttpResponse(status=204)
+
+        else:
+            # Send back the form if the data is not valid
+            return render(request, "core/create_event_form.html", {'create_event_form': form})
+    else:
+        # If GET request, render the form
+        form = EventForm()
+        return render(request, 'core/create_event_form.html', {'create_event_form': form})
+
+
+def create_event(request):
+    user = request.user
     event = Event.objects.create(event_id=idd, title=title,
                                  description=description,
                                  owner=userr, potential_start_date=start,
@@ -170,6 +187,7 @@ def eventcreation(request, idd, title, description, start,
 @login_required()
 def my_account(request):
     return render(request, "core/my_account.html", {})
+
 
 @login_required()
 def privacy_policy(request):
