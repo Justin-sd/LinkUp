@@ -48,4 +48,5 @@ urlpatterns = [
     path('failed_login/', views.failed_login)
     path('failed_login/', views.failed_login),
     path('event_page/change_event_title/', views.change_event_title),
+    path('event_page/change_event_description/', views.change_event_description),
 ]

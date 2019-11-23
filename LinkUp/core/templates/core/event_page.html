@@ -36,13 +36,9 @@
                      <ul>
                         {% for event in user_events %}
                         <li>
-                            {% if event.event_id is event_id %}
-                                <p>{{ event.event_id }}</p>
-                                <p>{{ event_id }}</p>
+                            {% if event.event_id == event_id %}
                                 <a class="is-active is-size-4" href="/event_page/{{ event.event_id }}">{{ event.title }}</a>
                             {% else %}
-                                <p>{{ event.event_id }}</p>
-                                <p>{{ event_id }}</p>
                                 <a class="is-size-4" href="/event_page/{{ event.event_id }}">{{ event.title }}</a>
                             {% endif %}
                         </li>
@@ -91,7 +87,12 @@
          </aside>
         <div class="column">
             <div class="box">
+                {% if admin %}
+                    <i class="fa fa-gear fa-spin" ></i>
                  <h1 class="title" contenteditable="true" id="EventTitle" >{{event.title}}</h1>
+                {% else %}
+                    <h1 class="title"  >{{event.title}}</h1>
+                {% endif %}
                 <hr/>
                 <div class="level">
                     <div class="level-left">
@@ -112,13 +113,24 @@
     <section class="section">
         <div class="columns is-multiline">
             <div class="column">
+
                 <div class="panel">
-                    <p class="panel-heading has-background-info">
+                    {% if admin %}
+                    <p class="panel-heading has-background-info"><i class="fa fa-gear fa-spin" ></i>
                         Event Description
                     </p>
-                    <div class="panel-block">
+
+                    <div class="panel-block" id="EventDescription" contenteditable="true">
                         {{ event.description }}
                     </div>
+                    {% else %}
+                        <p class="panel-heading has-background-info">
+                        Event Description
+                    </p>
+                        <div class="panel-block" >
+                        {{ event.description }}
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
