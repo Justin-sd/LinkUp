@@ -79,11 +79,13 @@ def my_events(request):
 
 @login_required()
 def my_availability(request):
+    user = request.user
+    user_events = Event.objects.filter(members=user)
     # Load users general availability from database
     busy_times = availability_calendar_api.format_general_availability_calendar(request.user)
     availability_dates = availability_calendar_api.get_list_of_next_n_days(30)
 
-    context = {"busy_times": busy_times, "availability_dates": availability_dates}
+    context = {"user_events": user_events, "busy_times": busy_times, "availability_dates": availability_dates}
     return render(request, "core/my_availability.html", context)
 
 
