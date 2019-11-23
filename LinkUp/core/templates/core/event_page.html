@@ -18,6 +18,9 @@
             });
         }
     </script>
+    {% load static %}
+    <script type="text/javascript" src="{% static '/js/EditEvent.js' %}"></script>
+    <script type="text/javascript" src="{% static '/js/InviteGuestTrigger.js' %}"></script>
 
     <section class="section">
        <div class="section">
@@ -77,9 +80,33 @@
                      </a>
                   </li>
                     <li>
-                       <a class="is-size-4" id="addadmin">
-                        Add An Admin
-                     </a>
+
+                        <div class="dropdown">
+                     <a class="is-size-4 dropdown-toggle" data-toggle="dropdown">Add An Admin<span class="caret"></span>   </a>
+                         <ul class="dropdown-menu" style="background-color: whitesmoke" id="myDropdown">
+                             <input class="input is-rounded glyphicon-search" placeholder="Search..." style="color: black" id="myInput" onkeyup="filterFunction()">
+
+                                    {% for member in event.members.all %}
+                                        {% if member not in event.admins.all %}
+                                        <li><a href="" style="color: black" onclick="AddAdmin()" id="member">{{ member }}</a></li>
+                                        {% endif %}
+                                    {% endfor %}
+
+                         </ul>
+                  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
                    </li>
                </ul>
     {% endif %}
@@ -89,7 +116,7 @@
             <div class="box">
                 {% if admin %}
                     <i class="fa fa-gear fa-spin" ></i>
-                 <h1 class="title" contenteditable="true" id="EventTitle" >{{event.title}}</h1>
+                 <h1 class="title" contenteditable="true" id="EventTitle">{{event.title}}</h1>
                 {% else %}
                     <h1 class="title"  >{{event.title}}</h1>
                 {% endif %}

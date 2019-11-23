@@ -272,3 +272,10 @@ def change_event_description(request):
         event = Event.objects.filter(event_id=request.POST.get('event_id'))
         event.update(description=request.POST.get('new_description'))
     return HttpResponse("Success")
+
+def add_event_admin(request):
+    if request.method == 'POST':
+        event = Event.objects.filter(event_id=request.POST.get('event_id'))
+        newadmin = User.objects.filter(username=request.POST.get('new_admin'))
+        event[0].admins.add(newadmin[0])
+    return HttpResponse("Success")
