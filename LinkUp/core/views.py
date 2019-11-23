@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect
+from django.views.decorators.csrf import csrf_exempt
+
 from .apis import availability_calendar_api, sendEmail_api, algorithm_api
 from .models import Event, UserTimezone
 from django.contrib.auth.decorators import login_required
@@ -132,9 +134,6 @@ def createUser(request):
     return render(request, "core/homepage.html", {})
 
 
-
-
-
 def login_user(request, backend='django.contrib.auth.backends.ModelBackend'):
     if request.method == "POST":
         try:
@@ -185,6 +184,7 @@ def eventcreation(request, idd, title, description, start,
 def my_account(request):
     return render(request, "core/my_account.html", {})
 
+
 @login_required()
 def privacy_policy(request):
     return render(request, "core/privacy_policy.html", {})
@@ -227,4 +227,11 @@ def update_timezone(request):
         UserTimezone.objects.update(user=user, timezone_str=user_timezone)
     else:
         UserTimezone.objects.create(user=user, timezone_str=user_timezone)
+    return HttpResponse("Success")
+
+@csrf_exempt
+def changeEventTitle(request):
+    if request.method == 'POST':
+        event = Event.objects.filter(event_id=request.POST.get('eventid'))
+        event.update(title=request.POST.get('newTitle'))
     return HttpResponse("Success")
