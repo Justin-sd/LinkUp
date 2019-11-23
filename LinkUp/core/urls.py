@@ -45,6 +45,5 @@ urlpatterns = [
     path('event_page/<str:event_id>', views.event_page),
     path('attendees/', views.attendees_page),
     path('create_event_form/', views.get_create_event_form),
-    path('create_event/', views.create_event),
     path('failed_login/', views.failed_login)
 ]

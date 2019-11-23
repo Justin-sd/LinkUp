@@ -40,33 +40,20 @@ function validateCreateEventForm() {
     const eventDuration = $("#id_duration").val();
     const eventStart = Date.parse($("#id_potential_start_date").val());
     const eventEnd = Date.parse($("#id_potential_end_date").val());
-    console.log(eventDuration, (eventStart), (eventEnd));
-}
 
-function createEvent() { // create an event popup when create event button is clicked
-    const eventTitle = $("#id_title").val();
-    const eventDescription = $("#id_description").val();
-    const eventDuration = $("#id_duration").val();
-    const eventStart = Date.parse($("#id_potential_start_date").val());
-    const eventEnd = Date.parse($("#id_potential_end_date").val());
-
-    const data = {"event_title": eventTitle, "event_description": eventDescription, "event_duration": eventDuration,
-                  "event_start": eventStart, "event_end": eventEnd};
-
-    $.ajax({
-        headers: {"X-CSRFToken": CSRF_TOKEN},
-        type: "POST",
-        url: "/create_event/",
-        data: data,
-    }).success(function (res) {
-        if (res === 204) {
-            window.location = "/event_page/" + event_id
-        } else {
-            $("#create-event-body").html(res);
-        }
-    }).fail(function () {
-        alert("Failed to submit the event form");
-    });
+    let validationStatus = true;
+    if (eventStart >= eventEnd) {
+        $("#id_potential_start_date").after("<div><p class='has-text-danger'>Potential start date must be before potential end date.</p></div>");
+        validationStatus = false;
+    }
+    if (eventDuration < 0) {
+        $("#id_duration").after("<div><p class='has-text-danger'>Duration must be greater than 0 minutes.</p></div>");
+        validationStatus = false;
+    }
+    if (validationStatus) {
+        modal.style.display = "none";
+    }
+    return validationStatus;
 }
 
 

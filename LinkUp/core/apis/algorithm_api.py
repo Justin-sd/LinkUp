@@ -6,7 +6,6 @@ from datetime import datetime, timedelta
 
 
 def get_best(event_id):
-
     event_set = Event.objects.filter(event_id=event_id)
 
     event = event_set[0]
