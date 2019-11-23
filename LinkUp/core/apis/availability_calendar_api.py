@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta, timezone
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 from django.utils.dateparse import parse_datetime
 
 from ..models import Schedule
@@ -266,7 +267,8 @@ def json_datetime_handler(obj):
     else:
         raise TypeError('Object of type %s with value of %s is not JSON serializable' % (type(obj), repr(obj)))
 
-def convert_user_calendar_to_normal(calendar, user) :
+
+def convert_user_calendar_to_normal(calendar, user):
     """
     :param calendar: The formatted calendar given in JS
     :return: The users availability converted into standard format:
@@ -274,16 +276,17 @@ def convert_user_calendar_to_normal(calendar, user) :
     """
     local_tz = get_user_timezone(user)
     new_calendar = json.load(calendar)
+    print(new_calendar)
     converted_calendar = []
-    for hours in new_calendar :
+    for hours in new_calendar:
         i = 0
         for day in new_calendar[hours] :
             today =(datetime.now() + timedelta(days=i))
             hour = hours.split('-')
 
-            if day is True :
-                converted_calendar.append({'start': datetime(today.year, today.month, today.day, int(hour[0]), int(hour[1]), tzinfo=local_tz).astimezone(UTC),
-                                             'end': (datetime(today.year, today.month, today.day, int(hour[0]), int(hour[1]), tzinfo=local_tz) + timedelta(minutes = 30)).astimezone(UTC) })
+            if day is True:
+                converted_calendar.append({'start': local_tz.localize(datetime(today.year, today.month, today.day, int(hour[0]), int(hour[1]))).astimezone(UTC),
+                                           'end': local_tz.localize((datetime(today.year, today.month, today.day, int(hour[0]), int(hour[1])) + timedelta(minutes = 30))).astimezone(UTC).astimezone(UTC) })
             i = i + 1
 
     return json.dumps(converted_calendar, default=json_datetime_handler)

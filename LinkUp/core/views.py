@@ -127,6 +127,8 @@ def save_availability(request):
     user = request.user
     new_availability_dates = availability_calendar_api.convert_user_calendar_to_normal(request, user)
 
+    print(new_availability_dates)
+
     query = Schedule.objects.filter(user=user)
     if query.count() == 0:
         Schedule.objects.create(availability=new_availability_dates, user=user)
@@ -180,8 +182,8 @@ def send_email(request):
     return HttpResponse("Success")
 
 
-#def send_contact(request):
-    #contact_us_api.send_contact_email(name, message, email)
+def send_contact(request):
+    contact_us_api.send_contact_email(name, message, email)
 
 
 def get_create_event_form(request):
