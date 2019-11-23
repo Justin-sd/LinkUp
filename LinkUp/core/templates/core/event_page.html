@@ -7,9 +7,8 @@
             let invitee_email = $("#invitee_email").val();
             let data = {"invitee_email": invitee_email, "event_id": {{event.event_id}}};
 
-            const token = "{{csrf_token}}";
             $.ajax({
-                headers: {"X-CSRFToken": token},
+                headers: {"X-CSRFToken": CSRF_TOKEN},
                 type: "POST",
                 url: "/send_email/",
                 data: data,

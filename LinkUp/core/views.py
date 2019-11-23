@@ -1,12 +1,15 @@
 from django.shortcuts import render, redirect
 from .apis import availability_calendar_api, sendEmail_api, algorithm_api
 from .models import Event, UserTimezone
+from .forms import EventForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib import messages
 from django.http import HttpResponse
+import uuid
+from datetime import datetime
 
 
 @login_required()
@@ -26,10 +29,7 @@ def home(request):
 
 @login_required()
 def event_page(request, event_id):
-    for i in range(10000):
-        event_query_set = Event.objects.filter(event_id=event_id)
-        if event_query_set.count() == 1 and event_query_set[0].admins.count() >= 1:
-            break
+    event_query_set = Event.objects.filter(event_id=event_id)
 
     if event_query_set.count() != 1:
         return render(request, "core/error_page", {})
@@ -72,7 +72,8 @@ def my_events(request):
         "user_name": user_name,
         "user_event_count": user_event_count,
         "busy_times": busy_times,
-        "availability_dates": availability_dates
+        "availability_dates": availability_dates,
+        "create_event_form": EventForm(),
     }
 
     return render(request, "core/my_events.html", context)
@@ -166,16 +167,28 @@ def send_contact(request):
     send_contact_email(name, message, email)
 
 
-def eventcreation(request, idd, title, description, start,
-                  end, duration):
-    userr = request.user
-    event = Event.objects.create(event_id=idd, title=title,
-                                 description=description,
-                                 owner=userr, potential_start_date=start,
-                                 potential_end_date=end, duration=int(duration))
-    event.admins.add(userr)  # creator is admin
-    event.members.add(userr)  # creator is also a member
-    return event_page(request, event.event_id)
+def get_create_event_form(request):
+    # If POST request, process the form
+    if request.method == 'POST':
+        form = EventForm(request.POST)
+        # If form is valid, save the event
+        if form.is_valid():
+            event_id = str(uuid.uuid1())
+            title = form.cleaned_data["title"]
+            duration = form.cleaned_data["duration"]
+            start = form.cleaned_data["potential_start_date"]
+            end = form.cleaned_data["potential_end_date"]
+            new_event = Event.objects.create(event_id=event_id, title=title, duration=duration, owner=request.user,
+                                             potential_start_date=start, potential_end_date=end)
+            new_event.members.add(request.user)
+            new_event.admins.add(request.user)
+            return redirect('/event_page/' + event_id)
+        else:
+            return HttpResponse(status=500)
+    else:
+        # If GET request, render the form
+        form = EventForm()
+        return render(request, 'core/create_event_form.html', {'create_event_form': form})
 
 
 @login_required()
