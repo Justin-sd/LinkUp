@@ -1,0 +1,14 @@
+<form method="post" action="/create_event_form/" onsubmit="return validateCreateEventForm()">
+    {% csrf_token %}
+    {% for field in create_event_form %}
+       <div style="margin-bottom: 8px;" class="fieldWrapper">
+            {{ field.label_tag }}
+            <br>
+            {{ field }}
+            {% if field.help_text %}
+                <p class="help">{{ field.help_text|safe }}</p>
+            {% endif %}
+        </div>
+    {% endfor %}
+    <input type="submit" value="Create">
+</form>

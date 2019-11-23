@@ -103,16 +103,13 @@
                   <div class="navbar-item">
                      <div class="buttons">
                         {% if user.is_authenticated %}
-                        <a class="button is-info is-size-3" id="logoutbutton">
+                        <a class="button is-info is-size-4" id="logoutbutton">
                         <strong>Log out, {{user.first_name}}</strong>
                         </a>
                         {% else %}
-                        <a class="button big-register" data-toggle="modal" href="javascript:void(0)" onclick="openLoginModal();">
-                        <strong>Login</strong>
-                        </a>
-                        <a class="button big-login" data-toggle="modal" href="javascript:void(0)" onclick="openRegisterModal();">
-                        <strong>Register</strong>
-                        </a>
+                         <a class="button is-info is-size-4" href="{% provider_login_url "google" %}">
+                            Sign in with Google
+                         </a>
                         {% endif %}
                      </div>
                   </div>
@@ -156,7 +153,7 @@
          <hr/>
       </div>
       <!-- The Modal -->
-      <div id="LogOutModal" class="modal" id="logoutmodal">
+      <div id="LogOutModal" class="modal">
          <!-- Modal content -->
          <div class="modal-content" id="logoutmodalcontent">
             <div class="modal-header" id="headerlogout" >
@@ -189,9 +186,7 @@
    <script type="text/javascript" src="{% static '/js/navBar.js' %}"></script>
    <script type="text/javascript" src="{% static '/js/login-register.js' %}"></script>
    <script type="text/javascript" src="{% static '/js/createEventTrigger.js' %}"></script>
-   <script type="text/javascript" src="{% static '/js/InviteGuestTrigger.js' %}"></script>
    <script type="text/javascript" src="{% static '/js/logoutModal.js' %}"></script>
-   <script type="text/javascript" src="{% static '/js/EditEvent.js' %}"></script>
    {% endblock footer_javascript_site %}
    {% endblock footer_javascript %}
 </html>

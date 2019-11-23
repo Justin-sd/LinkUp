@@ -1,3 +1,6 @@
+from decimal import Decimal
+
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -12,7 +15,8 @@ class Event(models.Model):
     members = models.ManyToManyField(User, related_name='event_members')
     title = models.CharField(max_length=250)
     description = models.CharField(max_length=250, null=True)
-    duration = models.DecimalField(decimal_places=2, max_digits=12, null=True)
+    duration = models.DecimalField(decimal_places=2, max_digits=12, null=True,
+                                   validators=[MinValueValidator(Decimal('0.01'))])
     potential_start_date = models.DateTimeField()
     potential_end_date = models.DateTimeField()
     final_start_date = models.DateTimeField(blank=True, null=True)

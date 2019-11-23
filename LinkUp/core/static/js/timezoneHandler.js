@@ -3,7 +3,7 @@ function setUserTimeZone(userTimeZone) {
     $.ajax({
         headers: {"X-CSRFToken": CSRF_TOKEN},
         type: "POST",
-        url: "update_timezone/",
+        url: "/update_timezone/",
         data: data,
     }).done(function(data) {
         // Pass

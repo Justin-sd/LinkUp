@@ -39,6 +39,9 @@ td.busy-time {
     border-bottom: 1px double #f6352a;
 }
 
+td.free-time {
+}
+
 .hide-scroll {
     overflow-y: scroll;
     scrollbar-width: none; /* Firefox */

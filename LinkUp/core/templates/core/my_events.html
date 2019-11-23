@@ -57,7 +57,7 @@
                   </div>
                   <div class="level-right">
                      <div class="level-item">
-                        <a class="button is-size-3" href="my_account/">
+                        <a class="button is-size-3" href="/my_account/">
                         Welcome {{ user_name }}!
                         </a>
                      </div>
@@ -77,8 +77,8 @@
                      <div class="level">
                         <div class="level-item">
                            <div class="">
-                              <a class="button is-info is-size-3" id="myBtn">
-                              + Create An Event
+                              <a class="button is-info is-size-3" id="btn-open-create-event-modal">
+                                 + Create An Event
                               </a>
                            </div>
                         </div>
@@ -122,31 +122,14 @@
    </div>
 </section>
 <!-- The Modal  Create a new event-->
-<div id="myModal" class="modal" >
-   <!-- Modal content -->
-   <div class="modal-content" id="createcontent">
+<div id="createEventModal" class="modal">
+<!--   Modal content -->
+   <div class="modal-content" id="create-content">
       <div class="modal-header" id="create header">
-         <span class="close" ></span>
-         <h2 style="font-size: larger" >Create a New Event</h2>
+         <span class="close"></span>
+         <h2 style="font-size: larger">Create a New Event</h2>
       </div>
-      <div class="modal-body" id="createbody">
-         <center>
-            <strong>Event Title:</strong><span class="red-star">*</span> <br> <input type="text" id="EventTitle" >
-            <br> <br>
-            <strong>Event ID:</strong><span class="red-star">*</span><br> <input type="text" id="EventID">
-            <br>
-            <br> <strong>Event Duration:</strong><span class="red-star">*</span><br> Minutes Only <input type="number" name="quantity" min="0" max="1000" id="minutes">
-            <br> <br>
-            <strong>Event Description:</strong><span class="red-star">*</span><br>
-            <textarea rows="4" cols="50" id="description"></textarea>
-            <br> <br>
-            <strong> Potential Start Date:</strong><span class="red-star">*</span><br> <input type="date" id="start"> <br>
-            <strong>Potential End Date</strong><span class="red-star">*</span><br> <input type="date" id="end">
-            <br> <br>
-            <form id="create" action="" onclick="Create()">
-               <button id="button" href="" class="button is-info is-size-5-fullhd">Create Event</button>
-            </form>
-         </center>
+      <div class="modal-body text-center" id="create-event-body">
       </div>
       <div class="modal-footer" id="createfooter">
          <h3></h3>
