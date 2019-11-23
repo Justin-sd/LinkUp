@@ -123,10 +123,22 @@ def createUser(request):
 
 def login_user(request, backend='django.contrib.auth.backends.ModelBackend'):
     if request.method == "POST":
-        user = authenticate(request, username=request.POST.get("email"), password=request.POST.get("password"))
-        user.is_active = True
-        login(request, user, backend)
-    return render(request, "core/homepage.html", {})
+        try:
+            user = authenticate(request, username=request.POST.get("email"), password=request.POST.get("password"))
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
+        if user is not None:
+            user.is_active = True
+            user.profile.email_confirmed = True
+            user.save()
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+            return redirect('homepage/')
+        else:
+            return render(request, "core/failed_login.html", {})
+
+
+def failed_login(request):
+    return render(request, "core/failed_login.html", {})
 
 
 def send_email(request):
