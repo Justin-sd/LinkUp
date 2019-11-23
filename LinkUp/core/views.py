@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
-from .apis import availability_calendar_api, sendEmail_api, algorithm_api
+
+from .apis import availability_calendar_api, sendEmail_api, algorithm_api, contact_us_api
 from .models import Event, Schedule, UserTimezone
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -163,8 +164,8 @@ def send_email(request):
     return HttpResponse("Success")
 
 
-def send_contact(request):
-    send_contact_email(name, message, email)
+#def send_contact(request):
+    #contact_us_api.send_contact_email(name, message, email)
 
 
 def eventcreation(request, idd, title, description, start,

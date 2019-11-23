@@ -39,7 +39,7 @@ urlpatterns = [
     path('password_change/', views.password_change),
     path('privacy_policy/', views.privacy_policy),
     # Contact
-    path('send_contact_email/', views.send_contact),
+    #path('send_contact_email/', views.send_contact),
     path('send_email/', views.send_email),
     # Events
     path('my_events/', views.my_events),
