@@ -83,8 +83,8 @@ def free_busy_month(user):
 
     """
     service = get_service(user)
-    min_time = datetime.utcnow() - timedelta(days=1)
-    max_time = min_time + timedelta(days=31)
+    min_time = datetime.combine(datetime.utcnow(), datetime.min.time())
+    max_time = min_time + timedelta(days=30)
 
     min_time = min_time.isoformat() + 'Z'  # 'Z' indicates UTC time
     max_time = max_time.isoformat() + 'Z'  # 'Z' indicates UTC time

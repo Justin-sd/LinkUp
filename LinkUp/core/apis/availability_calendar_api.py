@@ -1,10 +1,5 @@
 from datetime import datetime, timedelta, timezone
-from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
-from django.utils.dateparse import parse_datetime
-
-from ..models import Schedule
-from .calendar_api import free_busy_month, get_users_preferred_timezone
 from django.utils import timezone
 from pytz import UTC, timezone as pytz_timezone
 from django.utils.dateparse import parse_datetime
@@ -30,10 +25,11 @@ def format_google_calendar_availability(user):
             }
     """
     fb = free_busy_month(user)
-    number_of_days = 30  # About one month of google calendar data
-    start_date = timezone.localtime(datetime.utcnow().replace(tzinfo=UTC))
+    start_date = timezone.localtime(datetime.utcnow().replace(tzinfo=UTC)).replace(hour=0, minute=0, second=0,
+                                                                                   microsecond=0)
+    end_date = start_date + timedelta(days=30)
+    number_of_days = (end_date - start_date).days
     availability = convert_to_local_time(fb, user)
-
     return format_availabilities(availability, start_date, number_of_days)
 
 
@@ -53,10 +49,12 @@ def format_general_availability_calendar(user):
             }
     """
     fb = get_users_saved_schedule(user)
-    number_of_days = 30  # Support one month of general availability for now
-    start_date = timezone.localtime(datetime.utcnow().replace(tzinfo=UTC))
-    availability = convert_to_local_time(fb, user)
 
+    start_date = timezone.localtime(datetime.utcnow().replace(tzinfo=UTC)).replace(hour=0, minute=0, second=0,
+                                                                                   microsecond=0)
+    end_date = start_date + timedelta(days=30)
+    number_of_days = (end_date - start_date).days
+    availability = convert_to_local_time(fb, user)
     return format_availabilities(availability, start_date, number_of_days)
 
 
@@ -78,11 +76,23 @@ def format_event_availability_calendar(user, event_id):
 
     # Filter out availability dates that are not part of the event
     start_date = timezone.localtime(event.potential_start_date)
-    end_date = timezone.localtime(event.potential_end_date)
+    end_date = timezone.localtime(event.potential_end_date).replace(hour=23, minute=59, second=59)
     availability = filter_availability(availability, start_date, end_date)
     number_of_days = (end_date - start_date).days + 1
 
     return format_availabilities(availability, start_date, number_of_days)
+
+
+def round_down_half_hour(time):
+    """
+    Rounds a datetime object DOWN to the nearest half hour. So if its 12:15 pm, return datetime at 12:00 pm
+    :param time: A datetime object
+    """
+    if 0 < time.minute < 30:
+        return time.replace(minute=0)
+    if 30 < time.minute < 59:
+        return time.replace(minute=30)
+    return time
 
 
 def format_availabilities(availability, start_date, number_of_days):
@@ -108,13 +118,14 @@ def format_availabilities(availability, start_date, number_of_days):
 
     for times in availability:
         start = timezone.localtime(times["start"])
+        start = round_down_half_hour(start)
         end = timezone.localtime(times["end"])
+
         index = start.hour * 2
         if start.minute >= 30:
             index += 1
-
         while start < end:
-            busy_times[index][(start.day - start_date.day)] = True
+            busy_times[index][(start - start_date).days] = True
             index += 1
             start = start + timedelta(minutes=30)
 
@@ -144,6 +155,7 @@ def convert_to_local_time(fb, user):
         start = timezone.localtime(times["start"])
         end = timezone.localtime(times["end"])
 
+        # For busy times that span multiple days
         while start.day != end.day:
             dt_halfway = datetime.combine(start, datetime.max.time()).replace(tzinfo=end.tzinfo)
             split_time = {"start": start, "end": timezone.localtime(dt_halfway)}
@@ -162,8 +174,8 @@ def get_list_of_next_n_days(num_days):
     dates = []
 
     today = datetime.utcnow().replace(tzinfo=UTC)
-    next_month = today + timedelta(days=num_days)
-    while today < next_month:
+    end_day = today + timedelta(days=num_days)
+    while today < end_day:
         dates.append(timezone.localtime(today))
         today = today + timedelta(days=1)
 
@@ -221,10 +233,17 @@ def filter_availability(availability, start_date, end_date):
     """
     filtered_availability = []
     for time_range in availability:
-        if time_range["start"].day < start_date.day:
+        if time_range["start"] < start_date:
             continue
-        if time_range["end"].day <= end_date.day:
+        if time_range["end"] <= end_date:
             filtered_availability.append(time_range)
+        #
+        # if time_range["start"].day < start_date.day and time_range["start"].month < start_date.month and \
+        #         time_range["start"].year < start_date.year:
+        #     continue
+        # if time_range["end"].day <= end_date.day and time_range["end"].month <= end_date.month and \
+        #         time_range["end"].year <= end_date.year:
+        #     filtered_availability.append(time_range)
 
     return filtered_availability
 
@@ -239,10 +258,11 @@ def get_event_availability_dates(event_id):
     end_date = timezone.localtime(event.potential_end_date)
 
     possible_dates = []
-    dt = datetime(year=start_date.year, month=start_date.month, day=start_date.day)
-    while dt.day <= end_date.day or dt.month < end_date.month or dt.year < end_date.year:
-        possible_dates.append(dt)
-        dt = dt + timedelta(days=1)
+    start_dt = datetime(year=start_date.year, month=start_date.month, day=start_date.day, tzinfo=start_date.tzinfo)
+    end_dt = datetime(year=end_date.year, month=end_date.month, day=end_date.day, tzinfo=end_date.tzinfo)
+    while start_dt <= end_dt:
+        possible_dates.append(start_dt)
+        start_dt = start_dt + timedelta(days=1)
     return possible_dates
 
 
@@ -279,13 +299,16 @@ def convert_user_calendar_to_normal(calendar, user):
     converted_calendar = []
     for hours in new_calendar:
         i = 0
-        for day in new_calendar[hours] :
-            today =(datetime.now() + timedelta(days=i))
+        for day in new_calendar[hours]:
+            today = (datetime.now() + timedelta(days=i))
             hour = hours.split('-')
 
             if day is True:
-                converted_calendar.append({'start': local_tz.localize(datetime(today.year, today.month, today.day, int(hour[0]), int(hour[1]))).astimezone(UTC),
-                                           'end': local_tz.localize((datetime(today.year, today.month, today.day, int(hour[0]), int(hour[1])) + timedelta(minutes = 30))).astimezone(UTC).astimezone(UTC) })
+                converted_calendar.append({'start': local_tz.localize(
+                    datetime(today.year, today.month, today.day, int(hour[0]), int(hour[1]))).astimezone(UTC),
+                                           'end': local_tz.localize((datetime(today.year, today.month, today.day,
+                                                                              int(hour[0]), int(hour[1])) + timedelta(
+                                               minutes=30))).astimezone(UTC).astimezone(UTC)})
             i = i + 1
 
     return json.dumps(converted_calendar, default=json_datetime_handler)
@@ -295,7 +318,7 @@ def get_user_timezone(user):
     # Get User's Timezone
     query = UserTimezone.objects.filter(user=user)
     if query.count() == 0:
-        #USE AS DEFAULT FOR NOW
+        # USE AS DEFAULT FOR NOW
         local_tz = pytz_timezone("America/Los_Angeles")
     else:
         local_tz = pytz_timezone(query[0].timezone_str)
