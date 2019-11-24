@@ -84,14 +84,12 @@
                         <div class="dropdown">
                      <a class="is-size-4 dropdown-toggle" data-toggle="dropdown">Add An Admin<span class="caret"></span>   </a>
                          <ul class="dropdown-menu" style="background-color: whitesmoke" id="myDropdown">
-                             <input class="input is-rounded glyphicon-search" placeholder="Search..." style="color: black" id="myInput" onkeyup="filterFunction()">
-
+                             <input class="input is-rounded glyphicon-search " placeholder="    Search..." style="color: black" id="myInput" onkeyup="filterFunction()">
                                     {% for member in event.members.all %}
                                         {% if member not in event.admins.all %}
                                         <li><a href="" style="color: black" onclick="AddAdmin()" id="member">{{ member }}</a></li>
                                         {% endif %}
                                     {% endfor %}
-
                          </ul>
                   </div>
 
@@ -168,7 +166,7 @@
                     </p>
                     {% for members in event.members.all %}
                     <div class="panel-block">
-                        {{ user.first_name }} {{ user.last_name }}
+                        {{ members.first_name }} {{ members.last_name }}
                     </div>
                     {% endfor %}
                 </div>

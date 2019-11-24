@@ -15,7 +15,6 @@
                     <hr/>
                     <ul class="menu-list">
                         <li><a class="is-active is-size-4" href="/my_account">Profile</a></li>
-                        <li><a class="is-size-4" href="/password_change">Change Password</a></li>
                         <li><a class="is-size-4" href="/privacy_policy">Privacy Policy</a></li>
                     </ul>
                 </nav>
@@ -30,7 +29,7 @@
                     <aside class="column text-center is-centered">
                         <div class="box">
                             <p class="text-left" style="font-size: 14px">
-                                Display name: {{user.first_name}}
+                                Display name: {{user.first_name}} {{user.last_name}}
                             </p>
                             <a class="button is-info">Change Name</a>
                             <hr/>
