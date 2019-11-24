@@ -254,7 +254,7 @@ def update_timezone(request):
     user = request.user
     query = UserTimezone.objects.filter(user=user)
     if query.count() != 0:
-        UserTimezone.objects.update(user=user, timezone_str=user_timezone)
+        query.update(user=user, timezone_str=user_timezone)
     else:
         UserTimezone.objects.create(user=user, timezone_str=user_timezone)
     return HttpResponse("Success")
