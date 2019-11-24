@@ -127,8 +127,6 @@ def save_availability(request):
     user = request.user
     new_availability_dates = availability_calendar_api.convert_user_calendar_to_normal(request, user)
 
-    print(new_availability_dates)
-
     query = Schedule.objects.filter(user=user)
     if query.count() == 0:
         Schedule.objects.create(availability=new_availability_dates, user=user)
@@ -174,7 +172,6 @@ def failed_login(request):
 
 def send_email(request):
     data = request.POST
-    print(data)
     invitee_email = data["invitee_email"]
     event_id = data["event_id"]
     event_url = "https//:LinkUp.com/event_page/" + event_id
@@ -194,11 +191,12 @@ def get_create_event_form(request):
         if form.is_valid():
             event_id = str(uuid.uuid1())
             title = form.cleaned_data["title"]
+            description = form.cleaned_data["description"]
             duration = form.cleaned_data["duration"]
             start = form.cleaned_data["potential_start_date"]
             end = form.cleaned_data["potential_end_date"]
-            new_event = Event.objects.create(event_id=event_id, title=title, duration=duration, owner=request.user,
-                                             potential_start_date=start, potential_end_date=end)
+            new_event = Event.objects.create(event_id=event_id, title=title, description=description, duration=duration,
+                                             owner=request.user, potential_start_date=start, potential_end_date=end)
             new_event.members.add(request.user)
             new_event.admins.add(request.user)
             return redirect('/event_page/' + event_id)
