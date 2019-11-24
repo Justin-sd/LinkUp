@@ -123,7 +123,7 @@ def about(request):
 
 
 def save_availability(request):
-    #Get user and local timezone
+    # Get user and local timezone
     user = request.user
     new_availability_dates = availability_calendar_api.convert_user_calendar_to_normal(request, user)
 
@@ -272,6 +272,7 @@ def change_event_description(request):
         event = Event.objects.filter(event_id=request.POST.get('event_id'))
         event.update(description=request.POST.get('new_description'))
     return HttpResponse("Success")
+
 
 def add_event_admin(request):
     if request.method == 'POST':

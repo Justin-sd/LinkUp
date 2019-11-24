@@ -237,12 +237,12 @@ def get_event_availability_dates(event_id):
     event = Event.objects.get(event_id=event_id)
     start_date = timezone.localtime(event.potential_start_date)
     end_date = timezone.localtime(event.potential_end_date)
+
     possible_dates = []
-    dt = datetime(year=1, month=start_date.month, day=start_date.day)
-    while dt.day <= end_date.day:
+    dt = datetime(year=start_date.year, month=start_date.month, day=start_date.day)
+    while dt.day <= end_date.day or dt.month < end_date.month or dt.year < end_date.year:
         possible_dates.append(dt)
         dt = dt + timedelta(days=1)
-
     return possible_dates
 
 
@@ -276,7 +276,6 @@ def convert_user_calendar_to_normal(calendar, user):
     """
     local_tz = get_user_timezone(user)
     new_calendar = json.load(calendar)
-    print(new_calendar)
     converted_calendar = []
     for hours in new_calendar:
         i = 0

@@ -5,7 +5,7 @@
     <script type='text/javascript'>
         function sendEmail() {
             let invitee_email = $("#invitee_email").val();
-            let data = {"invitee_email": invitee_email, "event_id": {{event.event_id}}};
+            let data = {"invitee_email": invitee_email, "event_id": "{{event.event_id}}"};
 
             $.ajax({
                 headers: {"X-CSRFToken": CSRF_TOKEN},
@@ -126,16 +126,11 @@
                         <a class="button is-info">Set Availability</a>
                     </div>
                 </div>
-                <div class="panel">
-                    <p class="panel-heading has-background-info">
-                        My Availability for {{event.title}}
-                    </p>
-                    {% include "core/availability_calendar.html" %}
-                </div>
             </div>
         </div>
     </div>
-       </div>
+
+   </div>
     </section>
     <section class="section">
         <div class="columns is-multiline">
