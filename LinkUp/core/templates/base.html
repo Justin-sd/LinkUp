@@ -31,12 +31,6 @@
       {% endblock head_meta %}
       {% block head_css %}
       {% block head_css_site %}
-      <script type="text/javascript" src="{% static '/js/jquery-1.10.2.js' %}"></script>
-      <script type="text/javascript" src="{% static '/js/bootstrap.js' %}"></script>
-      <script type="text/javascript" src="{% static '/js/timezoneHandler.js' %}"></script>
-      <script>
-         const CSRF_TOKEN = "{{csrf_token}}";
-      </script>
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css"/>
       <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css"/>
       <link rel="stylesheet" href="{% static '/css/login-register.css' %}"/>
@@ -47,6 +41,12 @@
       <link rel="stylesheet" href="{% static '/css/inviteGuest.css' %}"/>
       {% endblock head_css_site %}
       {% endblock head_css %}
+      <script type="text/javascript" src="{% static '/js/jquery-1.10.2.js' %}"></script>
+      <script type="text/javascript" src="{% static '/js/bootstrap.js' %}"></script>
+      <script type="text/javascript" src="{% static '/js/timezoneHandler.js' %}"></script>
+      <script>
+         const CSRF_TOKEN = "{{csrf_token}}";
+      </script>
    </head>
    <body>
       {# Navigation Menu #}
@@ -103,11 +103,11 @@
                   <div class="navbar-item">
                      <div class="buttons">
                         {% if user.is_authenticated %}
-                        <a class="button is-info is-size-4" id="logoutbutton">
+                        <a class="button is-info is-size-4" id="logout-button">
                         <strong>Log out, {{user.first_name}}</strong>
                         </a>
                         {% else %}
-                         <a class="button is-info is-size-4" href="{% provider_login_url "google" %}">
+                         <a class="button is-info is-size-4" href="{% provider_login_url 'google' %}">
                             Sign in with Google
                          </a>
                         {% endif %}
@@ -153,7 +153,7 @@
          <hr/>
       </div>
       <!-- The Modal -->
-      <div id="LogOutModal" class="modal">
+      <div id="log-out-modal" class="modal">
          <!-- Modal content -->
          <div class="modal-content" id="logoutmodalcontent">
             <div class="modal-header" id="headerlogout" >
@@ -179,14 +179,16 @@
       </div>
       <!-- End modal -->
    </body>
-   {# Set of blocks that can be used to display JavaScript files #}
-   {% block footer_javascript %}
-   {% block footer_javascript_site %}
-       <script type="text/javascript" src="{% static '/js/modals.js' %}"></script>
-   <script type="text/javascript" src="{% static '/js/navBar.js' %}"></script>
-   <script type="text/javascript" src="{% static '/js/login-register.js' %}"></script>
-   <script type="text/javascript" src="{% static '/js/createEventTrigger.js' %}"></script>
-   <script type="text/javascript" src="{% static '/js/logoutModal.js' %}"></script>
-   {% endblock footer_javascript_site %}
-   {% endblock footer_javascript %}
+   <footer>
+      {# Set of blocks that can be used to display JavaScript files #}
+      {% block footer_javascript %}
+      {% block footer_javascript_site %}
+         <script type="text/javascript" src="{% static '/js/modals.js' %}"></script>
+         <script type="text/javascript" src="{% static '/js/navBar.js' %}"></script>
+         <script type="text/javascript" src="{% static '/js/login-register.js' %}"></script>
+         <script type="text/javascript" src="{% static '/js/logoutModal.js' %}"></script>
+         <script type="text/javascript" src="{% static '/js/createEventTrigger.js' %}"></script>
+      {% endblock footer_javascript_site %}
+      {% endblock footer_javascript %}
+   </footer>
 </html>
