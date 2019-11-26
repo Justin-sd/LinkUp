@@ -192,6 +192,22 @@
     </div>
 </section>
 
+{% if new_user %}
+    <div class="modal is-active" id="createModal">
+      <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head has-background-info has-text-weight-semibold">
+                <p class="modal-card-title is-size-2" id="effect">Join {{event.title}}</p>
+                <button class="delete is-pulled-right" aria-label="close" data-bulma-modal="close"></button>
+            </header>
+            <footer class="modal-card-foot">
+                <a class="button is-info is-size-5" href="/join_event/{{ event_id }}">Join Event as {{ user.name }}</a>
+                <button class="button is-danger is-size-5" data-bulma-modal="close">Cancel</button>
+            </footer>
+        </div>
+    </div>
+{% endif %}
+
 <!-- The Modal Add an Admin -->
 <div id="AdminModal" class="modal">
     <!-- Modal content -->

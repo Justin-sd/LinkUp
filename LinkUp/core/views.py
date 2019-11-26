@@ -41,6 +41,11 @@ def event_page(request, event_id):
     event = event_query_set[0]
     user_events = Event.objects.filter(members=user)
 
+    if user in event.members.all():
+        new_user = False
+    else:
+        new_user = True
+
     if user in event.admins.all():
         admin = True
     else:
@@ -53,7 +58,7 @@ def event_page(request, event_id):
 
     context = {"event": event, "admin": admin, "user": user, 'busy_times': busy_times,
                "availability_dates": available_dates, "time_list": time_list, "user_events": user_events,
-               "event_id": event_id, "create_event_form": EventForm()}
+               "event_id": event_id, "create_event_form": EventForm(), "new_user": new_user}
     return render(request, "core/event_page.html", context)
 
 
@@ -206,6 +211,14 @@ def get_create_event_form(request):
         # If GET request, render the form
         form = EventForm()
         return render(request, 'core/create_event_modal.html', {'create_event_form': form})
+
+
+def join_event(request, event_id):
+    event_query_set = Event.objects.filter(event_id=event_id)
+    event = event_query_set[0]
+    event.members.add(request.user)
+    return event_page(request, event_id)
+
 
 
 @login_required()
