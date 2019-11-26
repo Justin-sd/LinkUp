@@ -64,3 +64,21 @@ mdl.addEventListener("modal:close", function() {
 	console.log("closed")
 })
 
+var logoutBtns = document.querySelectorAll("#logout")
+var logoutMdl = new BulmaModal("#logoutModal")
+
+logoutBtns.forEach(function(btns) {
+    btns.addEventListener("click", function() {
+        logoutMdl.show()
+    });
+});
+
+
+logoutMdl.addEventListener('modal:show', function() {
+	console.log("opened")
+})
+
+logoutMdl.addEventListener("modal:close", function() {
+	console.log("closed")
+})
+
