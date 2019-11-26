@@ -65,7 +65,7 @@ function AddAdmin(){
         url:   "add_event_admin/",
         data: { "new_admin": newAdmin , "event_id": eventID },
     }).success(function (){
-        alert('Event Admin Added!');
+        alert(newAdmin+' has been added as a administrator !');
     }).fail(function () {
         alert('Event Admin not Added');
     });
