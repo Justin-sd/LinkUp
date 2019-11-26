@@ -19,8 +19,22 @@ class EventForm(ModelForm):
     class Meta:
         model = Event
         widgets = {
-            'potential_start_date': forms.DateInput(attrs={'type': 'date', 'class': 'datepicker'}),
-            'potential_end_date': forms.DateInput(attrs={'type': 'date', 'class': 'datepicker'}),
+            'title': forms.TextInput(attrs={
+                'type': 'text',
+                'class': 'input has-background-light',
+                'placeholder': 'Please enter a title for your event!'
+                }),
+            'description': forms.Textarea(attrs={
+                'type': 'textarea',
+                'class': 'textarea has-background-light',
+                'rows': '5',
+                'placeholder':  'Please enter a event description! \nThis can be '
+                                'anything from what the event is for, where it will '
+                                'be located, etc. \nThank you!'
+                }),
+            'duration': forms.DateInput(attrs={'type': 'number', 'class': 'number', 'placeholder': 'Duration'}),
+            'potential_start_date': forms.DateInput(attrs={'type': 'date', 'class': 'number'}),
+            'potential_end_date': forms.DateInput(attrs={'type': 'date', 'class': 'number'})
         }
         fields = ['title', 'description', 'duration', 'potential_start_date', 'potential_end_date']
 

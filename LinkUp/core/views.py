@@ -53,7 +53,7 @@ def event_page(request, event_id):
 
     context = {"event": event, "admin": admin, "user": user, 'busy_times': busy_times,
                "availability_dates": available_dates, "time_list": time_list, "user_events": user_events,
-               "event_id": event_id}
+               "event_id": event_id, "create_event_form": EventForm()}
     return render(request, "core/event_page.html", context)
 
 
@@ -205,7 +205,7 @@ def get_create_event_form(request):
     else:
         # If GET request, render the form
         form = EventForm()
-        return render(request, 'core/create_event_form.html', {'create_event_form': form})
+        return render(request, 'core/create_event_modal.html', {'create_event_form': form})
 
 
 @login_required()
