@@ -23,9 +23,9 @@ ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__name__)))
 SECRET_KEY = 'jbv986nhn@b77rljc!x&&@ucn&gdmyco%+wk-@y+ouq8oboda%'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['linkup-env.3yijpwf3qp.us-west-2.elasticbeanstalk.com', 'localhost']
 
 # Application definition
 

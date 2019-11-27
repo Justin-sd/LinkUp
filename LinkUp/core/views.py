@@ -10,7 +10,6 @@ from django.contrib.auth import authenticate, login, logout, update_session_auth
 from django.contrib import messages
 from django.http import HttpResponse
 import uuid
-from datetime import datetime
 
 
 @login_required()
