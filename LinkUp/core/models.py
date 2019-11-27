@@ -21,6 +21,8 @@ class Event(models.Model):
     potential_end_date = models.DateTimeField()
     final_start_date = models.DateTimeField(blank=True, null=True)
     final_end_date = models.DateTimeField(blank=True, null=True)
+    no_earlier_than = models.TimeField()
+    no_later_than = models.TimeField()
 
 
 class Schedule(models.Model):

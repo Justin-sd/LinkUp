@@ -200,8 +200,11 @@ def get_create_event_form(request):
             duration = form.cleaned_data["duration"]
             start = form.cleaned_data["potential_start_date"]
             end = form.cleaned_data["potential_end_date"]
+            no_earlier_than = form.cleaned_data["no_earlier_than"]
+            no_later_than = form.cleaned_data["no_later_than"]
             new_event = Event.objects.create(event_id=event_id, title=title, description=description, duration=duration,
-                                             owner=request.user, potential_start_date=start, potential_end_date=end)
+                                             owner=request.user, potential_start_date=start, potential_end_date=end,
+                                             no_earlier_than=no_earlier_than, no_later_than=no_later_than)
             new_event.members.add(request.user)
             new_event.admins.add(request.user)
             return redirect('/event_page/' + event_id)
