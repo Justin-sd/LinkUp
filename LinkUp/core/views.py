@@ -41,6 +41,11 @@ def event_page(request, event_id):
     event = event_query_set[0]
     user_events = Event.objects.filter(members=user)
 
+    if user in event.members.all():
+        new_user = False
+    else:
+        new_user = True
+
     if user in event.admins.all():
         admin = True
     else:
@@ -55,7 +60,7 @@ def event_page(request, event_id):
 
     context = {"event": event, "admin": admin, "user": user, 'busy_times': busy_times,
                "availability_dates": available_dates, "time_list": time_list, "user_events": user_events,
-               "event_id": event_id, "group_availability": group_availability, "member_count": member_count}
+               "event_id": event_id, "group_availability": group_availability, "member_count": member_count, "create_event_form": EventForm(), "new_user": new_user}
     return render(request, "core/event_page.html", context)
 
 
@@ -197,8 +202,11 @@ def get_create_event_form(request):
             duration = form.cleaned_data["duration"]
             start = form.cleaned_data["potential_start_date"]
             end = form.cleaned_data["potential_end_date"]
+            no_earlier_than = form.cleaned_data["no_earlier_than"]
+            no_later_than = form.cleaned_data["no_later_than"]
             new_event = Event.objects.create(event_id=event_id, title=title, description=description, duration=duration,
-                                             owner=request.user, potential_start_date=start, potential_end_date=end)
+                                             owner=request.user, potential_start_date=start, potential_end_date=end,
+                                             no_earlier_than=no_earlier_than, no_later_than=no_later_than)
             new_event.members.add(request.user)
             new_event.admins.add(request.user)
             return redirect('/event_page/' + event_id)
@@ -207,7 +215,15 @@ def get_create_event_form(request):
     else:
         # If GET request, render the form
         form = EventForm()
-        return render(request, 'core/create_event_form.html', {'create_event_form': form})
+        return render(request, 'core/create_event_modal.html', {'create_event_form': form})
+
+
+def join_event(request, event_id):
+    event_query_set = Event.objects.filter(event_id=event_id)
+    event = event_query_set[0]
+    event.members.add(request.user)
+    return event_page(request, event_id)
+
 
 
 @login_required()

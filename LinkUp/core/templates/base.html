@@ -2,193 +2,170 @@
 {% load static %}
 {% load socialaccount %}
 {% providers_media_js %}
-{% include 'core/login_register.html' %}
 <!DOCTYPE html>
 <html class="has-navbar-fixed-top">
-   {# Make modifiable head elements #}
-   <head>
-      <title>
-         {% block title %}
-         Home
-         {% endblock title %}
-      </title>
-      {% block head_favicon %} {# This is an icon on the the browsers tab #}
-      <link rel="icon" type="image/png" href="{% static '/images/LinkUpLogoTransBack.png' %}">
-      {% endblock head_favicon %}
-      {% block head_meta %} {# This defines attributes of the page, which the browser reads. #}
-      {% block head_meta_charset %}
-      <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-      {% endblock head_meta_charset %}
-      {% block head_meta_contentlanguage %}
-      <meta http-equiv="Content-Language" value="en-US" />
-      {% endblock head_meta_contentlanguage %}
-      {% block head_meta_viewport %}
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      {% endblock head_meta_viewport %}
-      {% block head_meta_description %}
-      <meta name="description" content="LinkUp is an easy to use meeting creator!"/>
-      {% endblock head_meta_description %}
-      {% endblock head_meta %}
-      {% block head_css %}
-      {% block head_css_site %}
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css"/>
-      <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css"/>
-      <link rel="stylesheet" href="{% static '/css/login-register.css' %}"/>
-      <link rel="stylesheet" href="{% static '/css/bootstrap.css' %}"/>
-      <link rel="stylesheet" href="{% static '/css/logoutModal.css' %}"/>
-      <link rel="stylesheet" href="{% static '/css/createeventModal.css' %}"/>
-      <link rel="stylesheet" href="{% static '/css/addAdminModal.css' %}"/>
-      <link rel="stylesheet" href="{% static '/css/inviteGuest.css' %}"/>
-      {% endblock head_css_site %}
-      {% endblock head_css %}
-      <script type="text/javascript" src="{% static '/js/jquery-1.10.2.js' %}"></script>
-      <script type="text/javascript" src="{% static '/js/bootstrap.js' %}"></script>
-      <script type="text/javascript" src="{% static '/js/timezoneHandler.js' %}"></script>
-      <script>
-         const CSRF_TOKEN = "{{csrf_token}}";
-      </script>
-   </head>
-   <body>
-      {# Navigation Menu #}
-      <header style="display: block">
-         <nav class="navbar is-fixed-top is-light" style="min-height: 80px;" role="navigation" aria-label="main navigation">
-            <div class="navbar-brand">
-               <a href="/">
-               <img src="{% static 'images/LinkUpChain.png' %}" height="150px" width="150px"/>
-               </a>
-               {# If size of screen is small, include a small clickable button that holds navBar elements #}
-               <a role="button" class="navbar-burger burger" data-target="navbar" aria-label="menu" aria-expanded="false">
-               <span aria-hidden="true"></span>
-               <span aria-hidden="true"></span>
-               <span aria-hidden="true"></span>
-               </a>
-            </div>
-            <div id="navbar" class="navbar-menu">
-               <div class="navbar-start">
-                  <a class="navbar-item is-size-3" href="/"> Home </a>
-                  {% if user.is_authenticated %}
-                  <a class="navbar-item is-size-3" href="/my_events">
-                  My Events
-                  </a>
-                  <div class="navbar-item has-dropdown is-hoverable">
-                     <a class="navbar-link is-size-3"> More </a>
-                     <div class="navbar-dropdown">
-                        <a class="navbar-item is-size-3" href="/about"> About Us </a>
-                        <a class="navbar-item is-size-3" href="/my_account"> My Account </a>
-                        <a class="navbar-item is-size-3" href="/contact"> Contact Us </a>
-                        <hr class="navbar-divider"/>
-                        <a class="navbar-item is-size-3" href="https://github.com/Justin-sd/LinkUp/issues">
-                        Report an issue
-                        </a>
-                     </div>
-                  </div>
-                  {% else %}
-                  <a class="navbar-item is-size-3" href="/about">
-                  About Us
-                  </a>
-                  <div class="navbar-item has-dropdown is-hoverable">
-                     <a class="navbar-link is-size-3"> More </a>
-                     <div class="navbar-dropdown">
-                        <a class="navbar-item is-size-3" href="/contact">
-                        Contact Us
-                        </a>
-                        <a class="navbar-item is-size-3" href="https://github.com/Justin-sd/LinkUp/issues">
-                        Report an issue
-                        </a>
-                     </div>
-                  </div>
-                  {% endif %}
-               </div>
-               <div class="navbar-end">
-                  <div class="navbar-item">
-                     <div class="buttons">
-                        {% if user.is_authenticated %}
-                        <a class="button is-info is-size-4" id="logout-button">
-                        <strong>Log out, {{user.first_name}}</strong>
-                        </a>
-                        {% else %}
-                         <a class="button is-info is-size-4" href="{% provider_login_url 'google' %}">
-                            Sign in with Google
-                         </a>
-                        {% endif %}
-                     </div>
-                  </div>
-               </div>
-            </div>
-         </nav>
-      </header>
-      {# The Document Body #}
-      <div id="site-wrapper">
-         {% block content %}
-         if you see this, something is wrong!
-         {% endblock content %}
-      </div>
-      {# The Footer #}
-      <div class="footer">
-         <nav class="level">
-            <p class="level-item has-text-centered">
-               <a class="link is-info is-size-3" href="/about">
-               About Us
-               </a>
-            </p>
-            <p class="level-item has-text-centered">
-               <a class="link is-info is-size-3" href="/donate">
-               Donate
-               </a>
-            </p>
-            <p class="level-item has-text-centered">
-               <img src="/static/images/LinkUpChain.png" height="200px" width="200px">
-            </p>
-            <p class="level-item has-text-centered">
-               <a class="link is-info is-size-3" href="/contact">
-               Contact Us
-               </a>
-            </p>
-            <p class="level-item has-text-centered">
-               <a class="link is-info is-size-3" href="https://github.com/Justin-sd/LinkUp/issues">
-               Report An Issue
-               </a>
-            </p>
-         </nav>
-         <hr/>
-      </div>
-      <!-- The Modal -->
-      <div id="log-out-modal" class="modal">
-         <!-- Modal content -->
-         <div class="modal-content" id="logoutmodalcontent">
-            <div class="modal-header" id="headerlogout" >
-               <span class="close"></span>
-               <center>
-                  <h1  style="font-size: x-large">Are you sure you want to sign out?</h1>
-               </center>
-               <br>
-            </div>
-            <div class="modal-body" id="lodoby">
-               <center>
-                  <br>
-                  <a class="button is-info is-size-1-desktop" href="/accounts/logout_user/" style="background-color: limegreen">Yes, Sign Me Out</a>
-                  <a class="button is-info is-size-1-fullhd" href="" style="background-color: orange">Nevermind</a>
-                  <br>
-                  <br>
-               </center>
-            </div>
-            <div class="modal-footer" id="logoutfooter">
-               <h3></h3>
-            </div>
-         </div>
-      </div>
-      <!-- End modal -->
-   </body>
-   <footer>
-      {# Set of blocks that can be used to display JavaScript files #}
-      {% block footer_javascript %}
-      {% block footer_javascript_site %}
-         <script type="text/javascript" src="{% static '/js/modals.js' %}"></script>
-         <script type="text/javascript" src="{% static '/js/navBar.js' %}"></script>
-         <script type="text/javascript" src="{% static '/js/login-register.js' %}"></script>
-         <script type="text/javascript" src="{% static '/js/logoutModal.js' %}"></script>
-         <script type="text/javascript" src="{% static '/js/createEventTrigger.js' %}"></script>
-      {% endblock footer_javascript_site %}
-      {% endblock footer_javascript %}
-   </footer>
+	{# Make modifiable head elements #}
+	<head>
+		<title>
+			{% block title %}
+			Home
+			{% endblock title %}
+		</title>
+		{% block head_favicon %} {# This is an icon on the the browsers tab #}
+		<link rel="icon" type="image/png" href="{% static '/images/LinkUpLogoTransBack.png' %}">
+		{% endblock head_favicon %}
+		{% block head_meta %} {# This defines attributes of the page, which the browser reads. #}
+		{% block head_meta_charset %}
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		{% endblock head_meta_charset %}
+		{% block head_meta_contentlanguage %}
+		<meta http-equiv="Content-Language" value="en-US" />
+		{% endblock head_meta_contentlanguage %}
+		{% block head_meta_viewport %}
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		{% endblock head_meta_viewport %}
+		{% block head_meta_description %}
+		<meta name="description" content="LinkUp is an easy to use meeting creator!"/>
+		{% endblock head_meta_description %}
+		{% endblock head_meta %}
+		{% block head_css %}
+		{% block head_css_site %}
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css"/>
+		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css"/>
+		<link rel="stylesheet" href="{% static '/css/login-register.css' %}"/>
+		<link rel="stylesheet" href="{% static '/css/bootstrap.css' %}"/>
+		<link rel="stylesheet" href="{% static '/css/logoutModal.css' %}"/>
+		<link rel="stylesheet" href="{% static '/css/createeventModal.css' %}"/>
+		<link rel="stylesheet" href="{% static '/css/addAdminModal.css' %}"/>
+		<link rel="stylesheet" href="{% static '/css/inviteGuest.css' %}"/>
+		{% endblock head_css_site %}
+		{% endblock head_css %}
+		<script type="text/javascript" src="{% static '/js/jquery-1.10.2.js' %}"></script>
+		<script type="text/javascript" src="{% static '/js/bootstrap.js' %}"></script>
+		<script type="text/javascript" src="{% static '/js/timezoneHandler.js' %}"></script>
+		<script>
+			const CSRF_TOKEN = "{{csrf_token}}";
+		</script>
+	</head>
+	<body>
+		<!-- The Modal  Create a new event-->
+		{% include 'core/create_event_modal.html' %}
+        {% include 'core/logout_modal.html' %}
+		<!-- End modal -->
+		{# Navigation Menu #}
+		<header style="display: block">
+			<nav class="navbar is-fixed-top is-light" style="min-height: 80px;" role="navigation" aria-label="main navigation">
+				<div class="navbar-brand">
+					<a href="/">
+					<img src="{% static 'images/LinkUpChain.png' %}" height="150px" width="150px"/>
+					</a>
+					{# If size of screen is small, include a small clickable button that holds navBar elements #}
+					<a role="button" class="navbar-burger burger" data-target="navbar" aria-label="menu" aria-expanded="false">
+					<span aria-hidden="true"></span>
+					<span aria-hidden="true"></span>
+					<span aria-hidden="true"></span>
+					</a>
+				</div>
+				<div id="navbar" class="navbar-menu">
+					<div class="navbar-start">
+						<a class="navbar-item is-size-3" href="/"> Home </a>
+						{% if user.is_authenticated %}
+						<a class="navbar-item is-size-3" href="/my_events">
+						My Events
+						</a>
+						<div class="navbar-item has-dropdown is-hoverable">
+							<a class="navbar-link is-size-3"> More </a>
+							<div class="navbar-dropdown">
+								<a class="navbar-item is-size-3" href="/about"> About Us </a>
+								<a class="navbar-item is-size-3" href="/my_account"> My Account </a>
+								<a class="navbar-item is-size-3" href="/contact"> Contact Us </a>
+								<hr class="navbar-divider"/>
+								<a class="navbar-item is-size-3" href="https://github.com/Justin-sd/LinkUp/issues">
+								Report an issue
+								</a>
+							</div>
+						</div>
+						{% else %}
+						<a class="navbar-item is-size-3" href="/about">
+						About Us
+						</a>
+						<div class="navbar-item has-dropdown is-hoverable">
+							<a class="navbar-link is-size-3"> More </a>
+							<div class="navbar-dropdown">
+								<a class="navbar-item is-size-3" href="/contact">
+								Contact Us
+								</a>
+								<a class="navbar-item is-size-3" href="https://github.com/Justin-sd/LinkUp/issues">
+								Report an issue
+								</a>
+							</div>
+						</div>
+						{% endif %}
+					</div>
+					<div class="navbar-end">
+						<div class="navbar-item">
+							<div class="buttons">
+								{% if user.is_authenticated %}
+								<a class="button is-info is-size-4" id="logout">
+								    Log out, {{user.first_name}}
+								</a>
+								{% else %}
+								<a class="button is-info is-size-4" href="{% provider_login_url 'google' %}">
+								Sign in with Google
+								</a>
+								{% endif %}
+							</div>
+						</div>
+					</div>
+				</div>
+			</nav>
+		</header>
+		{# The Document Body #}
+		<div id="site-wrapper">
+			{% block content %}
+			if you see this, something is wrong!
+			{% endblock content %}
+		</div>
+		{# The Footer #}
+		<div class="footer">
+			<nav class="level">
+				<p class="level-item has-text-centered">
+					<a class="link is-info is-size-3" href="/about">
+					About Us
+					</a>
+				</p>
+				<p class="level-item has-text-centered">
+					<a class="link is-info is-size-3" href="/donate">
+					Donate
+					</a>
+				</p>
+				<p class="level-item has-text-centered">
+					<img src="/static/images/LinkUpChain.png" height="200px" width="200px">
+				</p>
+				<p class="level-item has-text-centered">
+					<a class="link is-info is-size-3" href="/contact">
+					Contact Us
+					</a>
+				</p>
+				<p class="level-item has-text-centered">
+					<a class="link is-info is-size-3" href="https://github.com/Justin-sd/LinkUp/issues">
+					Report An Issue
+					</a>
+				</p>
+			</nav>
+			<hr/>
+		</div>
+	</body>
+	<footer>
+		{# Set of blocks that can be used to display JavaScript files #}
+		{% block footer_javascript %}
+		{% block footer_javascript_site %}
+		<script type="text/javascript" src="{% static '/js/modals.js' %}"></script>
+		<script type="text/javascript" src="{% static '/js/navBar.js' %}"></script>
+		<script type="text/javascript" src="{% static '/js/login-register.js' %}"></script>
+		<script type="text/javascript" src="{% static '/js/logoutModal.js' %}"></script>
+		<script type="text/javascript" src="{% static '/js/createEventTrigger.js' %}"></script>
+		{% endblock footer_javascript_site %}
+		{% endblock footer_javascript %}
+	</footer>
 </html>

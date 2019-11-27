@@ -205,10 +205,13 @@ def get_users_event_schedule(user, event):
     """
     event_schedule_query = EventSchedule.objects.filter(user=user, event=event)
     if event_schedule_query.count() == 0:
-        general_schedule = get_users_saved_schedule(user=user)
-        availability = json.dumps(general_schedule, default=json_datetime_handler)
-        EventSchedule.objects.create(user=user, event=event, availability=availability)
-        return general_schedule
+        general_schedule_query = Schedule.objects.filter(user=user)
+        if general_schedule_query.count() == 0:
+            users_availability_string = "[]"
+        else:
+            users_availability_string = general_schedule_query[0].availability
+        EventSchedule.objects.create(user=user, event=event, availability=users_availability_string)
+        return decode_availability(users_availability_string)
     return decode_availability(event_schedule_query[0].availability)
 
 

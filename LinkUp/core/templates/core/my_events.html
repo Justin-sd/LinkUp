@@ -2,140 +2,115 @@
 {% block title %}LinkUp {% endblock title %} //modifying the title
 {% block content %}
 <section class="section">
-   <div class="section">
-      <div class="columns">
-         <aside class="column is-2">
-            <nav class="menu">
-               <p class="menu-label is-size-5">
-                  General
-               </p>
-               <hr/>
-               <ul class="menu-list">
-                  <li>
-                     <a class="is-active is-size-4" href="/my_events">
-                     My Events
-                     </a>
-                     <ul>
-                        {% for event in user_events %}
-                        <li>
-                           <a class="is-size-4" href="/event_page/{{ event.event_id }}">{{ event.title }}</a>
-                        </li>
-                        {% endfor %}
-                     </ul>
-                     <a id="createEvent" class="button is-size-4" > + Create An Event</a>
-                      {% include 'core/create_event_modal.html' %}
-                  </li>
-               </ul>
-               <p class="menu-label is-size-5">
-                  Availability
-               </p>
-               <ul class="menu-list">
-                  <li>
-                     <a class="is-size-4" href="/my_availability">
-                     Adjust Your Availability
-                     </a>
-                      <ul>
-                        <li>
-                            <a href="/my_availability/google_calendar/" class="is-size-4">
-                                Import From Google Calendar
-                            </a>
-                        </li>
-                   </ul>
-                  </li>
-               </ul>
-            </nav>
-         </aside>
-         <main class="column" style="overflow-x: scroll;">
-            <div class="column">
-               <div class="level">
-                  <div class="level-left">
-                     <div class="level-item">
-                        <div class="title is-size-1">
-                           My Events
-                        </div>
-                     </div>
-                  </div>
-                  <div class="level-right">
-                     <div class="level-item">
-                        <a class="button is-size-3" href="/my_account/">
-                        Welcome {{ user.first_name }}!
-                        </a>
-                     </div>
-                  </div>
-               </div>
-            </div>
-            <br/>
-            <br/>
-            <div class="columns is-multiline">
-               <div class="column">
-                  <div class="box">
-                     <div class="is-size-3">Number of Events</div>
-                     <hr/>
-                     <div class="title has-text-centered" style="font-size: 100px">
-                        {{ user_event_count }}
-                     </div>
-                     <div class="level">
-                        <div class="level-item">
-                           <div class="">
-                              <a class="button is-info is-size-3" id="btn-open-create-event-modal">
-                                 + Create An Event
-                              </a>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-               <div class="column" style="text-align: center;">
-                  <img src="/static/images/LinkUpLogoTransBack.png" width="300" height="400"/>
-               </div>
-            </div>
-            <div class="columns is-multiline">
-               <div class="column">
-                  <div class="box">
-                     <div class="is-size-3">Events</div>
-                     <hr/>
-                      {% for event in user_events %}
-                     <ul>
-                        <li>
-                           <a class="is-size-3" href="/event_page/{{ event.event_id }}">
-                           {{ event.title }}
-                           </a>
-                            <p>{{ event.description }}</p>
-                        </li>
-                     </ul>
-                      {% endfor %}
-                  </div>
-               </div>
-            </div>
-            <div class="columns is-multiline">
-               <div class="column" style="overflow-y: scroll;">
-                  <div class="panel">
-                     <p class="panel-heading has-background-info">
-                        My Availability
-                     </p>
-                     {% include "core/availability_calendar.html" %}
-                  </div>
-               </div>
-            </div>
-         </main>
-      </div>
-   </div>
+	<div class="section">
+		<div class="columns">
+			<aside class="column is-2">
+				<nav class="menu">
+					<p class="menu-label is-size-5">
+						General
+					</p>
+					<hr/>
+					<ul class="menu-list">
+						<li>
+							<a class="is-active is-size-4" href="/my_events">
+							My Events
+							</a>
+							<ul>
+								{% for event in user_events %}
+								<li>
+									<a class="is-size-4" href="/event_page/{{ event.event_id }}">{{ event.title }}</a>
+								</li>
+								{% endfor %}
+							</ul>
+							<a id="createEvent" class="button is-size-4" > + Create An Event</a>
+						</li>
+					</ul>
+					<p class="menu-label is-size-5">
+						Availability
+					</p>
+					<ul class="menu-list">
+						<li>
+							<a class="is-size-4" href="/my_availability">
+							Adjust Your Availability
+							</a>
+						</li>
+					</ul>
+				</nav>
+			</aside>
+			<main class="column" style="overflow-x: scroll;">
+				<div class="column">
+					<div class="level">
+						<div class="level-left">
+							<div class="level-item">
+								<div class="title is-size-1">
+									My Events
+								</div>
+							</div>
+						</div>
+						<div class="level-right">
+							<div class="level-item">
+								<a class="button is-size-3" href="/my_account/">
+								Welcome {{ user.first_name }}!
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<br/>
+				<br/>
+				<div class="columns is-multiline">
+					<div class="column">
+						<div class="box">
+							<div class="is-size-3">Number of Events</div>
+							<hr/>
+							<div class="title has-text-centered" style="font-size: 100px">
+								{{ user_event_count }}
+							</div>
+							<div class="level">
+								<div class="level-item">
+									<div class="">
+										<a class="button is-info is-size-3" id="createEvent">
+										+ Create An Event
+										</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="column" style="text-align: center;">
+						<img src="/static/images/LinkUpLogoTransBack.png" width="300" height="400"/>
+					</div>
+				</div>
+				<div class="columns is-multiline">
+					<div class="column">
+						<div class="box">
+							<div class="is-size-3">Events</div>
+							<hr/>
+							{% for event in user_events %}
+							<ul>
+								<li>
+									<a class="is-size-3" href="/event_page/{{ event.event_id }}">
+									{{ event.title }}
+									</a>
+									<p>{{ event.description }}</p>
+								</li>
+							</ul>
+							{% endfor %}
+						</div>
+					</div>
+				</div>
+				<div class="columns is-multiline">
+					<div class="column" style="overflow-y: scroll;">
+						<div class="panel">
+							<p class="panel-heading has-background-info">
+								My Availability
+							</p>
+							{% include "core/availability_calendar.html" %}
+						</div>
+					</div>
+				</div>
+			</main>
+		</div>
+	</div>
 </section>
-<!-- The Modal  Create a new event-->
-<div id="createEventModal" class="modal">
-<!--   Modal content -->
-   <div class="modal-content" id="create-content">
-      <div class="modal-header" id="create header">
-         <span class="close"></span>
-         <h2 style="font-size: larger">Create a New Event</h2>
-      </div>
-      <div class="modal-body text-center" id="create-event-body">
-      </div>
-      <div class="modal-footer" id="createfooter">
-         <h3></h3>
-      </div>
-   </div>
-</div>
-<!-- End modal -->
 {% endblock content %}
-

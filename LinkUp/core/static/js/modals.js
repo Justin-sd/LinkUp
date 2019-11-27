@@ -46,12 +46,15 @@ class BulmaModal {
 	}
 }
 
-var btn = document.querySelector("#createEvent")
+var createEventBtns = document.querySelectorAll("#createEvent")
 var mdl = new BulmaModal("#createModal")
 
-btn.addEventListener("click", function () {
-	mdl.show()
-})
+createEventBtns.forEach(function(btns) {
+    btns.addEventListener("click", function() {
+        mdl.show()
+    });
+});
+
 
 mdl.addEventListener('modal:show', function() {
 	console.log("opened")
@@ -60,3 +63,22 @@ mdl.addEventListener('modal:show', function() {
 mdl.addEventListener("modal:close", function() {
 	console.log("closed")
 })
+
+var logoutBtns = document.querySelectorAll("#logout")
+var logoutMdl = new BulmaModal("#logoutModal")
+
+logoutBtns.forEach(function(btns) {
+    btns.addEventListener("click", function() {
+        logoutMdl.show()
+    });
+});
+
+
+logoutMdl.addEventListener('modal:show', function() {
+	console.log("opened")
+})
+
+logoutMdl.addEventListener("modal:close", function() {
+	console.log("closed")
+})
+
