@@ -14,11 +14,11 @@
         </tr>
         </thead>
         <tbody class="hide-scroll">
-        {% for time, dates in group_availability.items %}
+        {% for time, dates in group_ratio.items %}
             <tr>
                 <th>{{time}}</th>
                 {% for date in dates %}
-                    <td>{{ date }}</td>
+                    <td style="opacity: {{ date }}"></td>
                 {% endfor %}
             </tr>
         {% endfor %}

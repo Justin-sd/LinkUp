@@ -56,11 +56,11 @@ def event_page(request, event_id):
     available_dates = availability_calendar_api.get_event_availability_dates(event_id)
     time_list = algorithm_api.get_best(event_id)
     group_availability = event_calendar_api.format_group_availability_calendar(event_id)
-    member_count = event.members.count()
+    group_ratio = event_calendar_api.add_member_ratios(event_id, group_availability)
 
     context = {"event": event, "admin": admin, "user": user, 'busy_times': busy_times,
                "availability_dates": available_dates, "time_list": time_list, "user_events": user_events,
-               "event_id": event_id, "group_availability": group_availability, "member_count": member_count, "create_event_form": EventForm(), "new_user": new_user}
+               "event_id": event_id, "group_availability": group_availability,"create_event_form": EventForm(), "new_user": new_user, "group_ratio": group_ratio}
     return render(request, "core/event_page.html", context)
 
 

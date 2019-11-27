@@ -48,3 +48,33 @@ def format_group_availability_calendar(event_id) :
 
     return group_availability
 
+def add_member_ratios(event_id, group_availability) :
+    """
+
+    :param group_availability:
+    :return:
+    """
+    #First access and store all user_id
+    query = Event.objects.filter(event_id=event_id)
+    if query.count() == 0 :
+        return None
+    else :
+        event = query[0]
+
+    # Create appropriate table for group_availability
+    group_ratio = {}
+    number_of_days = (event.potential_end_date - event.potential_start_date).days + 1
+    dt = datetime(year=1, month=1, day=1)
+    dt_end = datetime(year=1, month=1, day=2)
+    while dt < dt_end:
+        group_ratio[dt.strftime("%I:%M %p")] = [0.0]*number_of_days
+        dt = dt + timedelta(minutes=30)
+
+    # Fill in each related cell with the appropriate ratio of people available
+    for half_hour_period in group_availability :
+        day_tracker = 0
+        for day in group_availability[half_hour_period] :
+            group_ratio[half_hour_period][day_tracker] = len(day) / event.members.count()
+            day_tracker = day_tracker + 1
+
+    return group_ratio
