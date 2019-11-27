@@ -108,6 +108,20 @@
                     <div class="card">
                         <header class="card-header has-background-info">
                             <p class="card-header-title is-size-3">
+                                Group Availability
+                            </p>
+                        </header>
+                        <div class="card-content">
+                            <div class="content">
+                                {% include "core/event_calendar.html" %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box">
+                    <div class="card">
+                        <header class="card-header has-background-info">
+                            <p class="card-header-title is-size-3">
                                 My Availability
                             </p>
                         </header>
@@ -118,9 +132,9 @@
                         </div>
                         <footer class="card-footer">
                             <a href="/my_availability/google_calendar/" id="a-import-from-google-calendar" class="card-footer-item is-size-4">
-                                Import From Google Calendar
+                                Import From General Availability
                             </a>
-                            <button id="btn-save-availability" class="card-footer-item is-pulled-right is-size-4">Save Availability</button>
+                            <button id="btn-save-availability" class="card-footer-item is-pulled-right is-size-4">Save Event Availability</button>
                         </footer>
                     </div>
                 </div>
