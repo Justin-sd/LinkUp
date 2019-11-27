@@ -6,6 +6,12 @@ from datetime import datetime, timedelta
 
 
 def get_best(event_id):
+    """
+
+    :param event_id: the id of the event we want to get best times of
+    :return: A list of sorted pairs: [ (time, [users]), (time, [users]).... ]
+            where time is the starting time and users is list of users who can make it.
+    """
     event_set = Event.objects.filter(event_id=event_id)
 
     event = event_set[0]
@@ -19,7 +25,7 @@ def get_best(event_id):
     # round up the potential starting minutes
     if st.minute > 30:
         new_st = st.replace(minute=0)
-        new_st =  new_st + timedelta(hours=1)
+        new_st = new_st + timedelta(hours=1)
     elif st.minute > 0:
         new_st = st.replace(minute=30)
     elif st.minute == 0 or st.minute == 30:
@@ -36,22 +42,33 @@ def get_best(event_id):
         new_et = et
     end = convert_to_minutes(new_et, new_st)
 
+    min_hour = event.no_earlier_than.hour
+    min_minute = event.no_earlier_than.minute
+    max_hour = event.no_later_than.hour
+    max_minute = event.no_later_than.minute
+
     # Dictionary: starting times as keys and values is list of people who can make it,
     # keys incremented by duration
     optimal_times = {}
     # from start to end time, add keys of 30 minute increments with querysets of every user attending
-    for i in range(start,end+1, duration):
+    for i in range(start,end+1, 30):
         if i + duration > end:
             break
-        optimal_times[i] = users.copy()
-
-    all_user_times = []
+        # only add times later than min time and earlier than max time
+        time = convert_to_datetime(new_st, i)
+        if min_hour < time.hour < max_hour:
+            optimal_times[i] = users.copy()
+        elif time.hour == min_hour:
+            if time.minute >= min_minute:
+                optimal_times[i] = users.copy()
+        elif time.hour == max_hour:
+            if time.minute <= max_minute:
+                optimal_times[i] = users.copy()
 
     # have a list of all users times
     for u in users:
         # user_sched = free_busy_month(u)
         # schedule = json.dumps(user_sched, default=json_datetime_handler)
-
         # Schedule.objects.create(user=u, availability=schedule)
 
         # get user's schedules in datetime format
@@ -107,6 +124,7 @@ def convert_to_minutes(time, starting):
     elapsed = time - starting
     minutes = int(elapsed.total_seconds()/60)
     return minutes
+
 
 # convert minutes to a datetime by getting starting datetime and timedelta by minutes
 def convert_to_datetime(starting, mins):
