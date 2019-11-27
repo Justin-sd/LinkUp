@@ -30,24 +30,21 @@ def format_group_availability_calendar(event_id) :
     dt = datetime(year=1, month=1, day=1)
     dt_end = datetime(year=1, month=1, day=2)
     while dt < dt_end :
-        group_availability[dt.strftime("%I:%M %p")] = [[]]*number_of_days
+        group_availability[dt.strftime("%I:%M %p")] = [[] for i in range(number_of_days)]
         dt = dt + timedelta(minutes=30)
+
 
 
     #Properly fill in dictionary with users availabile at each time
     for schedule in user_schedules :
         schedule_user = list(schedule.keys())[0]
         availability = list(schedule.values())[0]
-        print("Going through " + str(schedule_user) + "'s availability")
         for half_hour_period in availability :
             day_tracker = 0
             for day in availability[half_hour_period] :
                 if day is False :
-                    print("Adding user " + str(schedule_user) + " to day " + str(day_tracker) + " to time " + half_hour_period + " is" + str(day))
-                    print(schedule_user)
                     group_availability[half_hour_period][day_tracker].append(schedule_user)
                 day_tracker = day_tracker + 1
 
-    print(group_availability)
     return group_availability
 
