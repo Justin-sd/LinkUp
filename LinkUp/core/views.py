@@ -149,6 +149,16 @@ def createUser(request):
         login(request, user)
     return render(request, "core/homepage.html", {})
 
+def change_user_info(request):
+    if request.method == 'POST':
+        user = get_user(request)
+        user.first_name = request.POST.get("first_name")
+        user.last_name = request.POST.get("last_name")
+        user.email = request.POST.get("email")
+        user.save()
+    return render(request, "core/my_account.html")
+
+
 
 def login_user(request, backend='django.contrib.auth.backends.ModelBackend'):
     if request.method == "POST":
@@ -240,6 +250,7 @@ def logout_user(request):
     Log the user out
     """
     logout(request)
+
     return render(request, "core/homepage.html", {})
 
 
@@ -278,3 +289,5 @@ def add_event_admin(request):
         newadmin = User.objects.filter(username=request.POST.get('new_admin'))
         event[0].admins.add(newadmin[0])
     return HttpResponse("Success")
+
+

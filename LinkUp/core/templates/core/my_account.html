@@ -30,54 +30,16 @@
                     <aside class="column text-center is-centered">
                         <div class="box">
                             <p class="text-left" style="font-size: 14px">
-                                Display name: {{user.first_name}} {{user.last_name}}
+                                Display name: {{user.get_full_name}}
                             </p>
                             <p class="text-left" style="font-size: 14px">
                                 <br>
                                 Email: {{user.email}}
                             </p>
                             <hr/>
-                            <a class="button is-info" data-toggle="modal" href="javascript:void(0)" onclick="openRegisterModal();">Change Info</a>
+                            <--!a class="button is-size-4" id="updateUser" >Change Info</--a> {% include 'core/update_user_modal.html' %} -->
                         </div>
-                        <div class="modal fade login" id="loginModal">
-                            <div class="modal-dialog login animated">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                        <h4 class="modal-title">Edit Info</h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="box">
-                                            <div class="box">
-                                                <div class="content">
-                                                    <div class="error"></div>
-                                                    <div class="form loginBox">
-                                                        <form method="post" action="/login_user/" accept-charset="UTF-8">
-                                                            {% csrf_token %}
-                                                            <input id="email" class="form-control" type="text" placeholder="Email" name="email">
-                                                            <input id="password" class="form-control" type="password" placeholder="Password" name="password">
-                                                            <input class="btn btn-default btn-login" type="submit" value="Login" >
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="content registerBox" style="display:none;">
-                                                <div class="form">
-                                                    <form method="post" html="{:multipart=>true}" data-remote="true" action="/update_user/" accept-charset="UTF-8">
-                                                        {% csrf_token %}
-                                                        <input id="first_name" class="form-control" type="text" placeholder="First Name" name="first_name">
-                                                        <input id="last_name" class="form-control" type="text" placeholder="Last Name" name="last_name">
-                                                        <input id="email" class="form-control" type="text" placeholder="Email" name="email">
-                                                        <input class="btn btn-default btn-register" type="submit" value="Update" name="commit">
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
 
-                                </div>
-                            </div>
-                        </div>
                     </aside>
                     <aside class="column"><p></p></aside>
                 </div>
