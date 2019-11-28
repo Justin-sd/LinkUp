@@ -196,6 +196,7 @@ def get_create_event_form(request):
         form = EventForm(request.POST)
         # If form is valid, save the event
         if form.is_valid():
+            local_tz = availability_calendar_api.get_user_timezone(request.user)
             event_id = str(uuid.uuid1())
             title = form.cleaned_data["title"]
             description = form.cleaned_data["description"]
