@@ -236,7 +236,6 @@ def join_event(request, event_id):
     return event_page(request, event_id)
 
 
-
 @login_required()
 def my_account(request):
     return render(request, "core/my_account.html", {})
