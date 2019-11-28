@@ -296,3 +296,8 @@ def add_event_admin(request):
         newadmin = User.objects.filter(username=request.POST.get('new_admin'))
         event[0].admins.add(newadmin[0])
     return HttpResponse("Success")
+
+def delete_event(request):
+    eventid = request.POST
+    e = Event.objects.filter(event_id=eventid["event_ID"]).delete()
+    return render(request, "core/my_events.html/", {})
