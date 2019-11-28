@@ -51,7 +51,6 @@ $(document).ready(function() {
                 }
             }
         });
-        console.log("CALENDAR" + calendar);
 
         $.ajax({
             headers: {'X-CSRFToken': token},

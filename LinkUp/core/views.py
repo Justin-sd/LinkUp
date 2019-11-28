@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 
 from .apis import availability_calendar_api, sendEmail_api, algorithm_api, contact_us_api, event_calendar_api
-from .models import Event, Schedule, UserTimezone
+from .models import Event, Schedule, UserTimezone, EventSchedule
 from .forms import EventForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -143,6 +143,23 @@ def save_availability(request):
         schedule.save()
 
     return render(request, "core/availability_calendar.html", {})
+
+def save_event_availability(request):
+    # Get user and local timezone
+    user = request.user
+    # How to get event???
+    event = request.event
+    new_availability_dates = availability_calendar_api.convert_user_calendar_to_normal(request, user)
+
+    query = EventSchedule.objects.filter(user=user, event=event)
+    if query.count() == 0:
+        EventSchedule.objects.create(availability=new_availability_dates, user=user, event=event)
+    else:
+        schedule = query[0]
+        schedule.availability = new_availability_dates
+        schedule.save()
+
+    return render(request, "core/event_calendar.html", {})
 
 
 def createUser(request):

@@ -27,6 +27,7 @@ urlpatterns = [
     # availability
     path('my_availability/', views.my_availability),
     path('save_availability/', views.save_availability),
+    path('save_event_availability/', views.save_event_availability),
     path('my_availability/google_calendar/', views.import_google_calendar_data),
     path('update_timezone/', views.update_timezone),
     # Users
