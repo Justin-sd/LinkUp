@@ -21,6 +21,23 @@
             $("#invitee_email").val('');
         });
     }
+
+    function deleteEvent() {
+
+
+        let data = {"event_ID": "{{event.event_id}}"}
+
+        $.ajax({
+            headers: {
+                "X-CSRFToken": CSRF_TOKEN
+            },
+            type: "POST",
+            url: "/delete_event/",
+            data: data,
+        }).done(function(res) {
+            window.location.replace("/my_events/");
+        });
+    }
 </script>
 {% load static %}
 <script type="text/javascript" src="{% static '/js/EditEvent.js' %}"></script>
@@ -114,6 +131,7 @@
                     <div class="level">
                         <div class="level-left">
                             <a class="button is-info">Set Availability</a>
+                            <a class="button is-info" onclick="deleteEvent()">Delete Event</a>
                         </div>
                     </div>
                 </div>
