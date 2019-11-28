@@ -6,7 +6,7 @@ from django.utils.dateparse import parse_datetime
 import json
 
 from ..models import Event, Schedule, EventSchedule, UserTimezone
-from .calendar_api import free_busy_month
+from .calendar_api import free_busy_month, get_users_preferred_timezone
 
 
 def format_google_calendar_availability(user):
@@ -24,6 +24,7 @@ def format_google_calendar_availability(user):
                 '10:00 AM': [False, False, False, ..., True, True, ..., False]
             }
     """
+    timezone.activate(get_users_preferred_timezone(user))
     fb = free_busy_month(user)
     start_date = timezone.localtime(datetime.utcnow().replace(tzinfo=UTC)).replace(hour=0, minute=0, second=0,
                                                                                    microsecond=0)
@@ -48,6 +49,7 @@ def format_general_availability_calendar(user):
                 '10:00 AM': [False, False, False, ..., True, True, ..., False]
             }
     """
+    activate_users_saved_timezone(user)
     fb = get_users_saved_schedule(user)
 
     start_date = timezone.localtime(datetime.utcnow().replace(tzinfo=UTC)).replace(hour=0, minute=0, second=0,
@@ -70,6 +72,7 @@ def format_event_availability_calendar(user, event_id):
                 '10:00 AM': [False, False, False, ..., True, True, ..., False]
             }
     """
+    activate_users_saved_timezone(user)
     event = Event.objects.get(event_id=event_id)
     availability = get_users_event_schedule(user, event)
     availability = convert_to_local_time(availability, user)
@@ -146,10 +149,6 @@ def convert_to_local_time(fb, user):
     :param: user:   The user whose timezone we are converting to. This timezone is taken from their google calendar.
                     Maybe it would be better to calculate it from their browser using javascript?
     """
-    # Must do this for timezone.localtime to work!
-    # Set users timezone
-    activate_users_saved_timezone(user)
-
     split_fb = []
     for times in fb:
         start = timezone.localtime(times["start"])
@@ -205,10 +204,13 @@ def get_users_event_schedule(user, event):
     """
     event_schedule_query = EventSchedule.objects.filter(user=user, event=event)
     if event_schedule_query.count() == 0:
-        general_schedule = get_users_saved_schedule(user=user)
-        availability = json.dumps(general_schedule, default=json_datetime_handler)
-        EventSchedule.objects.create(user=user, event=event, availability=availability)
-        return general_schedule
+        general_schedule_query = Schedule.objects.filter(user=user)
+        if general_schedule_query.count() == 0:
+            users_availability_string = "[]"
+        else:
+            users_availability_string = general_schedule_query[0].availability
+        EventSchedule.objects.create(user=user, event=event, availability=users_availability_string)
+        return decode_availability(users_availability_string)
     return decode_availability(event_schedule_query[0].availability)
 
 
@@ -273,7 +275,11 @@ def activate_users_saved_timezone(user):
     :return: None
     """
     try:
-        timezone.activate(UserTimezone.objects.get(user=user).timezone_str)
+        # timezone.activate(UserTimezone.objects.get(user=user).timezone_str)
+
+        # I think we have decided that converting timezones is more confusing for the user than helpful
+        # Everyone will keep the same timezone now, except for their google calendar imports.
+        timezone.activate('UTC')
     except ObjectDoesNotExist:
         # If we can't find it, just make it LA for now
         timezone.activate('America/Los_Angeles')
@@ -294,7 +300,7 @@ def convert_user_calendar_to_normal(calendar, user):
     :return: The users availability converted into standard format:
             [{'start': datetime(..., hour=4, minute=30), 'end': datetime(..., hour=6, minute=30)}, ...]
     """
-    local_tz = get_user_timezone(user)
+    local_tz = pytz_timezone("UTC")
     new_calendar = json.load(calendar)
     converted_calendar = []
     for hours in new_calendar:

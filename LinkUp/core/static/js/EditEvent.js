@@ -8,7 +8,7 @@ $(document).ready(function(){
             url:   "change_event_title/",
             data: { "new_title": $('#EventTitle').text(), "event_id": eventID },
         }).success(function (){
-            alert('Event title changed!');
+           // alert('Event title changed!');
         }).fail(function () {
             alert('Failed to change event title!');
         });
@@ -23,7 +23,7 @@ $(document).ready(function(){
             url:   "change_event_description/",
             data: { "new_description": $('#EventDescription').text() , "event_id": eventID },
         }).success(function (){
-            alert('Event description changed!');
+           // alert('Event description changed!');
         }).fail(function () {
             alert('Failed to change event Description');
         });
@@ -65,7 +65,7 @@ function AddAdmin(){
         url:   "add_event_admin/",
         data: { "new_admin": newAdmin , "event_id": eventID },
     }).success(function (){
-        alert('Event Admin Added!');
+        alert(newAdmin+' has been added as a administrator !');
     }).fail(function () {
         alert('Event Admin not Added');
     });

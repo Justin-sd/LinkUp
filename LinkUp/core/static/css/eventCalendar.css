@@ -1,45 +1,33 @@
-#a-import-from-google-calendar {
-    background: limegreen;
-}
-
-#btn-save-availability {
-    background: lightblue;
-}
-
-.user tbody{
+.event tbody{
     display:block;
     overflow-y:scroll;
     overflow-x: scroll;
     height:500px;
 }
 
-.user thead tr{
+.event thead tr{
     height:20px;
     display: table;
     width: 100%;
     table-layout: fixed;
 }
 
-.user table {
+.event table {
     border-collapse: collapse;
 }
 
-.user th, td {
+.event th, td {
     width: 120px;
 }
 
-.user tbody tr{
+.event td {
+    background-color: #0dff00;
+}
+
+.event tbody tr{
     display: table;
     width: 100%;
     table-layout: fixed;
-}
-
-.user td.busy-time {
-    background-color: #f6352a;
-    border-bottom: 1px double #f6352a;
-}
-
-.user td.free-time {
 }
 
 .hide-scroll {

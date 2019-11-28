@@ -50,4 +50,6 @@ urlpatterns = [
     path('event_page/change_event_title/', views.change_event_title),
     path('event_page/change_event_description/', views.change_event_description),
     path('event_page/add_event_admin/', views.add_event_admin),
+    path('join_event/<str:event_id>', views.join_event),
+    path('delete_event/', views.delete_event)
 ]

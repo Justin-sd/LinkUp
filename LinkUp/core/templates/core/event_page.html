@@ -1,4 +1,6 @@
-{% extends 'base.html' %} {% block title %}LinkUp {% endblock title %} //modifying the title {% block content %}
+{% extends 'base.html' %}
+{% block title %}LinkUp {% endblock title %} //modifying the title
+{% block content %}
 <script type='text/javascript'>
     function sendEmail() {
         let invitee_email = $("#invitee_email").val();
@@ -19,10 +21,43 @@
             $("#invitee_email").val('');
         });
     }
+
+    function deleteEvent() {
+
+
+        let data = {"event_ID": "{{event.event_id}}"}
+
+        $.ajax({
+            headers: {
+                "X-CSRFToken": CSRF_TOKEN
+            },
+            type: "POST",
+            url: "/delete_event/",
+            data: data,
+        }).done(function(res) {
+            window.location.replace("/my_events/");
+        });
+    }
 </script>
 {% load static %}
 <script type="text/javascript" src="{% static '/js/EditEvent.js' %}"></script>
 <script type="text/javascript" src="{% static '/js/InviteGuestTrigger.js' %}"></script>
+
+    {% if new_user %}
+    <div class="modal is-active" id="createModal">
+      <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head has-background-info has-text-weight-semibold">
+                <p class="modal-card-title is-size-2" id="effect">Join {{event.title}}</p>
+                <button class="delete is-pulled-right" aria-label="close" data-bulma-modal="close"></button>
+            </header>
+            <footer class="modal-card-foot">
+                <a class="button is-info is-size-5" href="/join_event/{{ event_id }}">Join Event as {{ user.name }}</a>
+                <button class="button is-danger is-size-5" data-bulma-modal="close">Cancel</button>
+            </footer>
+        </div>
+    </div>
+{% endif %}
 
 <section class="section">
     <div class="section">
@@ -47,7 +82,7 @@
                                 </li>
                                 {% endfor %}
                             </ul>
-                            <a id="createEvent" class="button is-size-4"> + Create An Event</a> {% include 'core/create_event_modal.html' %}
+                            <a id="createEvent" class="button is-size-4" > + Create An Event</a>
                         </li>
                     </ul>
                     <p class="menu-label is-size-5">
@@ -73,10 +108,12 @@
                         <li>
                             <div class="dropdown">
                                 <a class="is-size-4 dropdown-toggle" data-toggle="dropdown">Add An Admin<span class="caret"></span>   </a>
-                                <ul class="dropdown-menu" style="background-color: whitesmoke" id="myDropdown">
-                                    <input class="input is-rounded glyphicon-search " placeholder="    Search..." style="color: black" id="myInput" onkeyup="filterFunction()"> {% for member in event.members.all %} {% if member not in event.admins.all %}
-                                    <li><a href="" style="color: black" onclick="AddAdmin()" id="member">{{ member }}</a></li>
+                                <ul class="dropdown-menu" style="background-color: whitesmoke;margin-left: 100px;margin-top: -5px" id="myDropdown">
+                                    <input class="input is-rounded glyphicon-search " placeholder="    Search..." style="color: black; margin-left: -5px" id="myInput" onkeyup="filterFunction()"> {% for member in event.members.all %} {% if member not in event.admins.all %}
+                                    <li><a href="" style="color: black;padding-left: 40px " onclick="AddAdmin()" id="member">{{ member }}</a></li>
                                     {% endif %} {% endfor %}
+
+
                                 </ul>
                             </div>
                         </li>
@@ -87,13 +124,28 @@
             <div class="column is-four-fifths">
                 <div class="box">
                     {% if admin %}
-                    <i class="fa fa-gear fa-spin"></i>
+                    <i class="fa fa-pencil"></i>
                     <h1 class="title" contenteditable="true" id="EventTitle">{{event.title}}</h1> {% else %}
                     <h1 class="title">{{event.title}}</h1> {% endif %}
                     <hr/>
                     <div class="level">
                         <div class="level-left">
                             <a class="button is-info">Set Availability</a>
+                            <a class="button is-info" onclick="deleteEvent()">Delete Event</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="box">
+                    <div class="card">
+                        <header class="card-header has-background-info">
+                            <p class="card-header-title is-size-3">
+                                Group Availability
+                            </p>
+                        </header>
+                        <div class="card-content">
+                            <div class="content">
+                                {% include "core/event_calendar.html" %}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -111,9 +163,9 @@
                         </div>
                         <footer class="card-footer">
                             <a href="/my_availability/google_calendar/" id="a-import-from-google-calendar" class="card-footer-item is-size-4">
-                                Import From Google Calendar
+                                Import From General Availability
                             </a>
-                            <button id="btn-save-availability" class="card-footer-item is-pulled-right is-size-4">Save Availability</button>
+                            <button id="btn-save-availability" class="card-footer-item is-pulled-right is-size-4">Save Event Availability</button>
                         </footer>
                     </div>
                 </div>
@@ -126,7 +178,7 @@
         <div class="column">
             <div class="panel">
                 {% if admin %}
-                <p class="panel-heading has-background-info"><i class="fa fa-gear fa-spin"></i> Event Description
+                <p class="panel-heading has-background-info"><i class="fa fa-pencil"></i> Event Description
                 </p>
                 <div class="panel-block" id="EventDescription" contenteditable="true">
                     {{ event.description }}
