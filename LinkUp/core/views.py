@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 
-from .apis import availability_calendar_api, sendEmail_api, algorithm_api, contact_us_api
+from .apis import availability_calendar_api, sendEmail_api, algorithm_api, contact_us_api, event_calendar_api
 from .models import Event, Schedule, UserTimezone
 from .forms import EventForm
 from django.contrib.auth.decorators import login_required
@@ -33,6 +33,7 @@ def event_page(request, event_id):
 
     if event_query_set.count() != 1:
         return render(request, "core/error_page", {})
+
     # User Object
     user = request.user
 
@@ -40,24 +41,25 @@ def event_page(request, event_id):
     event = event_query_set[0]
     user_events = Event.objects.filter(members=user)
 
-    if user in event.members.all():
-        new_user = False
-    else:
-        new_user = True
+    new_user = user not in event.members.all()
+    admin = user in event.admins.all()
 
-    if user in event.admins.all():
-        admin = True
-    else:
-        admin = False
-
-    # Get the users event schedule
-    busy_times = availability_calendar_api.format_event_availability_calendar(user, event_id)
     available_dates = availability_calendar_api.get_event_availability_dates(event_id)
     time_list = algorithm_api.get_best(event_id)
 
+    busy_times = availability_calendar_api.format_event_availability_calendar(user, event_id)  # users event schedule
+    busy_times = event_calendar_api.apply_event_time_constraints(event, busy_times)
+
+    group_availability = event_calendar_api.format_group_availability_calendar(event_id)
+
+    group_ratio = event_calendar_api.add_member_ratios(event_id, group_availability)
+    group_ratio = event_calendar_api.apply_event_time_constraints(event, group_ratio)
+
     context = {"event": event, "admin": admin, "user": user, 'busy_times': busy_times,
                "availability_dates": available_dates, "time_list": time_list, "user_events": user_events,
-               "event_id": event_id, "create_event_form": EventForm(), "new_user": new_user}
+               "event_id": event_id, "group_availability": group_availability, "create_event_form": EventForm(),
+               "new_user": new_user, "group_ratio": group_ratio}
+
     return render(request, "core/event_page.html", context)
 
 
@@ -153,6 +155,16 @@ def createUser(request):
         login(request, user)
     return render(request, "core/homepage.html", {})
 
+def change_user_info(request):
+    if request.method == 'POST':
+        user = get_user(request)
+        user.first_name = request.POST.get("first_name")
+        user.last_name = request.POST.get("last_name")
+        user.email = request.POST.get("email")
+        user.save()
+    return render(request, "core/my_account.html")
+
+
 
 def login_user(request, backend='django.contrib.auth.backends.ModelBackend'):
     if request.method == "POST":
@@ -193,14 +205,18 @@ def get_create_event_form(request):
         form = EventForm(request.POST)
         # If form is valid, save the event
         if form.is_valid():
+            local_tz = availability_calendar_api.get_user_timezone(request.user)
             event_id = str(uuid.uuid1())
             title = form.cleaned_data["title"]
             description = form.cleaned_data["description"]
             duration = form.cleaned_data["duration"]
             start = form.cleaned_data["potential_start_date"]
             end = form.cleaned_data["potential_end_date"]
+            no_earlier_than = form.cleaned_data["no_earlier_than"]
+            no_later_than = form.cleaned_data["no_later_than"]
             new_event = Event.objects.create(event_id=event_id, title=title, description=description, duration=duration,
-                                             owner=request.user, potential_start_date=start, potential_end_date=end)
+                                             owner=request.user, potential_start_date=start, potential_end_date=end,
+                                             no_earlier_than=no_earlier_than, no_later_than=no_later_than)
             new_event.members.add(request.user)
             new_event.admins.add(request.user)
             return redirect('/event_page/' + event_id)
@@ -217,7 +233,6 @@ def join_event(request, event_id):
     event = event_query_set[0]
     event.members.add(request.user)
     return event_page(request, event_id)
-
 
 
 @login_required()
@@ -252,6 +267,7 @@ def logout_user(request):
     Log the user out
     """
     logout(request)
+
     return render(request, "core/homepage.html", {})
 
 
@@ -290,3 +306,10 @@ def add_event_admin(request):
         newadmin = User.objects.filter(username=request.POST.get('new_admin'))
         event[0].admins.add(newadmin[0])
     return HttpResponse("Success")
+
+
+def delete_event(request):
+    eventid = request.POST
+    e = Event.objects.filter(event_id=eventid["event_ID"]).delete()
+    return render(request, "core/my_events.html/", {})
+

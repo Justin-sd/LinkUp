@@ -14,7 +14,6 @@ class SignUpForm(UserCreationForm):
         model = User
         fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2',)
 
-
 class EventForm(ModelForm):
     class Meta:
         model = Event
@@ -27,16 +26,28 @@ class EventForm(ModelForm):
             'description': forms.Textarea(attrs={
                 'type': 'textarea',
                 'class': 'textarea has-background-light',
-                'rows': '5',
+                'rows': '3',
                 'placeholder':  'Please enter a event description! \nThis can be '
                                 'anything from what the event is for, where it will '
                                 'be located, etc. \nThank you!'
                 }),
-            'duration': forms.DateInput(attrs={'type': 'number', 'class': 'number', 'placeholder': 'Duration'}),
-            'potential_start_date': forms.DateInput(attrs={'type': 'date', 'class': 'number'}),
-            'potential_end_date': forms.DateInput(attrs={'type': 'date', 'class': 'number'})
+            'duration': forms.NumberInput(attrs={'type': 'number',
+                                                 'class': 'input has-background-light',
+                                                 'placeholder': 'Duration'}),
+            'potential_start_date': forms.DateInput(attrs={'type': 'date', 'class': 'input has-background-light'}),
+            'potential_end_date': forms.DateInput(attrs={'type': 'date', 'class': 'input has-background-light'}),
+            'no_earlier_than': forms.NumberInput(attrs={'type': 'time', 'class': 'input has-background-light',
+                                                        'placeholder': 'No earlier than'}),
+            'no_later_than': forms.NumberInput(attrs={'type': 'time', 'class': 'input has-background-light',
+                                                      'placeholder': 'No later than'}),
         }
-        fields = ['title', 'description', 'duration', 'potential_start_date', 'potential_end_date']
+        fields = ['title',
+                  'description',
+                  'duration',
+                  'potential_start_date',
+                  'potential_end_date',
+                  'no_earlier_than',
+                  'no_later_than']
 
     def clean(self):
         cleaned_data = super().clean()

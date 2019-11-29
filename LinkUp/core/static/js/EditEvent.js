@@ -9,6 +9,7 @@ $(document).ready(function(){
             data: { "new_title": $('#EventTitle').text(), "event_id": eventID },
         }).success(function (){
            // alert('Event title changed!');
+            location.reload();
         }).fail(function () {
             alert('Failed to change event title!');
         });
@@ -24,6 +25,7 @@ $(document).ready(function(){
             data: { "new_description": $('#EventDescription').text() , "event_id": eventID },
         }).success(function (){
            // alert('Event description changed!');
+           // location.reload();
         }).fail(function () {
             alert('Failed to change event Description');
         });
@@ -73,5 +75,6 @@ function AddAdmin(){
 }//end of function
 
 ////Add admin
+
 
 
