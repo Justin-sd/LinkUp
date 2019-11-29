@@ -10,16 +10,18 @@ from django.contrib.auth import authenticate, login, logout, update_session_auth
 from django.contrib import messages
 from django.http import HttpResponse
 import uuid
-from datetime import datetime
 
 
-@login_required()
 def home(request):
     user = request.user
-    user_events = Event.objects.filter(members=user)
-    no_user_events = False
-    if user_events.count() is 0:
+    if user.is_anonymous:
         no_user_events = True
+        user_events = []
+    else:
+        user_events = Event.objects.filter(members=user)
+        no_user_events = False
+        if user_events.count() is 0:
+            no_user_events = True
 
     context = {
         "user_events": user_events,
@@ -156,6 +158,7 @@ def createUser(request):
         login(request, user)
     return render(request, "core/homepage.html", {})
 
+
 def change_user_info(request):
     if request.method == 'POST':
         user = get_user(request)
@@ -164,7 +167,6 @@ def change_user_info(request):
         user.email = request.POST.get("email")
         user.save()
     return render(request, "core/my_account.html")
-
 
 
 def login_user(request, backend='django.contrib.auth.backends.ModelBackend'):
@@ -279,6 +281,8 @@ def update_timezone(request):
     """
     user_timezone = request.POST.get("time_zone")
     user = request.user
+    if user.is_anonymous:
+        return HttpResponse("User not logged in")
     query = UserTimezone.objects.filter(user=user)
     if query.count() != 0:
         query.update(user=user, timezone_str=user_timezone)
