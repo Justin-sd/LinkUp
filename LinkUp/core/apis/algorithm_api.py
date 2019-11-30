@@ -106,7 +106,9 @@ def get_best(event_id):
 
     # go through the optimal times and find which list contains
     # most users then append to new list
-    curr_max = len(list(optimal_times.values())[0])
+    curr_max = 0
+    if len(optimal_times) > 0:
+        curr_max = len(list(optimal_times.values())[0])
     append_list = []
     for times in optimal_times:
         if len(optimal_times[times]) >= curr_max:
