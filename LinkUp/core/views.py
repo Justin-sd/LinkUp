@@ -194,7 +194,7 @@ def send_email(request):
     data = request.POST
     invitee_email = data["invitee_email"]
     event_id = data["event_id"]
-    event_url = "https//:LinkUp.com/event_page/" + event_id
+    event_url = "http://linkup-env.3yijpwf3qp.us-west-2.elasticbeanstalk.com/event_page/" + event_id
     sendEmail_api.send_invite_email(event_url, invitee_email)
     return HttpResponse("Success")
 
