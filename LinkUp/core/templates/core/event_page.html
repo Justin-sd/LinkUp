@@ -61,6 +61,13 @@
 
 <section class="section">
     <div class="section">
+          <nav class="breadcrumb has-succeeds-separator is-large has-background-white" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/my_events/">My Events</a></li>
+      <li><a href="/event_page/{{ event.id }}" class="is-active" aria-current="page">{{ event.title }}</a></li>
+  </ul>
+</nav>
         <div class="columns">
             <aside class="column is-2">
                 <nav class="menu">
