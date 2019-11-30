@@ -12,13 +12,16 @@ from django.http import HttpResponse
 import uuid
 
 
-@login_required()
 def home(request):
     user = request.user
-    user_events = Event.objects.filter(members=user)
-    no_user_events = False
-    if user_events.count() is 0:
+    if user.is_anonymous:
         no_user_events = True
+        user_events = []
+    else:
+        user_events = Event.objects.filter(members=user)
+        no_user_events = False
+        if user_events.count() is 0:
+            no_user_events = True
 
     context = {
         "user_events": user_events,
@@ -155,6 +158,7 @@ def createUser(request):
         login(request, user)
     return render(request, "core/homepage.html", {})
 
+
 def change_user_info(request):
     if request.method == 'POST':
         user = get_user(request)
@@ -163,7 +167,6 @@ def change_user_info(request):
         user.email = request.POST.get("email")
         user.save()
     return render(request, "core/my_account.html")
-
 
 
 def login_user(request, backend='django.contrib.auth.backends.ModelBackend'):
@@ -190,7 +193,7 @@ def send_email(request):
     data = request.POST
     invitee_email = data["invitee_email"]
     event_id = data["event_id"]
-    event_url = "https//:LinkUp.com/event_page/" + event_id
+    event_url = "http://linkup-env.3yijpwf3qp.us-west-2.elasticbeanstalk.com/event_page/" + event_id
     sendEmail_api.send_invite_email(event_url, invitee_email)
     return HttpResponse("Success")
 
@@ -278,6 +281,8 @@ def update_timezone(request):
     """
     user_timezone = request.POST.get("time_zone")
     user = request.user
+    if user.is_anonymous:
+        return HttpResponse("User not logged in")
     query = UserTimezone.objects.filter(user=user)
     if query.count() != 0:
         query.update(user=user, timezone_str=user_timezone)
