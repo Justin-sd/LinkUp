@@ -1,0 +1,41 @@
+.event tbody{
+    display:block;
+    overflow-y:scroll;
+    overflow-x: scroll;
+    height:500px;
+}
+
+.event thead tr{
+    height:20px;
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+.event table {
+    border-collapse: collapse;
+}
+
+.event th, td {
+    width: 120px;
+}
+
+.event td {
+    background-color: #0dff00;
+}
+
+.event tbody tr{
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+.hide-scroll {
+    overflow-y: scroll;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+}
+.hide-scroll::-webkit-scrollbar { /* WebKit */
+    width: 0;
+    height: 0;
+}
