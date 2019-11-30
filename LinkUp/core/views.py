@@ -248,7 +248,7 @@ def my_account(request):
 def privacy_policy(request):
     return render(request, "core/privacy_policy.html", {})
 
-
+"""
 def password_change(request):
     if request.method == 'POST':
         form = PasswordChangeForm(request.user, request.POST)
@@ -264,7 +264,7 @@ def password_change(request):
     return render(request, 'core/password_change.html', {
         'form': form
     })
-
+"""
 
 def logout_user(request):
     """
