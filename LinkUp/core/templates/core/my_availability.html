@@ -3,6 +3,13 @@
 {% block content %}
 <section class="section">
    <div class="section">
+    <nav class="breadcrumb has-succeeds-separator is-large has-background-white" aria-label="breadcrumbs">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/my_events/">My Events</a></li>
+          <li><a href="/my_availability/" class="is-active" aria-current="page">My Availability</a></li>
+      </ul>
+    </nav>
       <div class="columns">
         <aside class="column is-2">
             <nav class="menu">
@@ -67,7 +74,7 @@
                     <a href="/my_availability/google_calendar/" id="a-import-from-google-calendar" class="card-footer-item is-size-4">
                             Import From Google Calendar
                     </a>
-                  <button id="btn-save-availability" class="card-footer-item is-pulled-right is-size-4">Save Availability</button>
+                  <button id="btn-save-availability" class="card-footer-item is-pulled-right is-size-4">Save My Unavailability</button>
               </footer>
           </div>
       </div>

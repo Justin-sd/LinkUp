@@ -1,31 +1,30 @@
-tbody{
+.event tbody{
     display:block;
     overflow-y:scroll;
     overflow-x: scroll;
     height:500px;
 }
 
-thead tr{
+.event thead tr{
     height:20px;
     display: table;
     width: 100%;
     table-layout: fixed;
 }
 
-table {
+.event table {
     border-collapse: collapse;
 }
 
-th, td {
+.event th, td {
     width: 120px;
 }
 
-td {
-    opacity: 0.8;
+.event td {
     background-color: #0dff00;
 }
 
-tbody tr{
+.event tbody tr{
     display: table;
     width: 100%;
     table-layout: fixed;

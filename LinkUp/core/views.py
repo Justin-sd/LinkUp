@@ -10,16 +10,18 @@ from django.contrib.auth import authenticate, login, logout, update_session_auth
 from django.contrib import messages
 from django.http import HttpResponse
 import uuid
-from datetime import datetime
 
 
-@login_required()
 def home(request):
     user = request.user
-    user_events = Event.objects.filter(members=user)
-    no_user_events = False
-    if user_events.count() is 0:
+    if user.is_anonymous:
         no_user_events = True
+        user_events = []
+    else:
+        user_events = Event.objects.filter(members=user)
+        no_user_events = False
+        if user_events.count() is 0:
+            no_user_events = True
 
     context = {
         "user_events": user_events,
@@ -34,6 +36,7 @@ def event_page(request, event_id):
 
     if event_query_set.count() != 1:
         return render(request, "core/error_page", {})
+
     # User Object
     user = request.user
 
@@ -41,26 +44,25 @@ def event_page(request, event_id):
     event = event_query_set[0]
     user_events = Event.objects.filter(members=user)
 
-    if user in event.members.all():
-        new_user = False
-    else:
-        new_user = True
+    new_user = user not in event.members.all()
+    admin = user in event.admins.all()
 
-    if user in event.admins.all():
-        admin = True
-    else:
-        admin = False
-
-    # Get the users event schedule
-    busy_times = availability_calendar_api.format_event_availability_calendar(user, event_id)
     available_dates = availability_calendar_api.get_event_availability_dates(event_id)
     time_list = algorithm_api.get_best(event_id)
+
+    busy_times = availability_calendar_api.format_event_availability_calendar(user, event_id)  # users event schedule
+    busy_times = event_calendar_api.apply_event_time_constraints(event, busy_times)
+
     group_availability = event_calendar_api.format_group_availability_calendar(event_id)
-    member_count = event.members.count()
+
+    group_ratio = event_calendar_api.add_member_ratios(event_id, group_availability)
+    group_ratio = event_calendar_api.apply_event_time_constraints(event, group_ratio)
 
     context = {"event": event, "admin": admin, "user": user, 'busy_times': busy_times,
                "availability_dates": available_dates, "time_list": time_list, "user_events": user_events,
-               "event_id": event_id, "group_availability": group_availability, "member_count": member_count, "create_event_form": EventForm(), "new_user": new_user}
+               "event_id": event_id, "group_availability": group_availability, "create_event_form": EventForm(),
+               "new_user": new_user, "group_ratio": group_ratio}
+
     return render(request, "core/event_page.html", context)
 
 
@@ -145,7 +147,7 @@ def save_availability(request):
     return render(request, "core/availability_calendar.html", {})
 
 
-def createUser(request):
+def create_user(request):
     if request.method == "POST":
         user = User.objects.create_user(first_name=request.POST.get("first_name"),
                                         last_name=request.POST.get("last_name"),
@@ -155,6 +157,17 @@ def createUser(request):
         user = authenticate(request, username=request.POST.get("email"), password=request.POST.get("password"))
         login(request, user)
     return render(request, "core/homepage.html", {})
+
+
+def change_name(request):
+    if request.method == 'POST':
+        request.user.first_name = request.POST.get("first_name")
+        request.user.last_name = request.POST.get("last_name")
+    return render(request, "core/my_account.html")
+
+
+def change_name_form(request):
+    return render(request, "core/change_name_form.html", {})
 
 
 def login_user(request, backend='django.contrib.auth.backends.ModelBackend'):
@@ -181,7 +194,7 @@ def send_email(request):
     data = request.POST
     invitee_email = data["invitee_email"]
     event_id = data["event_id"]
-    event_url = "https//:LinkUp.com/event_page/" + event_id
+    event_url = "http://linkup-env.3yijpwf3qp.us-west-2.elasticbeanstalk.com/event_page/" + event_id
     sendEmail_api.send_invite_email(event_url, invitee_email)
     return HttpResponse("Success")
 
@@ -196,6 +209,7 @@ def get_create_event_form(request):
         form = EventForm(request.POST)
         # If form is valid, save the event
         if form.is_valid():
+            local_tz = availability_calendar_api.get_user_timezone(request.user)
             event_id = str(uuid.uuid1())
             title = form.cleaned_data["title"]
             description = form.cleaned_data["description"]
@@ -223,7 +237,6 @@ def join_event(request, event_id):
     event = event_query_set[0]
     event.members.add(request.user)
     return event_page(request, event_id)
-
 
 
 @login_required()
@@ -258,6 +271,7 @@ def logout_user(request):
     Log the user out
     """
     logout(request)
+
     return render(request, "core/homepage.html", {})
 
 
@@ -268,6 +282,8 @@ def update_timezone(request):
     """
     user_timezone = request.POST.get("time_zone")
     user = request.user
+    if user.is_anonymous:
+        return HttpResponse("User not logged in")
     query = UserTimezone.objects.filter(user=user)
     if query.count() != 0:
         query.update(user=user, timezone_str=user_timezone)
@@ -296,3 +312,10 @@ def add_event_admin(request):
         newadmin = User.objects.filter(username=request.POST.get('new_admin'))
         event[0].admins.add(newadmin[0])
     return HttpResponse("Success")
+
+
+def delete_event(request):
+    eventid = request.POST
+    e = Event.objects.filter(event_id=eventid["event_ID"]).delete()
+    return render(request, "core/my_events.html/", {})
+
