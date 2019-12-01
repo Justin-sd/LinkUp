@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load socialaccount %}
+{% providers_media_js %}
+{% block title %}LinkUp {% endblock title %} //modifying the title
+{% block content %}
+<!-- Need to make different versions of page for google vs email account -->
+<section class="section">
+    <div class="section">
+        <div class="columns is-8">
+            <aside class="column is-3">
+                <nav class="menu">
+                    <div class="is-centered">
+                        <p class="menu-label is-size-1 text-center">
+                            Account Options
+                        </p>
+                    </div>
+                    <hr/>
+                    <ul class="menu-list">
+                        <li><a class="is-size-4"  href="/my_account">Profile</a></li>
+                        <li><a class="is-active is-size-4"  href="/password_change">Change Name</a></li>
+                    </ul>
+                </nav>
+            </aside>
+            <aside class="column">
+                <p class="heading is-size-1 is-centered text-center">
+                    Change name
+                </p>
+                <hr/>
+                <div class="columns">
+                    <aside class="column"><p></p></aside>
+                    <aside class="column text-center is-centered">
+                        <div class="box">
+                            <div class="form">
+                                <form method="post" html="{:multipart=>true}" data-remote="true" action="/change_name/" accept-charset="UTF-8">
+                                    {% csrf_token %}
+                                    <p class="text-left" style="font-size: 14px">
+                                        First name: {{user.first_name}}
+                                    </p>
+                                    <input id="first_name" class="form-control" type="text" placeholder="First Name" name="first_name">
+                                    <br/>
+                                    <p class="text-left" style="font-size: 14px">
+                                        Last name: {{user.last_name}}
+                                    </p>
+                                    <input id="last_name" class="form-control" type="text" placeholder="Last Name" name="last_name">
+                                    <br/>
+                                    <input class="btn btn-default" type="submit" value="Make Changes" name="commit">
+                                </form>
+
+
+
+                        </div>
+
+                    </aside>
+                    <aside class="column"><p></p></aside>
+                </div>
+
+            </aside>
+        </div>
+    </div>
+</section>
+{% endblock content %}

@@ -147,7 +147,7 @@ def save_availability(request):
     return render(request, "core/availability_calendar.html", {})
 
 
-def createUser(request):
+def create_user(request):
     if request.method == "POST":
         user = User.objects.create_user(first_name=request.POST.get("first_name"),
                                         last_name=request.POST.get("last_name"),
@@ -159,14 +159,15 @@ def createUser(request):
     return render(request, "core/homepage.html", {})
 
 
-def change_user_info(request):
+def change_name(request):
     if request.method == 'POST':
-        user = get_user(request)
-        user.first_name = request.POST.get("first_name")
-        user.last_name = request.POST.get("last_name")
-        user.email = request.POST.get("email")
-        user.save()
+        request.user.first_name = request.POST.get("first_name")
+        request.user.last_name = request.POST.get("last_name")
     return render(request, "core/my_account.html")
+
+
+def change_name_form(request):
+    return render(request, "core/change_name_form.html", {})
 
 
 def login_user(request, backend='django.contrib.auth.backends.ModelBackend'):
@@ -247,7 +248,7 @@ def my_account(request):
 def privacy_policy(request):
     return render(request, "core/privacy_policy.html", {})
 
-
+"""
 def password_change(request):
     if request.method == 'POST':
         form = PasswordChangeForm(request.user, request.POST)
@@ -263,7 +264,7 @@ def password_change(request):
     return render(request, 'core/password_change.html', {
         'form': form
     })
-
+"""
 
 def logout_user(request):
     """

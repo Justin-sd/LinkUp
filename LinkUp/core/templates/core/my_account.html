@@ -1,4 +1,7 @@
 {% extends 'base.html' %}
+{% load static %}
+{% load socialaccount %}
+{% providers_media_js %}
 {% block title %}LinkUp {% endblock title %} //modifying the title
 {% block content %}
 <!-- Need to make different versions of page for google vs email account -->
@@ -21,8 +24,7 @@
                     <hr/>
                     <ul class="menu-list">
                         <li><a class="is-active is-size-4"  href="/my_account">Profile</a></li>
-                        <li><a class="is-size-4"            href="/password_change">Change Password</a></li>
-                        <li><a class="is-size-4"            href="/privacy_policy">Privacy Policy</a></li>
+                        <li><a class="is-size-4"            href="/change_name_form">Change Name</a></li>
                     </ul>
                 </nav>
             </aside>
@@ -38,14 +40,14 @@
                             <p class="text-left" style="font-size: 14px">
                                 Display name: {{user.get_full_name}}
                             </p>
+
                             <hr/>
                             <p class="text-left" style="font-size: 14px">
                                 Email: {{user.email}}
                             </p>
-
-                            <!--Button to change data? -->
+                            <!-- I can't get a modal working to save my life. F%$k web development. -->
+                            <!--a class="button" href="/change_name_form">Change Name</a-->
                         </div>
-
                     </aside>
                     <aside class="column"><p></p></aside>
                 </div>
