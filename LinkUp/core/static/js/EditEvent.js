@@ -30,6 +30,21 @@ $(document).ready(function(){
             alert('Failed to change event Description');
         });
     });
+
+    $(".li-admin-option").on('click', function () {
+        const newAdminName = $(this).text();
+        const eventID = window.location.pathname.split("/").pop();
+        $.ajax({
+            headers: {"X-CSRFToken": CSRF_TOKEN},
+            type: "POST",
+            url:   "add_event_admin/",
+            data: { "new_admin": newAdminName , "event_id": eventID },
+        }).success(function (){
+            alert(newAdminName + ' has been added as a administrator !');
+        }).fail(function () {
+            alert('Event Admin not Added');
+        });
+    });
 });
 
 
@@ -44,7 +59,8 @@ function filterFunction() {
   var input, filter, ul, li, a, i;
   input = document.getElementById("myInput");
   filter = input.value.toUpperCase();
-    let div = document.getElementById("myDropdown");
+  console.log(filter);
+  let div = document.getElementById("myDropdown");
   a = div.getElementsByTagName("a");
   for (i = 0; i < a.length; i++) {
     txtValue = a[i].textContent || a[i].innerText;
@@ -56,23 +72,7 @@ function filterFunction() {
   }
 }
 
-function AddAdmin(){
-
-    const newAdmin = document.getElementById("member").innerText;
-
-    const eventID = window.location.pathname.split("/").pop();
-    $.ajax({
-        headers: {"X-CSRFToken": CSRF_TOKEN},
-        type: "POST",
-        url:   "add_event_admin/",
-        data: { "new_admin": newAdmin , "event_id": eventID },
-    }).success(function (){
-        alert(newAdmin+' has been added as a administrator !');
-    }).fail(function () {
-        alert('Event Admin not Added');
-    });
-
-}//end of function
+//end of function
 
 ////Add admin
 
