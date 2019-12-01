@@ -30,8 +30,10 @@ function validateCreateEventForm() {
 
     //Validating potential starting date
     if (eventStartDate.getMonth() < todaysDate.getMonth()) {
+        if (eventStartDate.getFullYear() <= todaysDate.getFullYear()) {
         $("#id_potential_start_date").after("<div class='create_event_validation'><p class='has-text-danger'>Potential start date must be in the future.</p></div>");
         validationStatus = false;
+        }
     }
     else if ((eventStartDate.getMonth() === todaysDate.getMonth()) && (eventStartDate.getDate() < todaysDate.getDate() - 1)) {
         $("#id_potential_start_date").after("<div class='create_event_validation'><p class='has-text-danger'>Potential start date must be in the future.</p></div>");
@@ -40,8 +42,10 @@ function validateCreateEventForm() {
 
     //Validating potential ending date
     if (eventEndDate.getMonth() < todaysDate.getMonth()) {
-        $("#id_potential_end_date").after("<div class='create_event_validation'><p class='has-text-danger'>Potential end date must be in the future</p></div>");
-        validationStatus = false;
+         if (eventEndDate.getFullYear() <= todaysDate.getFullYear()) {
+             $("#id_potential_end_date").after("<div class='create_event_validation'><p class='has-text-danger'>Potential end date must be in the future.</p></div>");
+             validationStatus = false;
+         }
     }
     else if ((eventEndDate.getMonth() === todaysDate.getMonth()) && (eventEndDate.getDate() < todaysDate.getDate() - 1)) {
         $("#id_potential_end_date").after("<div class='create_event_validation'><p class='has-text-danger'>Potential end date must be in the future.</p></div>");
