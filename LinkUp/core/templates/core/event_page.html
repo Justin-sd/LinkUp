@@ -130,7 +130,9 @@
                         <a class="is-size-4 dropdown-toggle" data-toggle="dropdown">Remove an Admin<span class="caret"></span>   </a>
                         <ul class="dropdown-menu" style="background-color: whitesmoke;margin-left: 100px;margin-top: -5px" id="myDropdown2">
                            <input class="input is-rounded glyphicon-search " placeholder="    Search..." style="color: black; margin-left: -5px" id="myInput2" onkeyup="filterFunction2()"> {% for member in event.admins.all %}
+                            {% if member != event.owner %}
                            <li><a href="" style="color: black;padding-left: 20px " class="li-removeadm-option" id="member_{{member.email}}">{{ member.first_name }} {{ member.last_name }} [{{ member.email }}]</a></li>
+                          {% endif %}
                            {% endfor %}
                         </ul>
                      </div>
