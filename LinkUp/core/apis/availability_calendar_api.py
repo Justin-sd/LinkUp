@@ -9,7 +9,7 @@ from ..models import Event, Schedule, EventSchedule, UserTimezone
 from .calendar_api import free_busy_month, get_users_preferred_timezone
 
 
-def format_google_calendar_availability(user):
+def format_google_calendar_availability(user, service):
     """
     Takes the next thirty days of the user's google calendar data and puts it into a format compatible with the
     availability calendar template
@@ -24,8 +24,8 @@ def format_google_calendar_availability(user):
                 '10:00 AM': [False, False, False, ..., True, True, ..., False]
             }
     """
-    timezone.activate(get_users_preferred_timezone(user))
-    fb = free_busy_month(user)
+    timezone.activate(get_users_preferred_timezone(user, service))
+    fb = free_busy_month(user, service)
     start_date = timezone.localtime(datetime.utcnow().replace(tzinfo=UTC)).replace(hour=0, minute=0, second=0,
                                                                                    microsecond=0)
     end_date = start_date + timedelta(days=30)

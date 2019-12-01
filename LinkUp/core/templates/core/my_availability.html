@@ -1,6 +1,28 @@
 {% extends 'base.html' %}
-
 {% block content %}
+
+<!-- BEGIN Pre-requisites -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js">
+</script>
+<script src="https://apis.google.com/js/client:platform.js?onload=start" async defer>
+</script>
+<!-- END Pre-requisites -->
+
+<!-- Continuing the <head> section -->
+  <script>
+    function start() {
+      gapi.load('auth2', function() {
+        auth2 = gapi.auth2.init({
+          client_id: '669614465567-ng7l50r11u0pson5f4kj5oedk23b0r9n.apps.googleusercontent.com',
+          // Scopes to request in addition to 'profile' and 'email'
+          //scope: 'additional_scope'
+        });
+      });
+    }
+  </script>
+
+
+
 <section class="section">
    <div class="section">
     <nav class="breadcrumb has-succeeds-separator is-large has-background-white" aria-label="breadcrumbs">
@@ -71,14 +93,44 @@
                 </div>
               </div>
               <footer class="card-footer">
-                    <a href="/my_availability/google_calendar/" id="a-import-from-google-calendar" class="card-footer-item is-size-4">
+                    <a id="a-import-from-google-calendar" class="card-footer-item is-size-4">
                             Import From Google Calendar
                     </a>
                   <button id="btn-save-availability" class="card-footer-item is-pulled-right is-size-4">Save My Unavailability</button>
               </footer>
           </div>
       </div>
+        <!-- Add where you want your sign-in button to render -->
+        <!-- Use an image that follows the branding guidelines in a real app -->
+        <script>
+            $('#a-import-from-google-calendar').click(function() {
+                auth2.grantOfflineAccess().then(importCallback);
+            });
+        </script>
+          <!-- Last part of BODY element in file index.html -->
+        <script>
+        function importCallback(authResult) {
+          if (authResult['code']) {
 
+            // Send the auth code to the server
+            $.ajax({
+              headers: {
+                "X-CSRFToken": CSRF_TOKEN
+              },
+              type: 'POST',
+              url: 'google_calendar/',
+              data: { "auth_code": authResult['code'] },
+              success: function(result) {
+                const newDoc = document.open("text/html", "replace");
+                newDoc.write(result);
+                newDoc.close();
+              },
+            });
+          } else {
+              alert("Failed to authenticate. Please try again or set availability manually.");
+          }
+        }
+        </script>
       </div>
    </div>
 </section>

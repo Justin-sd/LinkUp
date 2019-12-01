@@ -2,45 +2,59 @@ from __future__ import print_function
 from datetime import datetime, timedelta
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
-import pickle
-import os.path
-from googleapiclient.discovery import build
-from google_auth_oauthlib.flow import InstalledAppFlow
-from google.auth.transport.requests import Request
+
+from apiclient import discovery
+import httplib2
+from oauth2client import client
 
 SCOPES = ['https://www.googleapis.com/auth/calendar']
+CLIENT_SECRET_FILE = 'core/apis/credentials.json'
 
 
-def get_service(user):
-    """
-    Creates service for google calendar API. Attempts to load credentials from file storage,
-    but will remake credentials if they do not exist or are invalid.
+def exchange_auth_code_for_calendar_service(auth_code):
+    # Set path to the Web application client_secret_*.json file you downloaded from the
+    # Google API Console: https://console.developers.google.com/apis/credentials
+    # Exchange auth code for access token, refresh token, and ID token
+    credentials = client.credentials_from_clientsecrets_and_code(
+        CLIENT_SECRET_FILE,
+        SCOPES,
+        auth_code)
 
-    :param user: Django User object for the user whose calendar is being accessed
-    """
-    creds = None
-    # The file token.pickle stores the user's access and refresh tokens, and is
-    # created automatically when the authorization flow completes for the first
-    # time.
-    if os.path.exists('core/apis/tokens/' + str(user.id)):
-        with open('core/apis/tokens/' + str(user.id), 'rb') as token:
-            creds = pickle.load(token)
-    # If there are no (valid) credentials available, let the user log in.
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file(
-                'core/apis/credentials.json', SCOPES)
-            creds = flow.run_local_server(port=0)
-        # Save the credentials for the next run
-        with open('core/apis/tokens/' + str(user.id), 'wb') as token:
-            pickle.dump(creds, token)
-
-    return build('calendar', 'v3', credentials=creds)
+    http_auth = credentials.authorize(httplib2.Http())
+    return discovery.build('calendar', 'v3', http=http_auth)
 
 
-def get_users_preferred_timezone(user):
+# Will not work with deployed system
+# def get_service(user):
+#     """
+#     Creates service for google calendar API. Attempts to load credentials from file storage,
+#     but will remake credentials if they do not exist or are invalid.
+#
+#     :param user: Django User object for the user whose calendar is being accessed
+#     """
+#     creds = None
+#     # The file token.pickle stores the user's access and refresh tokens, and is
+#     # created automatically when the authorization flow completes for the first
+#     # time.
+#     if os.path.exists('core/apis/tokens/' + str(user.id)):
+#         with open('core/apis/tokens/' + str(user.id), 'rb') as token:
+#             creds = pickle.load(token)
+#     # If there are no (valid) credentials available, let the user log in.
+#     if not creds or not creds.valid:
+#         if creds and creds.expired and creds.refresh_token:
+#             creds.refresh(Request())
+#         else:
+#             flow = InstalledAppFlow.from_client_secrets_file(
+#                 'core/apis/credentials.json', SCOPES)
+#             creds = flow.run_local_server(port=0)
+#         # Save the credentials for the next run
+#         with open('core/apis/tokens/' + str(user.id), 'wb') as token:
+#             pickle.dump(creds, token)
+#
+#     return build('calendar', 'v3', credentials=creds)
+
+
+def get_users_preferred_timezone(user, service):
     """
     Determines the users preferred timezone by checking what timezone they use for their primary google calendar
 
@@ -49,20 +63,16 @@ def get_users_preferred_timezone(user):
 
         - "Etc/GMT+8"
     """
-    service = get_service(user)
-
     primary_calendar = service.calendarList().get(calendarId='primary').execute()
 
     return primary_calendar['timeZone']
 
 
-def get_calendar_id_list(user):
+def get_calendar_id_list(user, service):
     """
     :param user: Django User object for the user whose calendar is being accessed
     :return: A list of all the users calendar IDs
     """
-    service = get_service(user)
-
     calendars = service.calendarList().list().execute()["items"]
     # If the user has a ton of calendars, there may be a second page to the
     # query in calendars["nextPageToken"]. People with this many calendars do
@@ -71,7 +81,7 @@ def get_calendar_id_list(user):
     return [calendar["id"] for calendar in calendars]
 
 
-def free_busy_month(user):
+def free_busy_month(user, service):
     """
     :param user: Django User object for the user whose calendar is being accessed
 
@@ -82,7 +92,6 @@ def free_busy_month(user):
                 [{'start': datetime(..., hour=4, minute=30), 'end': datetime(..., hour=6, minute=30)}, ...]
 
     """
-    service = get_service(user)
     min_time = datetime.combine(datetime.utcnow(), datetime.min.time())
     max_time = min_time + timedelta(days=30)
 
@@ -96,7 +105,7 @@ def free_busy_month(user):
     #             "id": "A String",  # The identifier of a calendar or a group.
     #         },
     #   ]
-    calendar_ids = get_calendar_id_list(user)
+    calendar_ids = get_calendar_id_list(user, service)
     for calendar_id in calendar_ids:
         body["items"].append({"id": calendar_id})
 
@@ -109,12 +118,12 @@ def free_busy_month(user):
             dt_end = parse_datetime(times["end"])
             result.append({'start': dt_start, 'end': dt_end})
 
-    preferred_timezone = get_users_preferred_timezone(user)
+    preferred_timezone = get_users_preferred_timezone(user, service)
     timezone.activate(preferred_timezone)
     return result
 
 
-def add_event(user, start_time, end_time, event_title, event_description=None):
+def add_event(user, service, start_time, end_time, event_title, event_description=None):
     """
     Adds a new event to the users primary calendar
 
@@ -125,8 +134,6 @@ def add_event(user, start_time, end_time, event_title, event_description=None):
     :param event_description: An optional description of the event
     :return: True if event created successfully, False otherwise
     """
-    service = get_service(user)
-
     body = {"start": {"dateTime": start_time.isoformat() + 'Z'},
             "end": {"dateTime": end_time.isoformat() + 'Z'},
             "summary": event_title,
