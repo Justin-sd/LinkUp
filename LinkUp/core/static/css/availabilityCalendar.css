@@ -2,6 +2,10 @@
     background: limegreen;
 }
 
+#a-import-from-general-availability {
+    background: palegreen;
+}
+
 #btn-save-availability {
     background: lightblue;
 }
