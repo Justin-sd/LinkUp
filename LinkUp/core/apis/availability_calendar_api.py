@@ -294,14 +294,13 @@ def json_datetime_handler(obj):
         raise TypeError('Object of type %s with value of %s is not JSON serializable' % (type(obj), repr(obj)))
 
 
-def convert_user_calendar_to_normal(calendar, user):
+def convert_user_calendar_to_normal(new_calendar):
     """
     :param calendar: The formatted calendar given in JS
     :return: The users availability converted into standard format:
             [{'start': datetime(..., hour=4, minute=30), 'end': datetime(..., hour=6, minute=30)}, ...]
     """
     local_tz = pytz_timezone("UTC")
-    new_calendar = json.load(calendar)
     converted_calendar = []
     for hours in new_calendar:
         i = 0
@@ -329,3 +328,31 @@ def get_user_timezone(user):
     else:
         local_tz = pytz_timezone(query[0].timezone_str)
     return local_tz
+
+
+def convert_user_event_calendar_to_normal(new_calendar, start_date, start_time):
+    """
+    :param calendar: The formatted calendar given in JS
+    :return: The users availability converted into standard format:
+            [{'start': datetime(..., hour=4, minute=30), 'end': datetime(..., hour=6, minute=30)}, ...]
+    """
+    #First round start_time down to nearest half hour
+    start_time = round_down_half_hour(start_time)
+
+    local_tz = pytz_timezone("UTC")
+    converted_calendar = []
+    for hours in new_calendar:
+        i = 0
+        for day in new_calendar[hours]:
+            today = (start_date + timedelta(days=i))
+            hour = hours.split('-')
+
+            if day is True:
+                converted_calendar.append({'start': local_tz.localize(
+                    datetime(today.year, today.month, today.day, int(hour[0]), int(hour[1]))).astimezone(UTC) + timedelta(hours=float(start_time.hour), minutes=float(start_time.minute)) ,
+                                           'end': local_tz.localize((datetime(today.year, today.month, today.day,
+                                                                              int(hour[0]), int(hour[1])) + timedelta(
+                                               minutes=30))).astimezone(UTC).astimezone(UTC) + timedelta(hours=float(start_time.hour), minutes=float(start_time.minute)) })
+            i = i + 1
+
+    return json.dumps(converted_calendar, default=json_datetime_handler)

@@ -2,320 +2,344 @@
 {% block title %}LinkUp {% endblock title %} //modifying the title
 {% block content %}
 <script type='text/javascript'>
-    function sendEmail() {
-        let invitee_email = $("#invitee_email").val();
-        let data = {
-            "invitee_email": invitee_email,
-            "event_id": "{{event.event_id}}"
-        };
+   function sendEmail() {
+       let invitee_email = $("#invitee_email").val();
+       let data = {
+           "invitee_email": invitee_email,
+           "event_id": "{{event.event_id}}"
+       };
 
-        $.ajax({
-            headers: {
-                "X-CSRFToken": CSRF_TOKEN
-            },
-            type: "POST",
-            url: "/send_email/",
-            data: data,
-        }).done(function(res) {
-            // clear text
-            $("#invitee_email").val('');
-        });
-    }
+       $.ajax({
+           headers: {
+               "X-CSRFToken": CSRF_TOKEN
+           },
+           type: "POST",
+           url: "/send_email/",
+           data: data,
+       }).done(function(res) {
+           // clear text
+           $("#invitee_email").val('');
+       });
+   }
 
-    function deleteEvent() {
+   function deleteEvent() {
 
 
-        let data = {"event_ID": "{{event.event_id}}"}
+       let data = {"event_ID": "{{event.event_id}}"}
 
-        $.ajax({
-            headers: {
-                "X-CSRFToken": CSRF_TOKEN
-            },
-            type: "POST",
-            url: "/delete_event/",
-            data: data,
-        }).done(function(res) {
-            window.location.replace("/my_events/");
-        });
-    }
+       $.ajax({
+           headers: {
+               "X-CSRFToken": CSRF_TOKEN
+           },
+           type: "POST",
+           url: "/delete_event/",
+           data: data,
+       }).done(function(res) {
+           window.location.replace("/my_events/");
+       });
+   }
 </script>
 {% load static %}
 <script type="text/javascript" src="{% static '/js/EditEvent.js' %}"></script>
 <script type="text/javascript" src="{% static '/js/InviteGuestTrigger.js' %}"></script>
-
-    {% if new_user %}
-    <div class="modal is-active" id="createModal">
-      <div class="modal-background"></div>
-        <div class="modal-card">
-            <header class="modal-card-head has-background-info has-text-weight-semibold">
-                <p class="modal-card-title is-size-2" id="effect">Join {{event.title}}</p>
-                <button class="delete is-pulled-right" aria-label="close" data-bulma-modal="close"></button>
-            </header>
-            <footer class="modal-card-foot">
-                <a class="button is-info is-size-5" href="/join_event/{{ event_id }}">Join Event as {{ user.name }}</a>
-                <button class="button is-danger is-size-5" data-bulma-modal="close">Cancel</button>
-            </footer>
-        </div>
-    </div>
+<script type="text/javascript" src="{% static '/js/availabilityCalendar.js' %}"></script>
+{% if new_user %}
+<div class="modal is-active" id="createModal">
+   <div class="modal-background"></div>
+   <div class="modal-card">
+      <header class="modal-card-head has-background-info has-text-weight-semibold">
+         <p class="modal-card-title is-size-2" id="effect">Join {{event.title}}</p>
+         <button class="delete is-pulled-right" aria-label="close" data-bulma-modal="close" href="/"></button>
+      </header>
+      <footer class="modal-card-foot">
+         <a class="button is-info is-size-5" href="/join_event/{{ event_id }}">
+             Join Event as {{ user.first_name }} {{ user.last_name }}
+         </a>
+         <button class="button is-danger is-size-5" href="/" data-bulma-modal="close">Cancel</button>
+      </footer>
+   </div>
+</div>
 {% endif %}
-
 <section class="section">
-    <div class="section">
-          <nav class="breadcrumb has-succeeds-separator is-large has-background-white" aria-label="breadcrumbs">
-  <ul>
-    <li><a href="/">Home</a></li>
-    <li><a href="/my_events/">My Events</a></li>
-      <li><a href="/event_page/{{ event.id }}" class="is-active" aria-current="page">{{ event.title }}</a></li>
-  </ul>
-</nav>
-        <div class="columns">
-            <aside class="column is-2">
-                <nav class="menu">
-                    <p class="menu-label is-size-5">
-                        General
-                    </p>
-                    <hr/>
-                    <ul class="menu-list">
+   <div class="section">
+      <nav class="breadcrumb has-succeeds-separator is-large has-background-white" aria-label="breadcrumbs">
+         <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/my_events/">My Events</a></li>
+            <li>
+                <a href="/event_page/{{ event.event_id }}" class="is-active" aria-current="page">{{ event.title }}</a>
+            </li>
+         </ul>
+      </nav>
+      <div class="columns">
+         <aside class="column is-2">
+            <nav class="menu">
+               <p class="menu-label is-size-5">
+                  General
+               </p>
+               <hr/>
+               <ul class="menu-list">
+                  <li>
+                     <a class="is-size-4" href="/my_events">
+                     My Events
+                     </a>
+                     <ul>
+                        {% for event in user_events %}
                         <li>
-                            <a class="is-size-4" href="/my_events">
-                                    My Events
-                                </a>
-                            <ul>
-                                {% for event in user_events %}
-                                <li>
-                                    {% if event.event_id == event_id %}
-                                    <a class="is-active is-size-4" href="/event_page/{{ event.event_id }}">{{ event.title }}</a> {% else %}
-                                    <a class="is-size-4" href="/event_page/{{ event.event_id }}">{{ event.title }}</a> {% endif %}
-                                </li>
-                                {% endfor %}
-                            </ul>
-                            <a id="createEvent" class="button is-size-4" > + Create An Event</a>
+                           {% if event.event_id == event_id %}
+                           <a class="is-active is-size-4" href="/event_page/{{ event.event_id }}">{{ event.title }}</a> {% else %}
+                           <a class="is-size-4" href="/event_page/{{ event.event_id }}">{{ event.title }}</a> {% endif %}
                         </li>
-                    </ul>
-                    <p class="menu-label is-size-5">
-                        Availability
-                    </p>
-                    <ul class="menu-list">
-                        <li>
-                            <a class="is-size-4" href="/my_availability">
-                                Adjust Your Availability
-                            </a>
-                        </li>
-                    </ul>
-                    {% if admin %}
-                    <p class="menu-label is-size-5">
-                        Admin Controls
-                    </p>
-                    <ul class="menu-list">
-                        <li>
-                            <a class="is-size-4" onclick="openInviteModal()">
-                                Invite Guest
-                            </a>
-                        </li>
-                        <li>
-                            <div class="dropdown">
-                                <a class="is-size-4 dropdown-toggle" data-toggle="dropdown">Add An Admin<span class="caret"></span>   </a>
-                                <ul class="dropdown-menu" style="background-color: whitesmoke;margin-left: 100px;margin-top: -5px" id="myDropdown">
-                                    <input class="input is-rounded glyphicon-search " placeholder="    Search..." style="color: black; margin-left: -5px" id="myInput" onkeyup="filterFunction()"> {% for member in event.members.all %} {% if member not in event.admins.all %}
-                                    <li><a href="" style="color: black;padding-left: 40px " class="li-admin-option" id="member_{{member}}">{{ member }}</a></li>
-                                    {% endif %} {% endfor %}
-                                </ul>
-                            </div>
-                        </li>
-                    </ul>
-                    {% endif %}
-                </nav>
-            </aside>
-            <div class="column is-four-fifths">
-                <div class="box">
-                    {% if admin %}
-                    <i class="fa fa-pencil"></i>
-                    <h1 class="title" contenteditable="true" id="EventTitle">{{event.title}}</h1> {% else %}
-                    <h1 class="title">{{event.title}}</h1> {% endif %}
-                    <hr/>
-                    <div class="level">
-                        <div class="level-left">
-                            <a class="button is-info">Set Availability</a>
-                            <a class="button is-info" id="deleteBtn">Delete {{ event.title }}</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="box">
-                    <div class="card">
-                        <header class="card-header has-background-info">
-                            <p class="card-header-title is-size-3">
-                                Group Availability
-                            </p>
-                        </header>
-                        <div class="card-content">
-                            <div class="content">
-                                {% include "core/event_calendar.html" %}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="box">
-                    <div class="card">
-                        <header class="card-header has-background-info">
-                            <p class="card-header-title is-size-3">
-                                My Availability
-                            </p>
-                        </header>
-                        <div class="card-content">
-                            <div class="content">
-                                {% include "core/availability_calendar.html" %}
-                            </div>
-                        </div>
-                        <footer class="card-footer">
-                            <a href="/my_availability/google_calendar/" id="a-import-from-google-calendar" class="card-footer-item is-size-4">
-                                Import From General Availability
-                            </a>
-                            <button id="btn-save-availability" class="card-footer-item is-pulled-right is-size-4">Save Event Availability</button>
-                        </footer>
-                    </div>
-                </div>
+                        {% endfor %}
+                     </ul>
+                     <a id="createEvent" class="button is-size-4" > + Create An Event</a>
+                  </li>
+               </ul>
+               <p class="menu-label is-size-5">
+                  Unavailability
+               </p>
+               <ul class="menu-list">
+                  <li>
+                     <a class="is-size-4" href="/my_availability">
+                     Adjust Your Unavailability
+                     </a>
+                  </li>
+               </ul>
+               {% if admin %}
+               <p class="menu-label is-size-5">
+                  Admin Controls
+               </p>
+               <ul class="menu-list">
+                  <li>
+                     <a class="is-size-4" onclick="openInviteModal()">
+                     Invite Guest
+                     </a>
+                  </li>
+                  <li>
+                     <div class="dropdown">
+                        <a class="is-size-4 dropdown-toggle" data-toggle="dropdown">Add An Admin<span class="caret"></span>   </a>
+                        <ul class="dropdown-menu" style="background-color: whitesmoke;margin-left: 100px;margin-top: -5px" id="myDropdown">
+                           <input class="input is-rounded glyphicon-search " placeholder="    Search..." style="color: black; margin-left: -5px" id="myInput" onkeyup="filterFunction()"> {% for member in event.members.all %} {% if member not in event.admins.all %}
+                           <li><a href="" style="color: black;padding-left: 20px " class="li-admin-option" id="member_{{member}}">{{ member.first_name }} {{ member.last_name }} [{{ member.email }}]</a></li>
+                           {% endif %} {% endfor %}
+                        </ul>
+                     </div>
+                  </li>
+                  <li>
+                     <div class="dropdown">
+                        <a class="is-size-4 dropdown-toggle" data-toggle="dropdown">Remove an Admin<span class="caret"></span>   </a>
+                        <ul class="dropdown-menu" style="background-color: whitesmoke;margin-left: 100px;margin-top: -5px" id="myDropdown2">
+                           <input class="input is-rounded glyphicon-search " placeholder="    Search..." style="color: black; margin-left: -5px" id="myInput2" onkeyup="filterFunction2()"> {% for member in event.admins.all %}
+                           <li><a href="" style="color: black;padding-left: 20px " class="li-removeadm-option" id="member_{{member.email}}">{{ member.first_name }} {{ member.last_name }} [{{ member.email }}]</a></li>
+                           {% endfor %}
+                        </ul>
+                     </div>
+                  </li>
+               </ul>
+               {% endif %}
+            </nav>
+         </aside>
+         <div class="column is-four-fifths">
+            <div class="box">
+               {% if admin %}
+               <i class="fa fa-pencil"></i>
+               <h1 class="title" contenteditable="true" id="EventTitle">{{event.title}}</h1>
+               {% else %}
+               <h1 class="title">{{event.title}}</h1>
+               {% endif %}
+               <hr/>
+               <div class="level">
+                  <div class="level-left">
+                     <!--<a class="button is-info">Set Availability</a>--->
+                      {% if user in event.admins.all %}
+                     <a class="button is-info" id="deleteBtn">Delete {{ event.title }}</a>
+                      {% endif %}
+                  </div>
+               </div>
             </div>
-        </div>
-    </div>
-</section>
-<section class="section">
-    <div class="columns is-multiline">
-        <div class="column">
-            <div class="panel">
-                {% if admin %}
-                <p class="panel-heading has-background-info"> Event Description
-                </p><i class="fa fa-pencil"></i>
-                <div class="panel-block" id="EventDescription" contenteditable="true">
-                    {{ event.description }}
-                </div>
-                {% else %}
-                <p class="panel-heading has-background-info">
-                    Event Description
-                </p>
-                <div class="panel-block">
-                    {{ event.description }}
-                </div>
-                {% endif %}
+            <div class="box">
+               <div class="card">
+                  <header class="card-header has-background-info">
+                     <p class="card-header-title is-size-3">
+                        Group Availability
+                     </p>
+                  </header>
+                  <div class="card-content">
+                     <div class="content">
+                        {% include "core/event_calendar.html" %}
+                     </div>
+                  </div>
+               </div>
             </div>
-        </div>
-    </div>
+            <div class="box">
+               <div class="card">
+                  <header class="card-header has-background-info">
+                     <p class="card-header-title is-size-3">
+                        My Unavailability
+                     </p>
+                  </header>
+                  <div class="card-content">
+                     <div id="availability-calendar-content" class="content">
+                        {% include "core/user_event_schedule.html" %}
+                     </div>
+                  </div>
+                  <footer class="card-footer">
+                     <a id="a-import-from-general-availability" class="card-footer-item is-size-4">
+                        Import From General Unavailability
+                     </a>
+                     <button id="btn-save-event-availability" class="card-footer-item is-pulled-right is-size-4">Save Event Unavailability</button>
+                  </footer>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
 </section>
-
 <section class="section">
     <div class="columns">
         <div class="column">
             <div class="panel">
-                <p class="panel-heading has-background-info">
-                    <a class="button is-pulled-right is-small" onclick="openInviteModal()">+ Add Members</a>
-                    <!--TODO-->
+                {% if admin %}
+                <p class="panel-heading has-background-info is-size-4"> Event Description
+                </p><i class="fa fa-pencil"></i>
+                <div class="panel-block is-size-4" id="EventDescription" contenteditable="true">
+                    {{ event.description }}
+                </div>
+                {% else %}
+                <p class="panel-heading has-background-info is-size-4">
+                    Event Description
+                </p>
+                <div class="panel-block is-size-4">
+                    {{ event.description }}
+                </div>
+                {% endif %}
+         </div>
+      </div>
+        <div class="column">
+            <div class="panel">
+                <p class="panel-heading has-background-info is-size-4">
+                    {% if admin %}
+                    <a class="button is-pulled-right" onclick="openInviteModal()">+ Add Members</a>
+                    {% endif %}
                     Attendees
                 </p>
-                {% for members in event.members.all %}
                 <div class="panel-block">
-                    {{ members.first_name }} {{ members.last_name }}
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-    <div class="columns is-multiline">
-        <!--TODO-->
-        <div class="column is-6">
-            <div class="panel">
-                <p class="panel-heading has-background-info">
-                    Available
-                </p>
-                <div class="panel-block">
-                    Optimal starting times from best to worst:
-                    <br /> {% for a,b in time_list %} {{a}} with members {{b}}
-                    <br /> {% endfor %}
-                </div>
-            </div>
-        </div>
-        <div class="column is-6">
-            <div class="panel">
-                <p class="panel-heading has-background-info">
-                    Not Available
-                </p>
-                <div class="panel-block">
-                    Unsure How to Handle
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- The Modal Add an Admin -->
-<div id="AdminModal" class="modal">
-    <!-- Modal content -->
-    <div class="modal-content" id="AdminContent">
-        <div class="modal-header" id="AdminHeader">
-            <span class="close"></span>
-            <center>
-                <h1 style="font-size: x-large">Add Administrator for the Event</h1>
-            </center>
-            <br>
-        </div>
-        <div class="modal-body" id="AdminBody">
-            <div class="row">
-                <div class="col-sm-6">
-                    <br>
-                    <p>Choose Admins from the following list:</p>
-                </div>
-
-                <div class="col-sm-6">
-                    {% for members in event.members.all %}
-                    <div class="panel-block">
-                        <label class="checkbox">
-                            <input type="checkbox"> {{ members }}
-                        </label>
+                    <div class="field is-grouped is-grouped-multiline">
+                    {% for member in event.members.all %}
+                        <div class="control">
+                        {% if admin %}
+                            <div class="tags has-addons">
+                            <p class="tag is-info is-large">{{ member.first_name }} {{ member.last_name }} [{{ member.email }}]</p>
+                            <span class="tag is-delete is-danger is-large" onclick="deleteMember({{ member }})"></span>
+                            {% include 'core/delete_member_modal.html' %}
+                        {% else %}
+                            <div class="tags">
+                            <span class="tag is-info is-large">{{ member.first_name }} {{ member.last_name }}</span>
+                        {% endif %}
+                    </div>
                     </div>
                     {% endfor %}
+                    </div>
                 </div>
+         </div>
+      </div>
+   </div>
+   <div class="columns is-multiline">
+      <!--TODO-->
+      <div class="column">
+         <div class="panel">
+            <p class="panel-heading has-background-info">
+               Available
+            </p>
+            <div class="panel-block">
+               <br />
+            <div class="field is-grouped is-grouped-multiline">
+                {% for a,b in time_list %}
+                <div class="control">
+                <div class="tags has-addons">
+                  <span class="tag is-medium is-size-5">{{ a }}</span>
+                    <span class="tag is-medium is-primary is-size-5">Users Available: </span>
+                   {% for users in b %}
+                  <span class="tag is-medium is-info is-size-5">{{ users }}</span>
+                   {% endfor %}
+                </div></div>
+                {% endfor %} </div>
             </div>
-            <! -- end of row -->
-            <div class="row">
-                <p>--------------------------------------------------- or -----------------------------------------------------------</p>
-                <center>
-                    <a class="button is-info is-size-6-touch" style="background-color: orange">Add</a>
-                </center>
+         </div>
+      </div>
+   </div>
+</section>
+<!-- The Modal Add an Admin -->
+<div id="AdminModal" class="modal">
+   <!-- Modal content -->
+   <div class="modal-content" id="AdminContent">
+      <div class="modal-header" id="AdminHeader">
+         <span class="close"></span>
+         <center>
+            <h1 style="font-size: x-large">Add Administrator for the Event</h1>
+         </center>
+         <br>
+      </div>
+      <div class="modal-body" id="AdminBody">
+         <div class="row">
+            <div class="col-sm-6">
+               <br>
+               <p>Choose Admins from the following list:</p>
             </div>
-            <! -- End of second row -->
-        </div>
-        <div class="modal-footer" id="AdminFooter">
-            <h3></h3>
-        </div>
-    </div>
+            <div class="col-sm-6">
+               {% for members in event.members.all %}
+               <div class="panel-block">
+                  <label class="checkbox">
+                  <input type="checkbox"> {{ members }}
+                  </label>
+               </div>
+               {% endfor %}
+            </div>
+         </div>
+         <! -- end of row -->
+         <div class="row">
+            <p>--------------------------------------------------- or -----------------------------------------------------------</p>
+            <center>
+               <a class="button is-info is-size-6-touch" style="background-color: orange">Add</a>
+            </center>
+         </div>
+         <! -- End of second row -->
+      </div>
+      <div class="modal-footer" id="AdminFooter">
+         <h3></h3>
+      </div>
+   </div>
 </div>
 <!-- End modal -->
-
 <!-- Invite Guest Modal -->
 <div id="inviteModal" class="modal">
-    <!-- Modal content -->
-    <div class="modal-content" id="InviteContent">
-        <div class="modal-header" id="InviteHeader">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeInviteModal()">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            <center>
-                <h1 style="font-size: x-large">Invite Guests</h1>
-            </center>
-            <br>
-        </div>
-
-        <div class="modal-body" id="InviteBody">
-            <center>
-                <h3>Guest Email:</h3>
-                <form method="" id="container" onsubmit="sendEmail()">
-                    <input id="invitee_email" type="email" />
-                    <input type="submit" value="Send Email" />
-                </form>
-            </center>
-        </div>
-        <div class="modal-footer" id="InviteFooter">
-            <br>
-        </div>
-    </div>
+   <!-- Modal content -->
+   <div class="modal-content" id="InviteContent">
+      <div class="modal-header" id="InviteHeader">
+         <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeInviteModal()">
+         <span aria-hidden="true">&times;</span>
+         </button>
+          <header class="modal-card-head has-background-info has-text-weight-semibold">
+            <p class="is-size-2" id="effect">Invite Guests</p>
+          </header>
+      </div>
+       <form method="" id="container" onsubmit="sendEmail()">
+      <div class="modal-body" id="InviteBody">
+         <center>
+            <h3>Guest Email:</h3>
+               <input class="input" id="invitee_email"
+                      placeholder="Please enter the email of the person you would like to invite."
+                      type="email"/>
+                <br>
+                <br>
+         </center>
+      </div>
+      <div class="modal-footer" id="InviteFooter">
+          <input class="button is-info is-size-5" type="submit" value="Send Email" />
+         <br>
+      </div>
+       </form>
+   </div>
 </div>
 <!-- End modal -->
 {% endblock content %}

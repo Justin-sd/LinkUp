@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 
 from .apis import availability_calendar_api, sendEmail_api, algorithm_api, contact_us_api, event_calendar_api
-from .models import Event, Schedule, UserTimezone
+from .models import Event, Schedule, UserTimezone, EventSchedule
 from .forms import EventForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -10,14 +10,17 @@ from django.contrib.auth import authenticate, login, logout, update_session_auth
 from django.contrib import messages
 from django.http import HttpResponse
 import uuid
+import json
 
 
 def home(request):
     user = request.user
+    user_name = user.username
     if user.is_anonymous:
         no_user_events = True
         user_events = []
     else:
+        user = request.user
         user_events = Event.objects.filter(members=user)
         no_user_events = False
         if user_events.count() is 0:
@@ -26,6 +29,8 @@ def home(request):
     context = {
         "user_events": user_events,
         "no_user_events": no_user_events,
+        "user_name": user_name,
+        "create_event_form": EventForm(),
     }
     return render(request, "core/homepage.html", context)
 
@@ -49,6 +54,7 @@ def event_page(request, event_id):
 
     available_dates = availability_calendar_api.get_event_availability_dates(event_id)
     time_list = algorithm_api.get_best(event_id)
+    time_list = reversed(time_list)
 
     busy_times = availability_calendar_api.format_event_availability_calendar(user, event_id)  # users event schedule
     busy_times = event_calendar_api.apply_event_time_constraints(event, busy_times)
@@ -102,6 +108,27 @@ def my_availability(request):
 
 
 @login_required()
+def import_general_availability(request, event_id):
+    """
+    :return: Returns the HTML of the users general availability calendar
+    """
+    # Load users general availability from database
+    event = Event.objects.get(event_id=event_id)
+
+    availability_dates = availability_calendar_api.get_event_availability_dates(event_id)
+
+    busy_times = availability_calendar_api.format_general_availability_calendar(request.user)
+    busy_times = event_calendar_api.apply_event_time_constraints(event, busy_times)
+
+    # Hacky way to make the table the right date range
+    for k, v in busy_times.items():
+        busy_times[k] = v[:len(availability_dates)]
+
+    context = {"busy_times": busy_times, "availability_dates": availability_dates}
+    return render(request, "core/availability_calendar.html", context)
+
+
+@login_required()
 def import_google_calendar_data(request):
     busy_times = availability_calendar_api.format_google_calendar_availability(request.user)
     availability_dates = availability_calendar_api.get_list_of_next_n_days(30)
@@ -123,6 +150,10 @@ def contact(request):
     return render(request, "core/contact.html", {})
 
 
+def report_an_issue(request):
+    return render(request, "core/reportanissue.html", {})
+
+
 def donate(request):
     return render(request, "core/donate.html", {})
 
@@ -134,7 +165,7 @@ def about(request):
 def save_availability(request):
     # Get user and local timezone
     user = request.user
-    new_availability_dates = availability_calendar_api.convert_user_calendar_to_normal(request, user)
+    new_availability_dates = availability_calendar_api.convert_user_calendar_to_normal(json.load(request))
 
     query = Schedule.objects.filter(user=user)
     if query.count() == 0:
@@ -145,6 +176,32 @@ def save_availability(request):
         schedule.save()
 
     return render(request, "core/availability_calendar.html", {})
+
+def save_event_availability(request):
+    # Get user and unpack data
+    data = request.POST
+    calendar = data["calendar"]
+    event_query_set = Event.objects.filter(event_id=json.loads(data["user_event_id"]))
+
+    if event_query_set.count() != 1:
+        return render(request, "core/error_page", {})
+
+    event = event_query_set[0]
+    user = request.user
+    new_availability_dates = availability_calendar_api.convert_user_event_calendar_to_normal(json.loads(calendar),
+                                                                                             event.potential_start_date,
+                                                                                             event.no_earlier_than)
+
+    #Get event schedule to replace / store
+    query = EventSchedule.objects.filter(user=user, event=event)
+    if query.count() == 0:
+        EventSchedule.objects.create(availability=new_availability_dates, user=user, event=event)
+    else:
+        schedule = query[0]
+        schedule.availability = new_availability_dates
+        schedule.save()
+
+    return render(request, "core/event_calendar.html", {})
 
 
 def create_user(request):
@@ -309,8 +366,8 @@ def change_event_description(request):
 def add_event_admin(request):
     if request.method == 'POST':
         event = Event.objects.filter(event_id=request.POST.get('event_id'))
-        newadmin = User.objects.filter(username=request.POST.get('new_admin'))
-        event[0].admins.add(newadmin[0])
+        newadmin_email = User.objects.filter(email=request.POST.get('new_admin'))
+        event[0].admins.add(newadmin_email[0])
     return HttpResponse("Success")
 
 
@@ -318,4 +375,20 @@ def delete_event(request):
     eventid = request.POST
     e = Event.objects.filter(event_id=eventid["event_ID"]).delete()
     return render(request, "core/my_events.html/", {})
+
+
+def remove_event_admin(request):
+    if request.method == 'POST':
+        event = Event.objects.filter(event_id=request.POST.get('event_id'))
+        oldadmin = User.objects.filter(email=request.POST.get('old_admin'))
+        event[0].admins.remove(oldadmin[0])
+    return HttpResponse("Success")
+
+
+def delete_member(request):
+    if request.method == 'POST':
+        event = Event.objects.filter(event_id=request.POST.get('event_id'))
+        member = User.objects.filter(email=request.POST.get('member'))
+        event[0].members.remove(member[0])
+    return HttpResponse("Success")
 
