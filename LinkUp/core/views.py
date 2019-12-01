@@ -126,13 +126,6 @@ def import_general_availability(request, event_id):
     context = {"busy_times": busy_times, "availability_dates": availability_dates}
     return render(request, "core/availability_calendar.html", context)
 
-#
-# @login_required()
-# def store_google_auth(request):
-#     google_auth_code = request.POST.get("auth_code")
-#     calendar_api.exchange_auth_code_for_token(request.user, google_auth_code)
-#     return redirect('/my_availability/google_calendar')
-
 
 @login_required()
 def import_google_calendar_data(request):
@@ -229,6 +222,7 @@ def change_name(request):
     if request.method == 'POST':
         request.user.first_name = request.POST.get("first_name")
         request.user.last_name = request.POST.get("last_name")
+        request.user.save()
     return render(request, "core/my_account.html")
 
 
@@ -399,6 +393,6 @@ def remove_event_admin(request):
 def delete_member(request):
     if request.method == 'POST':
         event = Event.objects.filter(event_id=request.POST.get('event_id'))
-        member = User.objects.filter(email=request.POST.get('member'))
+        member = User.objects.filter(email=request.POST.get('old_member'))
         event[0].members.remove(member[0])
     return HttpResponse("Success")

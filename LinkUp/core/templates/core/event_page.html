@@ -130,7 +130,9 @@
                         <a class="is-size-4 dropdown-toggle" data-toggle="dropdown">Remove an Admin<span class="caret"></span>   </a>
                         <ul class="dropdown-menu" style="background-color: whitesmoke;margin-left: 100px;margin-top: -5px" id="myDropdown2">
                            <input class="input is-rounded glyphicon-search " placeholder="    Search..." style="color: black; margin-left: -5px" id="myInput2" onkeyup="filterFunction2()"> {% for member in event.admins.all %}
+                            {% if member != event.owner %}
                            <li><a href="" style="color: black;padding-left: 20px " class="li-removeadm-option" id="member_{{member.email}}">{{ member.first_name }} {{ member.last_name }} [{{ member.email }}]</a></li>
+                          {% endif %}
                            {% endfor %}
                         </ul>
                      </div>
@@ -187,7 +189,7 @@
                      <a id="a-import-from-general-availability" class="card-footer-item is-size-4">
                         Import From General Unavailability
                      </a>
-                     <button id="btn-save-event-availability" class="card-footer-item is-pulled-right is-size-4">Save Event Unavailability</button>
+                     <button id="btn-save-event-availability" class="card-footer-item is-pulled-right is-size-4" >Save Event Unavailability</button>
                   </footer>
                </div>
             </div>
@@ -229,8 +231,10 @@
                         <div class="control">
                         {% if admin %}
                             <div class="tags has-addons">
-                            <p class="tag is-info is-large">{{ member.first_name }} {{ member.last_name }} [{{ member.email }}]</p>
-                            <span class="tag is-delete is-danger is-large" onclick="deleteMember({{ member }})"></span>
+                           {% if member != user %}
+                            <button class="button is-info is-size-5" id="deleteMemberBtn">{{ member.first_name }} {{ member.last_name }} [{{ member.email }}]  <i class="fa fa-times" style="color: red"></i></button>
+                            {% endif %}
+
                             {% include 'core/delete_member_modal.html' %}
                         {% else %}
                             <div class="tags">
@@ -260,7 +264,7 @@
                   <span class="tag is-medium is-size-5">{{ a }}</span>
                     <span class="tag is-medium is-primary is-size-5">Users Available: </span>
                    {% for users in b %}
-                  <span class="tag is-medium is-info is-size-5">{{ users }}</span>
+                  <span class="tag is-medium is-info is-size-5">{{ users.first_name }}</span>
                    {% endfor %}
                 </div></div>
                 {% endfor %} </div>
