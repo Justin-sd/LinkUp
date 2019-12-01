@@ -319,10 +319,19 @@ def delete_event(request):
     e = Event.objects.filter(event_id=eventid["event_ID"]).delete()
     return render(request, "core/my_events.html/", {})
 
+
 def remove_event_admin(request):
     if request.method == 'POST':
         event = Event.objects.filter(event_id=request.POST.get('event_id'))
         oldadmin = User.objects.filter(email=request.POST.get('old_admin'))
         event[0].admins.remove(oldadmin[0])
+    return HttpResponse("Success")
+
+
+def delete_member(request):
+    if request.method == 'POST':
+        event = Event.objects.filter(event_id=request.POST.get('event_id'))
+        member = User.objects.filter(email=request.POST.get('member'))
+        event[0].members.remove(member[0])
     return HttpResponse("Success")
 

@@ -118,5 +118,21 @@ function filterFunction2() {
 
 ////Add admin
 
+function deleteMember(member){
+
+    const eventID = window.location.pathname.split("/").pop();
+
+    $.ajax({
+        headers: {"X-CSRFToken": CSRF_TOKEN},
+        type: "POST",
+        url:   "delete_member/",
+        data: { "member": member, "event_id": eventID },
+    }).success(function (){
+        alert(member + ' has been deleted from the event!');
+    }).fail(function () {
+        alert('Deletion of '+ member +' failed!');
+    });
+}
+
 
 

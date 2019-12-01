@@ -191,42 +191,55 @@
    </div>
 </section>
 <section class="section">
-   <div class="columns is-multiline">
-      <div class="column">
-         <div class="panel">
-            {% if admin %}
-            <p class="panel-heading has-background-info"> Event Description
-            </p>
-            <i class="fa fa-pencil"></i>
-            <div class="panel-block" id="EventDescription" contenteditable="true">
-               {{ event.description }}
-            </div>
-            {% else %}
-            <p class="panel-heading has-background-info">
-               Event Description
-            </p>
-            <div class="panel-block">
-               {{ event.description }}
-            </div>
-            {% endif %}
+    <div class="columns is-multiline">
+        <div class="column">
+            <div class="panel">
+                {% if admin %}
+                <p class="panel-heading has-background-info is-size-4"> Event Description
+                </p><i class="fa fa-pencil"></i>
+                <div class="panel-block" id="EventDescription" contenteditable="true">
+                    {{ event.description }}
+                </div>
+                {% else %}
+                <p class="panel-heading has-background-info is-size-4">
+                    Event Description
+                </p>
+                <div class="panel-block">
+                    {{ event.description }}
+                </div>
+                {% endif %}
          </div>
       </div>
    </div>
 </section>
 <section class="section">
-   <div class="columns">
-      <div class="column">
-         <div class="panel">
-            <p class="panel-heading has-background-info">
-               <a class="button is-pulled-right is-small" onclick="openInviteModal()">+ Add Members</a>
-               <!--TODO-->
-               Attendees
-            </p>
-            {% for members in event.members.all %}
-            <div class="panel-block">
-               {{ members.first_name }} {{ members.last_name }}
-            </div>
-            {% endfor %}
+    <div class="columns">
+        <div class="column">
+            <div class="panel">
+                <p class="panel-heading has-background-info is-size-4">
+                    {% if admin %}
+                    <a class="button is-pulled-right" onclick="openInviteModal()">+ Add Members</a>
+                    {% endif %}
+                    Attendees
+                </p>
+                <div class="panel-block">
+                    <div class="field is-grouped is-grouped-multiline">
+                    {% for member in event.members.all %}
+                        <div class="control">
+                        {% if admin %}
+                            <div class="tags has-addons">
+                            <p class="tag is-info is-large">{{ member.first_name }} {{ member.last_name }} [{{ member.email }}]</p>
+                            <span class="tag is-delete is-danger is-large" onclick="deleteMember({{ member }})"></span>
+                            {% include 'core/delete_member_modal.html' %}
+                        {% else %}
+                            <div class="tags">
+                            <span class="tag is-info is-large">{{ member.first_name }} {{ member.last_name }}</span>
+                        {% endif %}
+                    </div>
+                    </div>
+                    {% endfor %}
+                    </div>
+                </div>
          </div>
       </div>
    </div>
