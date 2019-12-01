@@ -15,7 +15,7 @@
         auth2 = gapi.auth2.init({
           client_id: '669614465567-ng7l50r11u0pson5f4kj5oedk23b0r9n.apps.googleusercontent.com',
           // Scopes to request in addition to 'profile' and 'email'
-          //scope: 'additional_scope'
+          scope: 'https://www.googleapis.com/auth/calendar'
         });
       });
     }
@@ -64,9 +64,14 @@
                      </a>
                       <ul>
                         <li>
-                            <a href="/my_availability/google_calendar/" class="is-size-4">
+                            <a class="a-import-from-google-calendar is-size-4">
                                 Import From Google Calendar
                             </a>
+                            <script>
+                                $('.a-import-from-google-calendar').click(function() {
+                                    auth2.grantOfflineAccess().then(importCallback);
+                                });
+                            </script>
                         </li>
                           <li>
                               <a class="is-size-4">Save Unavailability</a>
