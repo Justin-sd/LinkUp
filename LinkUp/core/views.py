@@ -309,8 +309,8 @@ def change_event_description(request):
 def add_event_admin(request):
     if request.method == 'POST':
         event = Event.objects.filter(event_id=request.POST.get('event_id'))
-        newadmin = User.objects.filter(username=request.POST.get('new_admin'))
-        event[0].admins.add(newadmin[0])
+        newadmin_email = User.objects.filter(email=request.POST.get('new_admin'))
+        event[0].admins.add(newadmin_email[0])
     return HttpResponse("Success")
 
 
@@ -318,4 +318,12 @@ def delete_event(request):
     eventid = request.POST
     e = Event.objects.filter(event_id=eventid["event_ID"]).delete()
     return render(request, "core/my_events.html/", {})
+
+def remove_event_admin(request):
+    if request.method == 'POST':
+        event = Event.objects.filter(event_id=request.POST.get('event_id'))
+        oldadmin = User.objects.filter(email=request.POST.get('old_admin'))
+        print(request.POST.get('old_admin')+'esto es lo que salio de esta pendejada')
+        event[0].admins.remove(oldadmin[0])
+    return HttpResponse("Success")
 
