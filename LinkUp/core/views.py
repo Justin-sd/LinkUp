@@ -49,6 +49,7 @@ def event_page(request, event_id):
 
     available_dates = availability_calendar_api.get_event_availability_dates(event_id)
     time_list = algorithm_api.get_best(event_id)
+    time_list = reversed(time_list)
 
     busy_times = availability_calendar_api.format_event_availability_calendar(user, event_id)  # users event schedule
     busy_times = event_calendar_api.apply_event_time_constraints(event, busy_times)
