@@ -14,10 +14,12 @@ import uuid
 
 def home(request):
     user = request.user
+    user_name = user.username
     if user.is_anonymous:
         no_user_events = True
         user_events = []
     else:
+        user = request.user
         user_events = Event.objects.filter(members=user)
         no_user_events = False
         if user_events.count() is 0:
@@ -26,6 +28,8 @@ def home(request):
     context = {
         "user_events": user_events,
         "no_user_events": no_user_events,
+        "user_name": user_name,
+        "create_event_form": EventForm(),
     }
     return render(request, "core/homepage.html", context)
 

@@ -49,11 +49,13 @@
    <div class="modal-card">
       <header class="modal-card-head has-background-info has-text-weight-semibold">
          <p class="modal-card-title is-size-2" id="effect">Join {{event.title}}</p>
-         <button class="delete is-pulled-right" aria-label="close" data-bulma-modal="close"></button>
+         <button class="delete is-pulled-right" aria-label="close" data-bulma-modal="close" href="/"></button>
       </header>
       <footer class="modal-card-foot">
-         <a class="button is-info is-size-5" href="/join_event/{{ event_id }}">Join Event as {{ user.name }}</a>
-         <button class="button is-danger is-size-5" data-bulma-modal="close">Cancel</button>
+         <a class="button is-info is-size-5" href="/join_event/{{ event_id }}">
+             Join Event as {{ user.first_name }} {{ user.last_name }}
+         </a>
+         <button class="button is-danger is-size-5" href="/" data-bulma-modal="close">Cancel</button>
       </footer>
    </div>
 </div>
@@ -64,7 +66,9 @@
          <ul>
             <li><a href="/">Home</a></li>
             <li><a href="/my_events/">My Events</a></li>
-            <li><a href="/event_page/{{ event.event_id }}" class="is-active" aria-current="page">{{ event.title }}</a></li>
+            <li>
+                <a href="/event_page/{{ event.event_id }}" class="is-active" aria-current="page">{{ event.title }}</a>
+            </li>
          </ul>
       </nav>
       <div class="columns">
@@ -146,7 +150,7 @@
                <hr/>
                <div class="level">
                   <div class="level-left">
-                     <a class="button is-info">Set Availability</a>
+                     <!--<a class="button is-info">Set Availability</a>--->
                       {% if user in event.admins.all %}
                      <a class="button is-info" id="deleteBtn">Delete {{ event.title }}</a>
                       {% endif %}
@@ -315,23 +319,26 @@
          <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeInviteModal()">
          <span aria-hidden="true">&times;</span>
          </button>
-         <center>
-            <h1 style="font-size: x-large">Invite Guests</h1>
-         </center>
-         <br>
+          <header class="modal-card-head has-background-info has-text-weight-semibold">
+            <p class="is-size-2" id="effect">Invite Guests</p>
+          </header>
       </div>
+       <form method="" id="container" onsubmit="sendEmail()">
       <div class="modal-body" id="InviteBody">
          <center>
             <h3>Guest Email:</h3>
-            <form method="" id="container" onsubmit="sendEmail()">
-               <input id="invitee_email" type="email" />
-               <input type="submit" value="Send Email" />
-            </form>
+               <input class="input" id="invitee_email"
+                      placeholder="Please enter the email of the person you would like to invite."
+                      type="email"/>
+                <br>
+                <br>
          </center>
       </div>
       <div class="modal-footer" id="InviteFooter">
+          <input class="button is-info is-size-5" type="submit" value="Send Email" />
          <br>
       </div>
+       </form>
    </div>
 </div>
 <!-- End modal -->
