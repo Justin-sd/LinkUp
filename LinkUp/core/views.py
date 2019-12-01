@@ -102,6 +102,27 @@ def my_availability(request):
 
 
 @login_required()
+def import_general_availability(request, event_id):
+    """
+    :return: Returns the HTML of the users general availability calendar
+    """
+    # Load users general availability from database
+    event = Event.objects.get(event_id=event_id)
+
+    availability_dates = availability_calendar_api.get_event_availability_dates(event_id)
+
+    busy_times = availability_calendar_api.format_general_availability_calendar(request.user)
+    busy_times = event_calendar_api.apply_event_time_constraints(event, busy_times)
+
+    # Hacky way to make the table the right date range
+    for k, v in busy_times.items():
+        busy_times[k] = v[:len(availability_dates)]
+
+    context = {"busy_times": busy_times, "availability_dates": availability_dates}
+    return render(request, "core/availability_calendar.html", context)
+
+
+@login_required()
 def import_google_calendar_data(request):
     busy_times = availability_calendar_api.format_google_calendar_availability(request.user)
     availability_dates = availability_calendar_api.get_list_of_next_n_days(30)

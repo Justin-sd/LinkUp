@@ -68,12 +68,7 @@ $(document).ready(function(){
             alert('Event Admin not Added');
         });
     });
-
-
-
 });
-
-
 
 
 //// Add Admin

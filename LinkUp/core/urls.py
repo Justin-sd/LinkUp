@@ -17,17 +17,17 @@ from django.urls import path
 from . import views
 from django.views.generic import TemplateView
 
-
 urlpatterns = [
     path('', views.home),
     path('about/', views.about),
     path('contact/', views.contact),
     path('donate/', views.donate),
-    #path('redirect/', views.password_change),
+    # path('redirect/', views.password_change),
     # availability
     path('my_availability/', views.my_availability),
     path('save_availability/', views.save_availability),
     path('my_availability/google_calendar/', views.import_google_calendar_data),
+    path('import_general_availability/<uuid:event_id>', views.import_general_availability),
     path('update_timezone/', views.update_timezone),
     # Users
     path('create_user/', views.create_user),
@@ -36,11 +36,11 @@ urlpatterns = [
     path('accounts/logout_user/', views.logout_user),
     path('signup_page/', TemplateView.as_view(template_name="core/signup.html")),
     path('my_account/', views.my_account),
-    #path('password_change/', views.password_change),
+    # path('password_change/', views.password_change),
     path('change_name/', views.change_name),
     path('change_name_form/', views.change_name_form),
     # Contact
-    #path('send_contact_email/', views.send_contact),
+    # path('send_contact_email/', views.send_contact),
     path('send_email/', views.send_email),
     # Events
     path('my_events/', views.my_events),
