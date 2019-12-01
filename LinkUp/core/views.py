@@ -323,7 +323,6 @@ def remove_event_admin(request):
     if request.method == 'POST':
         event = Event.objects.filter(event_id=request.POST.get('event_id'))
         oldadmin = User.objects.filter(email=request.POST.get('old_admin'))
-        print(request.POST.get('old_admin')+'esto es lo que salio de esta pendejada')
         event[0].admins.remove(oldadmin[0])
     return HttpResponse("Success")
 
