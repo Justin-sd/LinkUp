@@ -10,6 +10,7 @@ from django.contrib.auth import authenticate, login, logout, update_session_auth
 from django.contrib import messages
 from django.http import HttpResponse
 import uuid
+import json
 
 
 def home(request):
@@ -134,7 +135,7 @@ def about(request):
 def save_availability(request):
     # Get user and local timezone
     user = request.user
-    new_availability_dates = availability_calendar_api.convert_user_calendar_to_normal(request, user)
+    new_availability_dates = availability_calendar_api.convert_user_calendar_to_normal(json.load(request), user)
 
     query = Schedule.objects.filter(user=user)
     if query.count() == 0:
@@ -147,12 +148,21 @@ def save_availability(request):
     return render(request, "core/availability_calendar.html", {})
 
 def save_event_availability(request):
-    # Get user and local timezone
-    user = request.user
-    # How to get event???
-    event = request.event
-    new_availability_dates = availability_calendar_api.convert_user_calendar_to_normal(request, user)
+    # Get user and unpack data
+    data = request.POST
+    calendar = data["calendar"]
+    event_query_set = Event.objects.filter(event_id=json.loads(data["user_event_id"]))
 
+    if event_query_set.count() != 1:
+        return render(request, "core/error_page", {})
+
+    event = event_query_set[0]
+    user = request.user
+    new_availability_dates = availability_calendar_api.convert_user_event_calendar_to_normal(json.loads(calendar),
+                                                                                             event.potential_start_date,
+                                                                                             event.no_earlier_than)
+
+    #Get event schedule to replace / store
     query = EventSchedule.objects.filter(user=user, event=event)
     if query.count() == 0:
         EventSchedule.objects.create(availability=new_availability_dates, user=user, event=event)

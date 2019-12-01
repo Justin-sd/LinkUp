@@ -6,7 +6,7 @@ $(function () {
     let strtTime;
     let endTime;
 
-    $("#calendar_table td")
+    $("#event_calendar_table td")
         .mousedown(function () {
             isMouseDown = true;
             idx = $(this).index();
@@ -35,7 +35,36 @@ $(function () {
         });
 });
 
+$(document).ready(function() {
+    $('#btn-save-event-availability').click(function () {
+        let calendar = {};
+        //Loop over every hour
+        $("#event_availability").find('tr').each(function (row) {
+            let $tds = $(this).find('td');
+            calendar[convert(row)] = [];
+            //Loop over every day for that hour
+            for (let i = 0; i < $tds.length; i++) {
+                if ($tds.eq(i).attr('class') === "busy-time") {
+                    calendar[convert(row)].push(true);
+                } else {
+                    calendar[convert(row)].push(false);
+                }
+            }
+        });
 
+        let data = {"calendar": JSON.stringify(calendar), "user_event_id": JSON.stringify(user_event_id) };
+
+        $.ajax({
+            headers: {'X-CSRFToken': token},
+            url: "/save_event_availability/",
+            type: "POST",
+            data: data,
+            success: function (result) {
+                alert("SAVED")
+            }
+        });
+    });
+});
 
 function convert(idx) {
     switch(idx) {
