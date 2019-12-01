@@ -192,29 +192,25 @@
    </div>
 </section>
 <section class="section">
-    <div class="columns is-multiline">
+    <div class="columns">
         <div class="column">
             <div class="panel">
                 {% if admin %}
                 <p class="panel-heading has-background-info is-size-4"> Event Description
                 </p><i class="fa fa-pencil"></i>
-                <div class="panel-block" id="EventDescription" contenteditable="true">
+                <div class="panel-block is-size-4" id="EventDescription" contenteditable="true">
                     {{ event.description }}
                 </div>
                 {% else %}
                 <p class="panel-heading has-background-info is-size-4">
                     Event Description
                 </p>
-                <div class="panel-block">
+                <div class="panel-block is-size-4">
                     {{ event.description }}
                 </div>
                 {% endif %}
          </div>
       </div>
-   </div>
-</section>
-<section class="section">
-    <div class="columns">
         <div class="column">
             <div class="panel">
                 <p class="panel-heading has-background-info is-size-4">
@@ -246,25 +242,24 @@
    </div>
    <div class="columns is-multiline">
       <!--TODO-->
-      <div class="column is-6">
+      <div class="column">
          <div class="panel">
             <p class="panel-heading has-background-info">
                Available
             </p>
             <div class="panel-block">
-               Optimal starting times from best to worst:
-               <br /> {% for a,b in time_list %} {{a}} with members {{b}}
-               <br /> {% endfor %}
-            </div>
-         </div>
-      </div>
-      <div class="column is-6">
-         <div class="panel">
-            <p class="panel-heading has-background-info">
-               Not Available
-            </p>
-            <div class="panel-block">
-               Unsure How to Handle
+               <br />
+            <div class="field is-grouped is-grouped-multiline">
+                {% for a,b in time_list %}
+                <div class="control">
+                <div class="tags has-addons">
+                  <span class="tag is-medium is-size-5">{{ a }}</span>
+                    <span class="tag is-medium is-primary is-size-5">Users Available: </span>
+                   {% for users in b %}
+                  <span class="tag is-medium is-info is-size-5">{{ users }}</span>
+                   {% endfor %}
+                </div></div>
+                {% endfor %} </div>
             </div>
          </div>
       </div>
