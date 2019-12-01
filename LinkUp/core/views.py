@@ -149,6 +149,10 @@ def contact(request):
     return render(request, "core/contact.html", {})
 
 
+def report_an_issue(request):
+    return render(request, "core/reportanissue.html", {})
+
+
 def donate(request):
     return render(request, "core/donate.html", {})
 

@@ -21,6 +21,7 @@ urlpatterns = [
     path('', views.home),
     path('about/', views.about),
     path('contact/', views.contact),
+    path('report_an_issue/', views.report_an_issue),
     path('donate/', views.donate),
     # path('redirect/', views.password_change),
     # availability
