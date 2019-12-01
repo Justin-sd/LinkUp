@@ -1,6 +1,6 @@
 <div class="modal" id="createModal">
   <div class="modal-background"></div>
-  <div class="modal-card">
+  <div class="modal-card" style="overflow: auto;">
         <form method="post" action="/create_event_form/" onsubmit="return validateCreateEventForm()">
             <header class="modal-card-head has-background-info has-text-weight-semibold">
                 <p class="modal-card-title is-size-2" id="effect">Create a New Event!</p>
@@ -12,7 +12,10 @@
                         <div class="field">
                             <div class="control">
                                 {% if field.label == 'Duration' %}
-                                    <label class="is-size-4 is-capitalized">{{ field.label }} of The Event</label><br>
+                                    <label class="is-size-4 is-capitalized">
+                                        {{ field.label }} of The Event -- Minutes Only
+                                    </label>
+                                    <br>
                                 {% else %}
                                     <label class="is-size-4 is-capitalized">{{ field.label }}</label><br>
                                 {% endif %}
