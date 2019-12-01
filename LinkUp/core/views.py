@@ -388,7 +388,8 @@ def remove_event_admin(request):
 def delete_member(request):
     if request.method == 'POST':
         event = Event.objects.filter(event_id=request.POST.get('event_id'))
-        member = User.objects.filter(email=request.POST.get('member'))
+        member = User.objects.filter(email=request.POST.get('old_member'))
         event[0].members.remove(member[0])
     return HttpResponse("Success")
+
 

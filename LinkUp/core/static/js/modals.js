@@ -105,6 +105,7 @@ var deleteMemberMdl = new BulmaModal("#deleteMemberModal")
 
 deleteMemberBtns.forEach(function(btns) {
     btns.addEventListener("click", function() {
+    	document.getElementById("areyousure").innerText = "Are you sure you want to remove " +$(this).text()+ "?";
         deleteMemberMdl.show()
     });
 });

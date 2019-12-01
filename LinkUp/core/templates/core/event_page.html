@@ -229,8 +229,10 @@
                         <div class="control">
                         {% if admin %}
                             <div class="tags has-addons">
-                            <p class="tag is-info is-large">{{ member.first_name }} {{ member.last_name }} [{{ member.email }}]</p>
-                            <span class="tag is-delete is-danger is-large" onclick="deleteMember({{ member }})"></span>
+                           {% if member != user %}
+                            <button class="button is-info is-size-5" id="deleteMemberBtn">{{ member.first_name }} {{ member.last_name }} [{{ member.email }}]  <i class="fa fa-times" style="color: red"></i></button>
+                            {% endif %}
+
                             {% include 'core/delete_member_modal.html' %}
                         {% else %}
                             <div class="tags">
