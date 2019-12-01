@@ -59,7 +59,7 @@ $(document).ready(function() {
             data: JSON.stringify(calendar),
             contentType: "application/json",
             success: function (result) {
-                alert("SAVED")
+                alert("General unavailability has been saved!")
             }
         });
     });

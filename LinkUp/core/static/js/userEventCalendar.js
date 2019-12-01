@@ -60,7 +60,7 @@ $(document).ready(function() {
             type: "POST",
             data: data,
             success: function (result) {
-                alert("SAVED")
+                alert("Event unavailability has been saved!")
             }
         });
     });
