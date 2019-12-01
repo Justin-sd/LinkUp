@@ -146,7 +146,9 @@
                <div class="level">
                   <div class="level-left">
                      <a class="button is-info">Set Availability</a>
+                      {% if user in event.admins.all %}
                      <a class="button is-info" id="deleteBtn">Delete {{ event.title }}</a>
+                      {% endif %}
                   </div>
                </div>
             </div>
