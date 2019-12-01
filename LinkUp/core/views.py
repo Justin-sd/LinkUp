@@ -1,13 +1,12 @@
 from django.shortcuts import render, redirect
 
-from .apis import availability_calendar_api, sendEmail_api, algorithm_api, contact_us_api, event_calendar_api
+from .apis import calendar_api, availability_calendar_api, sendEmail_api, algorithm_api, contact_us_api, \
+    event_calendar_api
 from .models import Event, Schedule, UserTimezone, EventSchedule
 from .forms import EventForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import PasswordChangeForm
-from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
-from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
 import uuid
 import json
@@ -130,7 +129,9 @@ def import_general_availability(request, event_id):
 
 @login_required()
 def import_google_calendar_data(request):
-    busy_times = availability_calendar_api.format_google_calendar_availability(request.user)
+    google_auth_code = request.POST.get("auth_code")
+    service = calendar_api.exchange_auth_code_for_calendar_service(google_auth_code)
+    busy_times = availability_calendar_api.format_google_calendar_availability(request.user, service)
     availability_dates = availability_calendar_api.get_list_of_next_n_days(30)
 
     context = {"busy_times": busy_times, "availability_dates": availability_dates}
@@ -177,6 +178,7 @@ def save_availability(request):
 
     return render(request, "core/availability_calendar.html", {})
 
+
 def save_event_availability(request):
     # Get user and unpack data
     data = request.POST
@@ -192,7 +194,7 @@ def save_event_availability(request):
                                                                                              event.potential_start_date,
                                                                                              event.no_earlier_than)
 
-    #Get event schedule to replace / store
+    # Get event schedule to replace / store
     query = EventSchedule.objects.filter(user=user, event=event)
     if query.count() == 0:
         EventSchedule.objects.create(availability=new_availability_dates, user=user, event=event)
@@ -220,6 +222,7 @@ def change_name(request):
     if request.method == 'POST':
         request.user.first_name = request.POST.get("first_name")
         request.user.last_name = request.POST.get("last_name")
+        request.user.save()
     return render(request, "core/my_account.html")
 
 
@@ -305,6 +308,7 @@ def my_account(request):
 def privacy_policy(request):
     return render(request, "core/privacy_policy.html", {})
 
+
 """
 def password_change(request):
     if request.method == 'POST':
@@ -322,6 +326,7 @@ def password_change(request):
         'form': form
     })
 """
+
 
 def logout_user(request):
     """
@@ -388,7 +393,6 @@ def remove_event_admin(request):
 def delete_member(request):
     if request.method == 'POST':
         event = Event.objects.filter(event_id=request.POST.get('event_id'))
-        member = User.objects.filter(email=request.POST.get('member'))
+        member = User.objects.filter(email=request.POST.get('old_member'))
         event[0].members.remove(member[0])
     return HttpResponse("Success")
-

@@ -113,21 +113,24 @@ function filterFunction2() {
 
 ////Add admin
 
-function deleteMember(member){
-
-    const eventID = window.location.pathname.split("/").pop();
-
-    $.ajax({
-        headers: {"X-CSRFToken": CSRF_TOKEN},
-        type: "POST",
-        url:   "delete_member/",
-        data: { "member": member, "event_id": eventID },
-    }).success(function (){
-        alert(member + ' has been deleted from the event!');
-    }).fail(function () {
-        alert('Deletion of '+ member +' failed!');
-    });
+function deleteMember(){
+    let removedMember = document.getElementById("areyousure").innerText;
+    const index1 = removedMember.indexOf("[");
+        const index2 = removedMember.indexOf("]");
+        const size = index2-1 - index1;
+        removedMember = removedMember.substr(index1+1,size);
+        const eventID = window.location.pathname.split("/").pop();
+        $.ajax({
+            headers: {"X-CSRFToken": CSRF_TOKEN},
+            type: "POST",
+            url:   "delete_member/",
+            data: { "old_member": removedMember , "event_id": eventID },
+        }).success(function (){
+            window.location.reload();
+            //alert(removedMember + ' has been removed as a Member !');
+        }).fail(function () {
+            alert('Event Member not Removed');
+        });
 }
-
 
 
