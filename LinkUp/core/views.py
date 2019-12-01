@@ -10,16 +10,18 @@ from django.contrib.auth import authenticate, login, logout, update_session_auth
 from django.contrib import messages
 from django.http import HttpResponse
 import uuid
-from datetime import datetime
 
 
-@login_required()
 def home(request):
     user = request.user
-    user_events = Event.objects.filter(members=user)
-    no_user_events = False
-    if user_events.count() is 0:
+    if user.is_anonymous:
         no_user_events = True
+        user_events = []
+    else:
+        user_events = Event.objects.filter(members=user)
+        no_user_events = False
+        if user_events.count() is 0:
+            no_user_events = True
 
     context = {
         "user_events": user_events,
@@ -162,7 +164,7 @@ def save_event_availability(request):
     return render(request, "core/event_calendar.html", {})
 
 
-def createUser(request):
+def create_user(request):
     if request.method == "POST":
         user = User.objects.create_user(first_name=request.POST.get("first_name"),
                                         last_name=request.POST.get("last_name"),
@@ -172,6 +174,17 @@ def createUser(request):
         user = authenticate(request, username=request.POST.get("email"), password=request.POST.get("password"))
         login(request, user)
     return render(request, "core/homepage.html", {})
+
+
+def change_name(request):
+    if request.method == 'POST':
+        request.user.first_name = request.POST.get("first_name")
+        request.user.last_name = request.POST.get("last_name")
+    return render(request, "core/my_account.html")
+
+
+def change_name_form(request):
+    return render(request, "core/change_name_form.html", {})
 
 
 def login_user(request, backend='django.contrib.auth.backends.ModelBackend'):
@@ -198,7 +211,7 @@ def send_email(request):
     data = request.POST
     invitee_email = data["invitee_email"]
     event_id = data["event_id"]
-    event_url = "https//:LinkUp.com/event_page/" + event_id
+    event_url = "http://linkup-env.3yijpwf3qp.us-west-2.elasticbeanstalk.com/event_page/" + event_id
     sendEmail_api.send_invite_email(event_url, invitee_email)
     return HttpResponse("Success")
 
@@ -252,7 +265,7 @@ def my_account(request):
 def privacy_policy(request):
     return render(request, "core/privacy_policy.html", {})
 
-
+"""
 def password_change(request):
     if request.method == 'POST':
         form = PasswordChangeForm(request.user, request.POST)
@@ -268,13 +281,14 @@ def password_change(request):
     return render(request, 'core/password_change.html', {
         'form': form
     })
-
+"""
 
 def logout_user(request):
     """
     Log the user out
     """
     logout(request)
+
     return render(request, "core/homepage.html", {})
 
 
@@ -285,6 +299,8 @@ def update_timezone(request):
     """
     user_timezone = request.POST.get("time_zone")
     user = request.user
+    if user.is_anonymous:
+        return HttpResponse("User not logged in")
     query = UserTimezone.objects.filter(user=user)
     if query.count() != 0:
         query.update(user=user, timezone_str=user_timezone)
@@ -314,7 +330,9 @@ def add_event_admin(request):
         event[0].admins.add(newadmin[0])
     return HttpResponse("Success")
 
+
 def delete_event(request):
     eventid = request.POST
     e = Event.objects.filter(event_id=eventid["event_ID"]).delete()
     return render(request, "core/my_events.html/", {})
+

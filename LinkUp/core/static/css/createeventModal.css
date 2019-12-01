@@ -4,3 +4,27 @@
    color: #fff;
    text-shadow: 0px 1px 0px #666, 0px 2px 0px #555, 0px 3px 0px #444, 0px 4px 0px #333, 0px 5px 4px #001135;
 }
+
+
+[contenteditable] {
+
+  padding: .25em 0em;
+  margin: 1em 0;
+  transition: padding .3s ease-in-out;
+   display: inline-block;
+}
+
+[contenteditable]:hover,
+[contenteditable]:focus {
+  padding: .25em;
+}
+
+[contenteditable]:hover {
+  background: #fafafa;
+  outline: 2px solid #eee;
+}
+
+[contenteditable]:focus {
+  background: #efefef;
+  outline: 2px solid #ff0016;
+}

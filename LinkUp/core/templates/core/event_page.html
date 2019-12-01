@@ -61,6 +61,13 @@
 
 <section class="section">
     <div class="section">
+          <nav class="breadcrumb has-succeeds-separator is-large has-background-white" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/my_events/">My Events</a></li>
+      <li><a href="/event_page/{{ event.id }}" class="is-active" aria-current="page">{{ event.title }}</a></li>
+  </ul>
+</nav>
         <div class="columns">
             <aside class="column is-2">
                 <nav class="menu">
@@ -131,7 +138,7 @@
                     <div class="level">
                         <div class="level-left">
                             <a class="button is-info">Set Availability</a>
-                            <a class="button is-info" onclick="deleteEvent()">Delete Event</a>
+                            <a class="button is-info" id="deleteBtn">Delete {{ event.title }}</a>
                         </div>
                     </div>
                 </div>
@@ -178,8 +185,8 @@
         <div class="column">
             <div class="panel">
                 {% if admin %}
-                <p class="panel-heading has-background-info"><i class="fa fa-pencil"></i> Event Description
-                </p>
+                <p class="panel-heading has-background-info"> Event Description
+                </p><i class="fa fa-pencil"></i>
                 <div class="panel-block" id="EventDescription" contenteditable="true">
                     {{ event.description }}
                 </div>
@@ -233,7 +240,7 @@
                     Not Available
                 </p>
                 <div class="panel-block">
-                    Unsure how to handle
+                    Unsure How to Handle
                 </div>
             </div>
         </div>
