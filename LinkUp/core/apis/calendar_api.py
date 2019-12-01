@@ -32,7 +32,7 @@ def get_service(user):
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
                 'core/apis/credentials.json', SCOPES)
-            creds = flow.run_local_server(port=0)
+            creds = flow.run_console().credentials
         # Save the credentials for the next run
         with open('core/apis/tokens/' + str(user.id), 'wb') as token:
             pickle.dump(creds, token)
