@@ -100,3 +100,20 @@ deleteMdl.addEventListener("modal:close", function() {
 	console.log("closed")
 })
 
+var deleteMemberBtns = document.querySelectorAll("#deleteMemberBtn")
+var deleteMemberMdl = new BulmaModal("#deleteMemberModal")
+
+deleteMemberBtns.forEach(function(btns) {
+    btns.addEventListener("click", function() {
+        deleteMemberMdl.show()
+    });
+});
+
+
+deleteMemberMdl.addEventListener('modal:show', function() {
+	console.log("opened")
+})
+
+deleteMemberMdl.addEventListener("modal:close", function() {
+	console.log("closed")
+})
