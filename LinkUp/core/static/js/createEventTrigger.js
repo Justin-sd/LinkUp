@@ -4,8 +4,18 @@ function validateCreateEventForm() {
     $(".create_event_validation").remove();
 
     //start and end times as DATE object
-    const eventStartDate = new Date($("#id_potential_start_date").val());
-    const eventEndDate = new Date($("#id_potential_end_date").val());
+    const eventStartDate = new Date();
+    let eventStartString = $("#id_potential_start_date").val();
+    eventStartString = eventStartString.split("-");
+
+    eventStartDate.setFullYear(parseInt(eventStartString[0], 10), parseInt(eventStartString[1], 10) - 1, parseInt(eventStartString[2], 10));
+
+    //parse end date
+    const eventEndDate = new Date();
+    let eventEndString = $("#id_potential_end_date").val();
+    eventEndString = eventEndString.split("-");
+    eventEndDate.setFullYear(eventEndString[0], eventEndString[1], eventEndString[2]);
+
     const eventDuration = $("#id_duration").val();  //In hours?
 
     //get number of milliseconds since Unix Epoch in local time.
@@ -35,7 +45,7 @@ function validateCreateEventForm() {
         validationStatus = false;
         }
     }
-    else if ((eventStartDate.getMonth() === todaysDate.getMonth()) && (eventStartDate.getDate() < todaysDate.getDate() - 1)) {
+    else if ((eventStartDate.getMonth() === todaysDate.getMonth()) && (eventStartDate.getDate() < todaysDate.getDate())) {
         $("#id_potential_start_date").after("<div class='create_event_validation'><p class='has-text-danger'>Potential start date must be in the future.</p></div>");
         validationStatus = false;
     }
@@ -47,7 +57,7 @@ function validateCreateEventForm() {
              validationStatus = false;
          }
     }
-    else if ((eventEndDate.getMonth() === todaysDate.getMonth()) && (eventEndDate.getDate() < todaysDate.getDate() - 1)) {
+    else if ((eventEndDate.getMonth() === todaysDate.getMonth()) && (eventEndDate.getDate() < todaysDate.getDate())) {
         $("#id_potential_end_date").after("<div class='create_event_validation'><p class='has-text-danger'>Potential end date must be in the future.</p></div>");
         validationStatus = false;
     }
@@ -64,5 +74,7 @@ function validateCreateEventForm() {
     if (validationStatus) {
         modal.style.display = "none";
     }
+
+
     return validationStatus;
 }
