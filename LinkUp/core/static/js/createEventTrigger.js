@@ -60,10 +60,7 @@ function validateCreateEventForm() {
             $("#id_no_earlier_than").after("<div class='create_event_validation'><p class='has-text-danger'>Must be 1 hour or more between start and end time</p></div>");
             validationStatus = false;
     }
-    if (eventEndTime - eventStartTime > 1 && eventEndTime - eventStartTime <= eventDuration){
-            $("#id_no_earlier_than").after("<div class='create_event_validation'><p class='has-text-danger'>There is not enough time for your event. Please shorted duration, start earlier or end later.</p></div>");
-            validationStatus = false;
-    }
+    
     if (validationStatus) {
         modal.style.display = "none";
     }
