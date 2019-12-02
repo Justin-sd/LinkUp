@@ -64,19 +64,6 @@ $(document).ready(function() {
         });
     });
 
-    $('#a-import-from-general-availability').on('click', function () {
-        const eventId = window.location.pathname.split("/").pop();
-        $.ajax({
-            url: "/import_general_availability/" + eventId,
-            type: "GET",
-            success: function (result) {
-                $("#availability-calendar-content").html(result);
-                // Adjust width too match the other calendar
-                const tableWidth = $("#group-availability-header").width();
-                $("#user-availability-header").width(tableWidth);
-            }
-        });
-    });
 });
 
 function convert(idx) {
