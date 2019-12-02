@@ -70,7 +70,7 @@ function validateCreateEventForm() {
             $("#id_no_earlier_than").after("<div class='create_event_validation'><p class='has-text-danger'>Must be 1 hour or more between start and end time</p></div>");
             validationStatus = false;
     }
-    
+
     if (validationStatus) {
         modal.style.display = "none";
     }
