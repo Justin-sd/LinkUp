@@ -36,7 +36,7 @@ $(function () {
 });
 
 $(document).ready(function() {
-    $('#btn-save-availability').click(function () {
+    $('.btn-save-availability').click(function () {
         let calendar = {};
         //Loop over every hour
         $("table tbody").find('tr').each(function (row) {
