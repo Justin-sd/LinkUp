@@ -166,7 +166,7 @@ def about(request):
 def save_availability(request):
     # Get user and local timezone
     user = request.user
-    new_availability_dates = availability_calendar_api.convert_user_calendar_to_normal(json.load(request))
+    new_availability_dates = availability_calendar_api.convert_user_calendar_to_normal(user, json.load(request))
 
     query = Schedule.objects.filter(user=user)
     if query.count() == 0:
