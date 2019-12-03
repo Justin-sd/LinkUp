@@ -102,7 +102,11 @@ def my_availability(request):
     busy_times = availability_calendar_api.format_general_availability_calendar(request.user)
     availability_dates = availability_calendar_api.get_list_of_next_n_days(30)
 
-    context = {"user_events": user_events, "busy_times": busy_times, "availability_dates": availability_dates}
+    context = {"user_events": user_events,
+               "busy_times": busy_times,
+               "availability_dates": availability_dates,
+               "create_event_form": EventForm(),
+               }
     return render(request, "core/my_availability.html", context)
 
 
