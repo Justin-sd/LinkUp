@@ -1,4 +1,6 @@
-from .availability_calendar_api import format_event_availability_calendar
+from django.utils import timezone
+from pytz import UTC
+from .availability_calendar_api import format_event_availability_calendar, activate_users_saved_timezone
 from ..models import Event
 from datetime import datetime, timedelta
 
@@ -90,3 +92,19 @@ def apply_event_time_constraints(event, busy_times):
         busy_times_cut[k] = busy_times[k]
 
     return busy_times_cut
+
+
+def cut_user_availability_dates_to_match_event(user, event, busy_times):
+    activate_users_saved_timezone(user)
+    start_date = timezone.localtime(datetime.utcnow().replace(tzinfo=UTC)).replace(hour=0, minute=0, second=0,
+                                                                                   microsecond=0).replace(tzinfo=UTC)
+    timezone.activate('UTC')
+    event_start_date = event.potential_start_date
+
+    time_keys = list(busy_times.keys())
+    while start_date > event_start_date:
+        event_start_date = event_start_date + timedelta(days=1)
+        for k in time_keys:
+            busy_times[k] = [False] + busy_times[k]
+
+    return busy_times
