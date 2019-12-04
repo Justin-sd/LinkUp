@@ -166,18 +166,21 @@ def convert_to_local_time(fb, user):
     return split_fb
 
 
-def get_list_of_next_n_days(num_days):
+def get_list_of_next_n_days(user, num_days):
     """
+    :param user: The user -- needed because timezones may change date ranges
     :return: A list of datetime objects from today to thirty days from now (exclusive)
     :param num_days: The number of date objects to return in the list
     """
     dates = []
-
-    today = datetime.utcnow().replace(tzinfo=UTC)
+    local_tz = get_user_timezone(user)
+    today = datetime.utcnow().astimezone(local_tz)
     end_day = today + timedelta(days=num_days)
     while today < end_day:
         dates.append(timezone.localtime(today))
         today = today + timedelta(days=1)
+
+    activate_users_saved_timezone(user)
 
     return dates
 
@@ -308,7 +311,7 @@ def convert_user_calendar_to_normal(user, new_calendar):
     for hours in new_calendar:
         i = 0
         for day in new_calendar[hours]:
-            today = (local_tz.localize(datetime.now()) + timedelta(days=i))
+            today = datetime.utcnow().astimezone(local_tz) + timedelta(days=i)
             hour = hours.split('-')
 
             if day is True:

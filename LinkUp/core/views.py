@@ -80,7 +80,7 @@ def my_events(request):
     user_event_count = user_events.count()
 
     busy_times = availability_calendar_api.format_general_availability_calendar(request.user)
-    availability_dates = availability_calendar_api.get_list_of_next_n_days(30)
+    availability_dates = availability_calendar_api.get_list_of_next_n_days(user, 30)
 
     context = {
         "user_events": user_events,
@@ -100,7 +100,7 @@ def my_availability(request):
     user_events = Event.objects.filter(members=user)
     # Load users general availability from database
     busy_times = availability_calendar_api.format_general_availability_calendar(request.user)
-    availability_dates = availability_calendar_api.get_list_of_next_n_days(30)
+    availability_dates = availability_calendar_api.get_list_of_next_n_days(user, 30)
 
     context = {"user_events": user_events,
                "busy_times": busy_times,
@@ -136,7 +136,7 @@ def import_google_calendar_data(request):
     google_auth_code = request.POST.get("auth_code")
     service = calendar_api.exchange_auth_code_for_calendar_service(google_auth_code)
     busy_times = availability_calendar_api.format_google_calendar_availability(request.user, service)
-    availability_dates = availability_calendar_api.get_list_of_next_n_days(30)
+    availability_dates = availability_calendar_api.get_list_of_next_n_days(request.user, 30)
 
     context = {"busy_times": busy_times, "availability_dates": availability_dates}
     return render(request, "core/my_availability.html", context)
