@@ -1,0 +1,27 @@
+{% load static %}
+<script src="{% static 'js/eventCalendar.js' %}"></script>
+<script src="{% static 'js/timezoneHandler.js' %}"></script>
+<link href="{% static 'css/eventCalendar.css' %}" rel="stylesheet" />
+
+<div class="table-container" style="overflow-y:scroll; overflow-x:scroll;">
+    <table id="event_table" class="event table is-bordered is-fullwidth">
+        <thead>
+        <tr id="group-availability-header">
+            <th>Hour</th>
+            {% for date in availability_dates %}
+                <th>{{date|date:"M d"}}</th>
+            {% endfor %}
+        </tr>
+        </thead>
+        <tbody class="hide-scroll">
+        {% for time, dates in group_ratio.items %}
+            <tr>
+                <th>{{time}}</th>
+                {% for date in dates %}
+                    <td style="opacity: {{ date }}"></td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load socialaccount %}
+{% providers_media_js %}
+{% block title %}LinkUp - Make Your Meeting{% endblock title %} //modifying the title
+{% block nav-style %} {% endblock nav-style %}
+{% block content %}
+<!-- START NAV -->
+<!-- END NAV -->
+<section class="hero is-halfheight " style="height: 550px">
+   <div class="hero-body ">
+      <div class="container has-text-centered">
+         <div class="columns is-8 is-variable ">
+            <div class="column is-one-third has-text-left">
+               <h1>
+                  <strong>Support</strong> LinkUp <span class="bd-emoji-bis">😃</span>
+               </h1>
+               <br>
+               <p class="is-size-4 text-center"></p>
+               <div class="social-media">
+                  <div class="column  has-text-left">
+                     <img src="/static/images/yourdonations.png" width="400" height="400">
+                  </div>
+                  <br> <br>
+                  <center>
+                     <input type="hidden" name="cmd" value="_s-xclick">
+                     <input type="hidden" name="hosted_button_id" value="92TZKHPM5****">
+                     <input type="image" src="https://www.paypalobjects.com/en_US/GB/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal – The safer, easier way to pay online.">
+                     <img alt="" border="0" src="https://www.paypalobjects.com/en_GB/i/scr/pixel.gif" width="4" height="4">
+                  </center>
+               </div>
+            </div>
+            <div class="column is-4 ">
+               <img src="/static/images/LinkUpLogoTransBack.png"  height="700" width="600" style="padding-left: 50px">
+            </div>
+            <br> <br> <br>
+            <div class="column is-4 ">
+               <img src="/static/images/thankyou.png"  height="300" width="200" style="padding-top: 100px">
+            </div>
+         </div>
+      </div>
+   </div>
+</section>
+{% endblock content %}

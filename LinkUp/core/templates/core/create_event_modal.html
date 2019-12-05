@@ -1,0 +1,37 @@
+<div class="modal" id="createModal">
+  <div class="modal-background"></div>
+  <div class="modal-card" style="overflow: auto;">
+        <form method="post" action="/create_event_form/" onsubmit="return validateCreateEventForm()">
+            <header class="modal-card-head has-background-info has-text-weight-semibold">
+                <p class="modal-card-title is-size-2" id="effect">Create a New Event!</p>
+                <button class="delete is-pulled-right" aria-label="close" data-bulma-modal="close"></button>
+            </header>
+            <section class="modal-card-body">
+                {% csrf_token %}
+                {% for field in create_event_form %}
+                        <div class="field">
+                            <div class="control">
+                                {% if field.label == 'Duration' %}
+                                    <label class="is-size-4 is-capitalized">
+                                        {{ field.label }} of The Event -- Minutes Only
+                                    </label>
+                                    <br>
+                                {% else %}
+                                    <label class="is-size-4 is-capitalized">{{ field.label }}</label><br>
+                                {% endif %}
+                                {{ field }}
+                                {% if field.help_text %}
+                                    <p class="help">{{ field.help_text|safe }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                {% endfor %}
+            </section>
+            <footer class="modal-card-foot">
+                <input class="button is-info is-size-5" type="submit" value="Create Your New Event!">
+                <button class="button is-danger is-size-5" data-bulma-modal="close">Cancel</button>
+            </footer>
+        </form>
+  </div>
+</div>

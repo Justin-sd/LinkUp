@@ -1,0 +1,16 @@
+<div class="modal" id="deleteMemberModal">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+            <header class="modal-card-head has-background-info has-text-weight-semibold">
+                <p class="modal-card-title is-size-2" id="effect">Delete a Member</p>
+                <button class="delete is-pulled-right" aria-label="close" data-bulma-modal="close"></button>
+            </header>
+            <section class="modal-card-body is-size-4" id="areyousure">
+            </section>
+            <footer class="modal-card-foot">
+                <button class="button is-info is-size-5" value="{{ member }}" onclick="deleteMember()" id="deleteMember">Delete Member</button>
+                <button class="button is-danger is-size-5" data-bulma-modal="close">Cancel</button>
+            </footer>
+        </form>
+  </div>
+</div>

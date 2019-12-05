@@ -122,3 +122,11 @@ dmypy.json
 
 # Intellij idea file
 .idea
+
+# VIM
+*.swp
+*.swo
+
+# API Tokens
+Linkup/core/apis/tokens/*
+

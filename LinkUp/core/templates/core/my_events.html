@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+{% block title %}LinkUp {% endblock title %} //modifying the title
+{% block content %}
+<section class="section">
+	<div class="section">
+    <nav class="breadcrumb has-succeeds-separator is-large has-background-white" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/my_events/" class="is-active" aria-current="page">My Events</a></li>
+  </ul>
+</nav>
+		<div class="columns">
+			<aside class="column is-2">
+				<nav class="menu">
+					<p class="menu-label is-size-5">
+						General
+					</p>
+					<hr/>
+					<ul class="menu-list">
+						<li>
+							<a class="is-active is-size-4" href="/my_events">
+							My Events
+							</a>
+							<ul>
+								{% for event in user_events %}
+								<li>
+									<a class="is-size-4" href="/event_page/{{ event.event_id }}">{{ event.title }}</a>
+								</li>
+								{% endfor %}
+							</ul>
+							<a id="createEvent" class="button is-size-4" > + Create An Event</a>
+						</li>
+					</ul>
+					<p class="menu-label is-size-5">
+						Unavailability
+					</p>
+					<ul class="menu-list">
+						<li>
+							<a class="is-size-4" href="/my_availability">
+							Adjust Your Unavailability
+							</a>
+						</li>
+					</ul>
+				</nav>
+			</aside>
+			<main class="column" style="overflow-x: scroll;">
+				<div class="column">
+					<div class="level">
+						<div class="level-left">
+							<div class="level-item">
+								<div class="title is-size-1">
+									My Events
+								</div>
+							</div>
+						</div>
+						<div class="level-right">
+							<div class="level-item">
+								<a class="button is-size-3" href="/my_account/">
+								Welcome {{ user.first_name }}!
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<br/>
+				<br/>
+				<div class="columns is-multiline">
+					<div class="column">
+						<div class="box">
+							<div class="is-size-3">Number of Events</div>
+							<hr/>
+							<div class="title has-text-centered" style="font-size: 100px">
+								{{ user_event_count }}
+							</div>
+							<div class="level">
+								<div class="level-item">
+									<div class="">
+										<a class="button is-info is-size-3" id="createEvent">
+										+ Create An Event
+										</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="column" style="text-align: center;">
+						<img src="/static/images/LinkUpLogoTransBack.png" width="300" height="400"/>
+					</div>
+				</div>
+				<div class="columns is-multiline">
+					<div class="column">
+						<div class="box">
+							<div class="is-size-3">Events</div>
+							<hr/>
+                            <div class="columns is-multiline">
+							{% for event in user_events %}
+                                  <div class="column is-one-third">
+                                    <div class="card">
+                                      <header class="card-header is-centered">
+                                           <a href="/event_page/{{ event.event_id }}">
+                                                <p class="card-header-title">
+                                                  {{ event.title }}
+                                                </p>
+                                           </a>
+                                        <a href="/event_page/{{ event.event_id }}" class="card-header-icon" aria-label="more options">
+                                          <span class="icon">
+                                            <i class="fa fa-angle-right" aria-hidden="true"></i>
+                                          </span>
+                                        </a>
+                                      </header>
+                                      <div class="card-content">
+                                        <div class="content">
+                                            <br>
+                                          {{ event.description }}
+                                          <br>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+
+							{% endfor %}
+                            </div>
+						</div>
+					</div>
+				</div>
+				<div class="columns is-multiline">
+					<div class="column" style="overflow-y: scroll;">
+						<div class="panel">
+							<p class="panel-heading has-background-info">
+								My Unavailability
+							</p>
+							{% include "core/availability_calendar.html" %}
+						</div>
+					</div>
+				</div>
+			</main>
+		</div>
+	</div>
+</section>
+{% endblock content %}
