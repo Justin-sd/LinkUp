@@ -253,8 +253,8 @@ def get_event_availability_dates(event_id):
     :return: A list of potential event days
     """
     event = Event.objects.get(event_id=event_id)
-    start_date = timezone.localtime(event.potential_start_date)
-    end_date = timezone.localtime(event.potential_end_date)
+    start_date = event.potential_start_date
+    end_date = event.potential_end_date
 
     possible_dates = []
     start_dt = datetime(year=start_date.year, month=start_date.month, day=start_date.day, tzinfo=start_date.tzinfo)
