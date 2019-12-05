@@ -128,6 +128,8 @@ def import_general_availability(request, event_id):
     # Make the general availability length not go past the event availability end date
     for k, v in busy_times.items():
         busy_times[k] = v[:len(availability_dates)]
+        while len(availability_dates) > len(busy_times[k]):
+            busy_times[k].append(False)
 
     context = {"busy_times": busy_times, "availability_dates": availability_dates}
     return render(request, "core/availability_calendar.html", context)
