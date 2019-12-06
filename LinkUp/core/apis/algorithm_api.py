@@ -116,7 +116,6 @@ def get_best(event_id):
             curr_max = len(optimal_times[times])
 
     # return the reversed list
-    print(append_list[0][0])
     return sorted(append_list, key=cmp_to_key(best_times_sorter))
 
 
