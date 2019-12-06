@@ -1,8 +1,6 @@
-from ..models import *
 from .availability_calendar_api import *
-from .calendar_api import *
-import json
-from datetime import datetime, timedelta
+from datetime import timedelta
+from functools import cmp_to_key
 
 
 def get_best(event_id):
@@ -72,7 +70,7 @@ def get_best(event_id):
         # Schedule.objects.create(user=u, availability=schedule)
 
         # get user's schedules in datetime format
-        for times in get_users_saved_schedule(u):
+        for times in get_users_event_schedule(u, event):
             start_time = list(times.values())[0]
             # round DOWN the starting minutes
             if start_time.minute > 30:
@@ -118,7 +116,13 @@ def get_best(event_id):
             curr_max = len(optimal_times[times])
 
     # return the reversed list
-    return append_list[::-1]
+    return sorted(append_list, key=cmp_to_key(best_times_sorter))
+
+
+def best_times_sorter(t1, t2):
+    if len(t2[1]) - len(t1[1]) != 0:
+        return len(t2[1]) - len(t1[1])
+    return t1[0] >= t2[0]
 
 
 # convert a datetime to minutes elapsed
