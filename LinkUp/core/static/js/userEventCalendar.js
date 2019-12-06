@@ -39,7 +39,7 @@ $(document).ready(function() {
     $('#btn-save-event-availability').click(function () {
         let calendar = {};
         //Loop over every hour
-        $("#event_availability").find('tr').each(function (row) {
+        $("#availability-calendar-content tbody").find('tr').each(function (row) {
             let $tds = $(this).find('td');
             calendar[convert(row)] = [];
             //Loop over every day for that hour
@@ -60,7 +60,22 @@ $(document).ready(function() {
             type: "POST",
             data: data,
             success: function (result) {
-                alert("Event unavailability has been saved!")
+                alert("Event unavailability has been saved!");
+                location.reload();
+            }
+        });
+    });
+
+    $('#a-import-from-general-availability').on('click', function () {
+        const eventId = window.location.pathname.split("/").pop();
+        $.ajax({
+            url: "/import_general_availability/" + eventId,
+            type: "GET",
+            success: function (result) {
+                $("#availability-calendar-content").html(result);
+                // Adjust width too match the other calendar
+                const tableWidth = $("#group-availability-header").width();
+                $("#user-availability-header").width(tableWidth);
             }
         });
     });

@@ -6,7 +6,7 @@
     background: palegreen;
 }
 
-#btn-save-availability {
+#btn-save-event-availability, #btn-save-availability {
     background: lightblue;
 }
 

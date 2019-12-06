@@ -23,14 +23,14 @@ function validateCreateEventForm() {
     const eventEndMil = eventEndDate.getTime() + (eventEndDate.getTimezoneOffset()*60000);
     let todaysDate  = new Date();
 
-    let eventStartTime = $("#id_no_earlier_than").val();
-    let eventEndTime = $("#id_no_later_than").val();
+    const eventStartTime = $("#id_no_earlier_than").val();
+    const eventEndTime = $("#id_no_later_than").val();
     const eventStartTimeHour = parseInt(eventStartTime.substring(0, 2));
     const eventEndTimeHour = parseInt(eventEndTime.substring(0, 2));
     const eventStartTimeMin = parseInt(eventStartTime.substring(3, 5)) / 60;
     const eventEndTimeMin = parseInt(eventEndTime.substring(3, 5)) / 60;
-    eventStartTime = eventStartTimeHour + eventStartTimeMin;
-    eventEndTime = eventEndTimeHour + eventEndTimeMin;
+    const eventStartTimeVal = eventStartTimeHour + eventStartTimeMin;
+    const eventEndTimeVal = eventEndTimeHour + eventEndTimeMin;
 
     let validationStatus = true;
     if (eventStartMil > eventEndMil) {
@@ -41,8 +41,8 @@ function validateCreateEventForm() {
     //Validating potential starting date
     if (eventStartDate.getMonth() < todaysDate.getMonth()) {
         if (eventStartDate.getFullYear() <= todaysDate.getFullYear()) {
-        $("#id_potential_start_date").after("<div class='create_event_validation'><p class='has-text-danger'>Potential start date must be in the future.</p></div>");
-        validationStatus = false;
+            $("#id_potential_start_date").after("<div class='create_event_validation'><p class='has-text-danger'>Potential start date must be in the future.</p></div>");
+            validationStatus = false;
         }
     }
     else if ((eventStartDate.getMonth() === todaysDate.getMonth()) && (eventStartDate.getDate() < todaysDate.getDate())) {
@@ -66,7 +66,7 @@ function validateCreateEventForm() {
         $("#id_duration").after("<div class='create_event_validation'><p class='has-text-danger'>Duration must be greater than 0 minutes.</p></div>");
         validationStatus = false;
     }
-    if (eventEndTime - eventStartTime < 1) {
+    if (eventEndTimeVal - eventStartTimeVal < 1) {
             $("#id_no_earlier_than").after("<div class='create_event_validation'><p class='has-text-danger'>Must be 1 hour or more between start and end time</p></div>");
             validationStatus = false;
     }

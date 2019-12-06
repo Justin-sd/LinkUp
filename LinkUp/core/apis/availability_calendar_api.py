@@ -55,6 +55,7 @@ def format_general_availability_calendar(user):
     start_date = timezone.localtime(datetime.utcnow().replace(tzinfo=UTC)).replace(hour=0, minute=0, second=0,
                                                                                    microsecond=0)
     end_date = start_date + timedelta(days=30)
+    timezone.activate('UTC')
     number_of_days = (end_date - start_date).days
     availability = convert_to_local_time(fb, user)
     return format_availabilities(availability, start_date, number_of_days)
@@ -72,7 +73,7 @@ def format_event_availability_calendar(user, event_id):
                 '10:00 AM': [False, False, False, ..., True, True, ..., False]
             }
     """
-    activate_users_saved_timezone(user)
+    timezone.activate('UTC')
     event = Event.objects.get(event_id=event_id)
     availability = get_users_event_schedule(user, event)
     availability = convert_to_local_time(availability, user)
@@ -165,18 +166,21 @@ def convert_to_local_time(fb, user):
     return split_fb
 
 
-def get_list_of_next_n_days(num_days):
+def get_list_of_next_n_days(user, num_days):
     """
+    :param user: The user -- needed because timezones may change date ranges
     :return: A list of datetime objects from today to thirty days from now (exclusive)
     :param num_days: The number of date objects to return in the list
     """
     dates = []
-
-    today = datetime.utcnow().replace(tzinfo=UTC)
+    local_tz = get_user_timezone(user)
+    today = datetime.utcnow().astimezone(local_tz)
     end_day = today + timedelta(days=num_days)
     while today < end_day:
         dates.append(timezone.localtime(today))
         today = today + timedelta(days=1)
+
+    activate_users_saved_timezone(user)
 
     return dates
 
@@ -239,13 +243,6 @@ def filter_availability(availability, start_date, end_date):
             continue
         if time_range["end"] <= end_date:
             filtered_availability.append(time_range)
-        #
-        # if time_range["start"].day < start_date.day and time_range["start"].month < start_date.month and \
-        #         time_range["start"].year < start_date.year:
-        #     continue
-        # if time_range["end"].day <= end_date.day and time_range["end"].month <= end_date.month and \
-        #         time_range["end"].year <= end_date.year:
-        #     filtered_availability.append(time_range)
 
     return filtered_availability
 
@@ -256,8 +253,8 @@ def get_event_availability_dates(event_id):
     :return: A list of potential event days
     """
     event = Event.objects.get(event_id=event_id)
-    start_date = timezone.localtime(event.potential_start_date)
-    end_date = timezone.localtime(event.potential_end_date)
+    start_date = event.potential_start_date
+    end_date = event.potential_end_date
 
     possible_dates = []
     start_dt = datetime(year=start_date.year, month=start_date.month, day=start_date.day, tzinfo=start_date.tzinfo)
@@ -275,48 +272,10 @@ def activate_users_saved_timezone(user):
     :return: None
     """
     try:
-        # timezone.activate(UserTimezone.objects.get(user=user).timezone_str)
-
-        # I think we have decided that converting timezones is more confusing for the user than helpful
-        # Everyone will keep the same timezone now, except for their google calendar imports.
-        timezone.activate('UTC')
+        timezone.activate(UserTimezone.objects.get(user=user).timezone_str)
     except ObjectDoesNotExist:
         # If we can't find it, just make it LA for now
         timezone.activate('America/Los_Angeles')
-
-
-def json_datetime_handler(obj):
-    if hasattr(obj, 'isoformat'):
-        return obj.isoformat()
-    elif isinstance(obj, ...):
-        return ...
-    else:
-        raise TypeError('Object of type %s with value of %s is not JSON serializable' % (type(obj), repr(obj)))
-
-
-def convert_user_calendar_to_normal(new_calendar):
-    """
-    :param calendar: The formatted calendar given in JS
-    :return: The users availability converted into standard format:
-            [{'start': datetime(..., hour=4, minute=30), 'end': datetime(..., hour=6, minute=30)}, ...]
-    """
-    local_tz = pytz_timezone("UTC")
-    converted_calendar = []
-    for hours in new_calendar:
-        i = 0
-        for day in new_calendar[hours]:
-            today = (datetime.now() + timedelta(days=i))
-            hour = hours.split('-')
-
-            if day is True:
-                converted_calendar.append({'start': local_tz.localize(
-                    datetime(today.year, today.month, today.day, int(hour[0]), int(hour[1]))).astimezone(UTC),
-                                           'end': local_tz.localize((datetime(today.year, today.month, today.day,
-                                                                              int(hour[0]), int(hour[1])) + timedelta(
-                                               minutes=30))).astimezone(UTC).astimezone(UTC)})
-            i = i + 1
-
-    return json.dumps(converted_calendar, default=json_datetime_handler)
 
 
 def get_user_timezone(user):
@@ -330,16 +289,52 @@ def get_user_timezone(user):
     return local_tz
 
 
+def json_datetime_handler(obj):
+    if hasattr(obj, 'isoformat'):
+        return obj.isoformat()
+    elif isinstance(obj, ...):
+        return ...
+    else:
+        raise TypeError('Object of type %s with value of %s is not JSON serializable' % (type(obj), repr(obj)))
+
+
+def convert_user_calendar_to_normal(user, new_calendar):
+    """
+    :param user: The user whose general availability is being converted
+    :param new_calendar: The calendar data interpreted from the general availability calendar on frontend
+    :return: The users availability converted into standard format:
+            [{'start': datetime(..., hour=4, minute=30), 'end': datetime(..., hour=6, minute=30)}, ...]
+    """
+    app_tz = pytz_timezone("UTC")
+    local_tz = get_user_timezone(user)
+    converted_calendar = []
+    for hours in new_calendar:
+        i = 0
+        for day in new_calendar[hours]:
+            today = datetime.utcnow().astimezone(local_tz) + timedelta(days=i)
+            hour = hours.split('-')
+
+            if day is True:
+                converted_calendar.append({'start': app_tz.localize(
+                    datetime(today.year, today.month, today.day, int(hour[0]), int(hour[1]))).astimezone(UTC),
+                                           'end': app_tz.localize((datetime(today.year, today.month, today.day,
+                                                                              int(hour[0]), int(hour[1])) + timedelta(
+                                               minutes=30))).astimezone(UTC).astimezone(UTC)})
+            i = i + 1
+
+    return json.dumps(converted_calendar, default=json_datetime_handler)
+
+
 def convert_user_event_calendar_to_normal(new_calendar, start_date, start_time):
     """
     :param calendar: The formatted calendar given in JS
     :return: The users availability converted into standard format:
             [{'start': datetime(..., hour=4, minute=30), 'end': datetime(..., hour=6, minute=30)}, ...]
     """
-    #First round start_time down to nearest half hour
+    # First round start_time down to nearest half hour
     start_time = round_down_half_hour(start_time)
 
-    local_tz = pytz_timezone("UTC")
+    app_tz = pytz_timezone("UTC")
     converted_calendar = []
     for hours in new_calendar:
         i = 0
@@ -348,11 +343,13 @@ def convert_user_event_calendar_to_normal(new_calendar, start_date, start_time):
             hour = hours.split('-')
 
             if day is True:
-                converted_calendar.append({'start': local_tz.localize(
-                    datetime(today.year, today.month, today.day, int(hour[0]), int(hour[1]))).astimezone(UTC) + timedelta(hours=float(start_time.hour), minutes=float(start_time.minute)) ,
-                                           'end': local_tz.localize((datetime(today.year, today.month, today.day,
+                converted_calendar.append({'start': app_tz.localize(
+                    datetime(today.year, today.month, today.day, int(hour[0]), int(hour[1]))).astimezone(
+                    UTC) + timedelta(hours=float(start_time.hour), minutes=float(start_time.minute)),
+                                           'end': app_tz.localize((datetime(today.year, today.month, today.day,
                                                                               int(hour[0]), int(hour[1])) + timedelta(
-                                               minutes=30))).astimezone(UTC).astimezone(UTC) + timedelta(hours=float(start_time.hour), minutes=float(start_time.minute)) })
+                                               minutes=30))).astimezone(UTC).astimezone(UTC) + timedelta(
+                                               hours=float(start_time.hour), minutes=float(start_time.minute))})
             i = i + 1
 
     return json.dumps(converted_calendar, default=json_datetime_handler)
