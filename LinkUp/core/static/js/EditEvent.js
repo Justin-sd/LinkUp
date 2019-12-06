@@ -76,6 +76,7 @@ function Search() {
   document.getElementById("myDropdown").classList.toggle("show");
 }
 
+// filter function obtained from [www.w3schools.com] https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_js_dropdown_filter
 function filterFunction() {
   var input, filter, ul, li, a, i;
   input = document.getElementById("myInput");
@@ -94,6 +95,7 @@ function filterFunction() {
 
 
 //Remove an admin
+// filter function obtained from [www.w3schools.com] https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_js_dropdown_filter
 function filterFunction2() {
   var input, filter, ul, li, a, i;
   input = document.getElementById("myInput2");
