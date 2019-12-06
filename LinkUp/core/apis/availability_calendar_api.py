@@ -116,6 +116,7 @@ def format_availabilities(availability, start_date, number_of_days):
             }
 
     """
+    start_date = start_date.replace(tzinfo=UTC)
     busy_times = {}
     for half_hour_periods in range(48):
         busy_times[half_hour_periods] = [False] * number_of_days
