@@ -18,7 +18,7 @@ The only requirement for running our website is having a internet browser (Googl
 a connection to internet.
 
 ## Installation Instructions 
-Our website should require no installation as we have deployed it using AWS.\ 
+Our website should require no installation as we have deployed it using AWS\ 
 To view our website please click here: http://linkup-env.3yijpwf3qp.us-west-2.elasticbeanstalk.com/
 
 ## Known Bugs
