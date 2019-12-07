@@ -38,12 +38,16 @@ def get_best(event_id):
     min_minute = event.no_earlier_than.minute
     max_hour = event.no_later_than.hour
     max_minute = event.no_later_than.minute
+    end_et = et.replace(hour=max_hour, minute=max_minute)
+    the_end = convert_to_minutes(end_et, new_st)
 
     # Dictionary: starting times as keys and values is list of people who can make it,
     # keys incremented by duration
     optimal_times = {}
     # from start to end time, add keys of 30 minute increments with querysets of every user attending
     for i in range(start, end+1, 30):
+        if (i + 30) > the_end:
+            break
         # only add times later than min time and earlier than max time
         time = convert_to_datetime(new_st, i)
         if min_hour < time.hour < max_hour:
