@@ -44,7 +44,7 @@
 							</div>
 						</div>
 						<div class="control">
-							<button type="submit" class="button is-link is-fullwidth has-text-weight-medium is-medium">
+							<button type="submit" onclick="emailSent()" class="button is-link is-fullwidth has-text-weight-medium is-medium">
                                 Send Message
                             </button>
 						</div>
@@ -54,4 +54,9 @@
 		</div>
             </div>
 	</section>
+    <script>
+        function emailSent() {
+            alert("Your message has been sent!");
+        }
+    </script>
 {% endblock content %}
