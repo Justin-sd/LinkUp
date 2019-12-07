@@ -15,8 +15,7 @@ class Event(models.Model):
     members = models.ManyToManyField(User, related_name='event_members')
     title = models.CharField(max_length=250)
     description = models.CharField(max_length=250, null=True)
-    duration = models.DecimalField(decimal_places=2, max_digits=12, null=True,
-                                   validators=[MinValueValidator(Decimal('0.01'))])
+    duration = models.IntegerField()
     potential_start_date = models.DateTimeField()
     potential_end_date = models.DateTimeField()
     final_start_date = models.DateTimeField(blank=True, null=True)
