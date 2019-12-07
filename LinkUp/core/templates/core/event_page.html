@@ -223,7 +223,7 @@
                     {% if admin %}
                     <a class="button is-pulled-right" onclick="openInviteModal()">+ Add Members</a>
                     {% endif %}
-                    Attendees
+                    Best Start Times
                 </p>
                 <div class="panel-block">
                     <div class="field is-grouped is-grouped-multiline">
@@ -233,6 +233,8 @@
                             <div class="tags has-addons">
                            {% if member != user %}
                             <button class="button is-info is-size-5" id="deleteMemberBtn">{{ member.first_name }} {{ member.last_name }} [{{ member.email }}]  <i class="fa fa-times" style="color: red"></i></button>
+                               {% else %}
+                                <button class="button is-info is-size-5">{{ member.first_name }} {{ member.last_name }} [{{ member.email }}] </button>
                             {% endif %}
 
                             {% include 'core/delete_member_modal.html' %}
