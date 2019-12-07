@@ -4,21 +4,21 @@ We allow users to create events and input their schedules. These schedules can t
 the organzier of the event to select the best time. 
 
 ## Login Credentials
-For testing purposes, please use:
-  ---------- Pre-populated ----------
-  Linkup Demo Google Account: linkup.demo.user@gmail.com
-  Linkup Demo Google Password: linkup10
+For testing purposes, please use:\
+  ---------- Pre-populated ----------\
+  Linkup Demo Google Account: linkup.demo.user@gmail.com\
+  Linkup Demo Google Password: linkup10\
   
-  ---------- Clean User ----------
-  Linkup Clean Google Account: linkup.clean.demo@gmail.com
-  Linkup Clean Google Password: linkup10
+  ---------- Clean User ----------\
+  Linkup Clean Google Account: linkup.clean.demo@gmail.com\
+  Linkup Clean Google Password: linkup10\
   
 ## Requirements
 The only requirement for running our website is having a internet browser (Google Chrome, Firefox, etc.) and 
 a connection to internet.
 
 ## Installation Instructions 
-Our website should require no installation as we have deployed it using AWS. 
+Our website should require no installation as we have deployed it using AWS.\ 
 To view our website please click here: http://linkup-env.3yijpwf3qp.us-west-2.elasticbeanstalk.com/
 
 ## Known Bugs
@@ -36,13 +36,13 @@ You can delete the event title and description and leave them blank.
 When you have an hour long event, the list on the bottom doesn't update the intervals.
 
 ## Contact for Support
-Justin Gross 
-  Email: jggross@ucsd.edu
-  Cell: 805-312-0767
+Justin Gross\
+  Email: jggross@ucsd.edu\
+  Cell: 805-312-0767\
   
-Kevin Rafferty 
-  Email: kraffert@ucsd.edu
-  Cell: 951-500-4700
+Kevin Rafferty\
+  Email: kraffert@ucsd.edu\
+  Cell: 951-500-4700\
  
 
 
