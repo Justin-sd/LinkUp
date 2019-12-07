@@ -53,7 +53,6 @@ def event_page(request, event_id):
 
     available_dates = availability_calendar_api.get_event_availability_dates(event_id)
     time_list = algorithm_api.get_best(event_id)
-    time_list = reversed(time_list)
 
     busy_times = availability_calendar_api.format_event_availability_calendar(user, event_id)  # users event schedule
     busy_times = event_calendar_api.apply_event_time_constraints(event, busy_times)
@@ -123,9 +122,13 @@ def import_general_availability(request, event_id):
     busy_times = availability_calendar_api.format_general_availability_calendar(request.user)
     busy_times = event_calendar_api.apply_event_time_constraints(event, busy_times)
 
-    # Hacky way to make the table the right date range
+    busy_times = event_calendar_api.cut_user_availability_dates_to_match_event(request.user, event, busy_times)
+
+    # Make the general availability length not go past the event availability end date
     for k, v in busy_times.items():
         busy_times[k] = v[:len(availability_dates)]
+        while len(availability_dates) > len(busy_times[k]):
+            busy_times[k].append(False)
 
     context = {"busy_times": busy_times, "availability_dates": availability_dates}
     return render(request, "core/availability_calendar.html", context)
@@ -133,12 +136,13 @@ def import_general_availability(request, event_id):
 
 @login_required()
 def import_google_calendar_data(request):
+    user_events = Event.objects.filter(members=request.user)
     google_auth_code = request.POST.get("auth_code")
     service = calendar_api.exchange_auth_code_for_calendar_service(google_auth_code)
     busy_times = availability_calendar_api.format_google_calendar_availability(request.user, service)
     availability_dates = availability_calendar_api.get_list_of_next_n_days(request.user, 30)
 
-    context = {"busy_times": busy_times, "availability_dates": availability_dates}
+    context = {"busy_times": busy_times, "availability_dates": availability_dates, "user_events": user_events}
     return render(request, "core/my_availability.html", context)
 
 

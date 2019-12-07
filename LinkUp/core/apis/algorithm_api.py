@@ -1,8 +1,6 @@
-from ..models import *
 from .availability_calendar_api import *
-from .calendar_api import *
-import json
-from datetime import datetime, timedelta
+from datetime import timedelta
+from functools import cmp_to_key
 
 
 def get_best(event_id):
@@ -33,13 +31,7 @@ def get_best(event_id):
     start = convert_to_minutes(new_st, new_st)
 
     et = event.potential_end_date
-    # round down potential ending minutes
-    if et.minute > 30:
-        new_et = et.replace(minute=30)
-    elif et.minute > 0:
-        new_et = et.replace(minute=0)
-    elif et.minute == 0 or et.minute == 30:
-        new_et = et
+    new_et = et.replace(hour=23, minute=59)
     end = convert_to_minutes(new_et, new_st)
 
     min_hour = event.no_earlier_than.hour
@@ -51,9 +43,7 @@ def get_best(event_id):
     # keys incremented by duration
     optimal_times = {}
     # from start to end time, add keys of 30 minute increments with querysets of every user attending
-    for i in range(start,end+1, 30):
-        if i + duration > end:
-            break
+    for i in range(start, end+1, 30):
         # only add times later than min time and earlier than max time
         time = convert_to_datetime(new_st, i)
         if min_hour < time.hour < max_hour:
@@ -72,7 +62,7 @@ def get_best(event_id):
         # Schedule.objects.create(user=u, availability=schedule)
 
         # get user's schedules in datetime format
-        for times in get_users_saved_schedule(u):
+        for times in get_users_event_schedule(u, event):
             start_time = list(times.values())[0]
             # round DOWN the starting minutes
             if start_time.minute > 30:
@@ -118,7 +108,13 @@ def get_best(event_id):
             curr_max = len(optimal_times[times])
 
     # return the reversed list
-    return append_list[::-1]
+    return sorted(append_list, key=cmp_to_key(best_times_sorter))
+
+
+def best_times_sorter(t1, t2):
+    if len(t2[1]) - len(t1[1]) != 0:
+        return len(t2[1]) - len(t1[1])
+    return t1[0] >= t2[0]
 
 
 # convert a datetime to minutes elapsed
@@ -132,3 +128,4 @@ def convert_to_minutes(time, starting):
 def convert_to_datetime(starting, mins):
     time = starting + timedelta(minutes=mins)
     return time
+

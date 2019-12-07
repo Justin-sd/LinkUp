@@ -60,7 +60,8 @@ $(document).ready(function() {
             type: "POST",
             data: data,
             success: function (result) {
-                alert("Event unavailability has been saved!")
+                alert("Event unavailability has been saved!");
+                location.reload();
             }
         });
     });
