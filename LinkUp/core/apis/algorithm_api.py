@@ -46,7 +46,7 @@ def get_best(event_id):
     optimal_times = {}
     # from start to end time, add keys of 30 minute increments with querysets of every user attending
     for i in range(start, end+1, 30):
-        if (i + 30) > the_end:
+        if (i + duration) > the_end+1:
             break
         # only add times later than min time and earlier than max time
         time = convert_to_datetime(new_st, i)
