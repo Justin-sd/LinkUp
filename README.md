@@ -7,11 +7,11 @@ the organzier of the event to select the best time.
 For testing purposes, please use:\
   ---------- Pre-populated ----------\
   Linkup Demo Google Account: linkup.demo.user@gmail.com\
-  Linkup Demo Google Password: linkup10\
+  Linkup Demo Google Password: linkup10
   
   ---------- Clean User ----------\
   Linkup Clean Google Account: linkup.clean.demo@gmail.com\
-  Linkup Clean Google Password: linkup10\
+  Linkup Clean Google Password: linkup10
   
 ## Requirements
 The only requirement for running our website is having a internet browser (Google Chrome, Firefox, etc.) and 
@@ -38,11 +38,11 @@ When you have an hour long event, the list on the bottom doesn't update the inte
 ## Contact for Support
 Justin Gross\
   Email: jggross@ucsd.edu\
-  Cell: 805-312-0767\
+  Cell: 805-312-0767
   
 Kevin Rafferty\
   Email: kraffert@ucsd.edu\
-  Cell: 951-500-4700\
+  Cell: 951-500-4700
  
 
 
