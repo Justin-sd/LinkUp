@@ -18,7 +18,7 @@ The only requirement for running our website is having a internet browser (Googl
 a connection to internet.
 
 ## Installation Instructions 
-Our website should require no installation as we have deployed it using AWS\ 
+Our website should require no installation as we have deployed it using AWS<br\>
 To view our website please click here: http://linkup-env.3yijpwf3qp.us-west-2.elasticbeanstalk.com/
 
 ## Known Bugs
@@ -26,6 +26,8 @@ The list of available times doesn't properly update with the information on the 
 
 On the general unavailability page, if you put block out time manually then import with google calendar,
 the manually inputted times are overwritten. 
+
+You can create an event that has a longer duration than start time and end time. For example, if you have 3 hour duration you can have the start time be 10 am and end time be 11 am. 
 
 Logout button on My Unavailability page doesn't work. 
 
