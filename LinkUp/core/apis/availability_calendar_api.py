@@ -31,7 +31,7 @@ def format_google_calendar_availability(user, service):
     end_date = start_date + timedelta(days=30)
     number_of_days = (end_date - start_date).days
     availability = convert_to_local_time(fb, user)
-    return format_availabilities(availability, start_date, number_of_days)
+    return format_availabilities(availability, start_date, number_of_days, True)
 
 
 def format_general_availability_calendar(user):
@@ -99,7 +99,7 @@ def round_down_half_hour(time):
     return time
 
 
-def format_availabilities(availability, start_date, number_of_days):
+def format_availabilities(availability, start_date, number_of_days, google_cal_format=False):
     """
     Handles the formatting of all availability calendars
     :param availability:    A list of dictionary objects containing start and end times representing time ranges in which
@@ -116,7 +116,8 @@ def format_availabilities(availability, start_date, number_of_days):
             }
 
     """
-    start_date = start_date.replace(tzinfo=UTC)
+    if not google_cal_format:
+        start_date = start_date.replace(tzinfo=UTC)
     busy_times = {}
     for half_hour_periods in range(48):
         busy_times[half_hour_periods] = [False] * number_of_days
