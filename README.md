@@ -37,6 +37,7 @@ You can delete the event title and description and leave them blank.
 
 When you have an hour long event, the list on the bottom doesn't update the intervals.
 
+Importing from Google Calendar on the general availability calendar requires a page refresh between subsequent imports.
 ## Contact for Support
 Justin Gross\
   Email: jggross@ucsd.edu\
