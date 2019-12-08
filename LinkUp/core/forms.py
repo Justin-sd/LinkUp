@@ -14,6 +14,7 @@ class SignUpForm(UserCreationForm):
         model = User
         fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2',)
 
+
 class EventForm(ModelForm):
     class Meta:
         model = Event
@@ -22,15 +23,15 @@ class EventForm(ModelForm):
                 'type': 'text',
                 'class': 'input has-background-light',
                 'placeholder': 'Please enter a title for your event!'
-                }),
+            }),
             'description': forms.Textarea(attrs={
                 'type': 'textarea',
                 'class': 'textarea has-background-light',
                 'rows': '3',
-                'placeholder':  'Please enter a event description! \nThis can be '
-                                'anything from what the event is for, where it will '
-                                'be located, etc. \nThank you!'
-                }),
+                'placeholder': 'Please enter a event description! \nThis can be '
+                               'anything from what the event is for, where it will '
+                               'be located, etc. \nThank you!'
+            }),
             'duration': forms.NumberInput(attrs={'type': 'number',
                                                  'class': 'input has-background-light',
                                                  'placeholder': 'Duration'}),
