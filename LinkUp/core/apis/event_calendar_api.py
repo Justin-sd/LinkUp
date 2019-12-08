@@ -84,7 +84,11 @@ def add_member_ratios(event_id, group_availability):
 
 def apply_event_time_constraints(event, busy_times):
     start_idx = event.no_earlier_than.hour * 2
+    if event.no_earlier_than.minute >= 30:
+        start_idx += 1
     end_idx = event.no_later_than.hour * 2
+    if event.no_later_than.minute >= 30:
+        end_idx += 1
     time_keys = list(busy_times.keys())
     time_keys = time_keys[start_idx:end_idx]
     busy_times_cut = dict.fromkeys(time_keys)
