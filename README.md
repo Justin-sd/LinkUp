@@ -40,11 +40,11 @@ When you have an hour long event, the list on the bottom doesn't update the inte
 
 Importing from Google Calendar on the general availability calendar requires a page refresh between subsequent imports.
 ## Contact for Support
-Justin Gross\
+Justin Gross - Software Development Lead\
   Email: jggross@ucsd.edu\
   Cell: 805-312-0767
   
-Kevin Rafferty\
+Kevin Rafferty - Project Manager\
   Email: kraffert@ucsd.edu\
   Cell: 951-500-4700
  
