@@ -3,6 +3,9 @@ Linkup is a great way to create a meeting and collabrate with others to pick the
 We allow users to create events and input their schedules. These schedules can then be compared allowing 
 the organzier of the event to select the best time. 
 
+## Video Link
+https://www.youtube.com/watch?reload=9&v=J9jnVEXFN7A&feature=youtu.be
+
 ## Login Credentials
 For testing purposes, please use:\
   ---------- Pre-populated ----------\
