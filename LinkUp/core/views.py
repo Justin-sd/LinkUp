@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
-
+from pytz import UTC
+from datetime import datetime
+from django.utils import timezone
 from .apis import calendar_api, availability_calendar_api, sendEmail_api, algorithm_api, contact_us_api, \
     event_calendar_api
 from .models import Event, Schedule, UserTimezone, EventSchedule
@@ -125,8 +127,13 @@ def import_general_availability(request, event_id):
     busy_times = event_calendar_api.cut_user_availability_dates_to_match_event(request.user, event, busy_times)
 
     # Make the general availability length not go past the event availability end date
+    start_date = event.potential_start_date.replace(tzinfo=UTC)
+    timezone.activate(availability_calendar_api.get_user_timezone(request.user))
+    today = timezone.localtime(datetime.utcnow().replace(tzinfo=UTC)).replace(hour=0, minute=0, second=0, microsecond=0).replace(tzinfo=UTC)
+    start_idx = (start_date - today).days
+    timezone.activate(UTC)
     for k, v in busy_times.items():
-        busy_times[k] = v[:len(availability_dates)]
+        busy_times[k] = v[start_idx:start_idx+len(availability_dates)]
         while len(availability_dates) > len(busy_times[k]):
             busy_times[k].append(False)
 
