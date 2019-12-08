@@ -34,8 +34,6 @@ You can create an event that has a longer duration than start time and end time.
 
 Logout button on My Unavailability page doesn't work. 
 
-On Change Name, if you don't enter anything for your name, your display name is now blank.
-
 You can delete the event title and description and leave them blank. 
 
 When you have an hour long event, the list on the bottom doesn't update the intervals.
