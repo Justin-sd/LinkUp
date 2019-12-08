@@ -43,12 +43,12 @@
                                     <p class="text-left" style="font-size: 14px">
                                         First name: {{user.first_name}}
                                     </p>
-                                    <input id="first_name" class="form-control" type="text" placeholder="First Name" name="first_name">
+                                    <input id="first_name" class="form-control" type="text" value="{{ user.first_name }}" name="first_name">
                                     <br/>
                                     <p class="text-left" style="font-size: 14px">
                                         Last name: {{user.last_name}}
                                     </p>
-                                    <input id="last_name" class="form-control" type="text" placeholder="Last Name" name="last_name">
+                                    <input id="last_name" class="form-control" type="text" value="{{ user.last_name }}" name="last_name">
                                     <br/>
                                     <input class="btn btn-default" type="submit" value="Make Changes" name="commit">
                                 </form>

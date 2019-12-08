@@ -235,9 +235,10 @@ def create_user(request):
 
 def change_name(request):
     if request.method == 'POST':
-        request.user.first_name = request.POST.get("first_name")
-        request.user.last_name = request.POST.get("last_name")
-        request.user.save()
+        if request.POST.get("first_name").strip() != "" and request.POST.get("last_name").strip() != "":
+            request.user.first_name = request.POST.get("first_name")
+            request.user.last_name = request.POST.get("last_name")
+            request.user.save()
     return render(request, "core/my_account.html")
 
 
