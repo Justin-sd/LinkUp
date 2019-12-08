@@ -131,7 +131,10 @@ def format_availabilities(availability, start_date, number_of_days, google_cal_f
         if start.minute >= 30:
             index += 1
         while start < end:
-            busy_times[index][(start - start_date).days] = True
+            try:
+                busy_times[index][(start - start_date).days] = True
+            except IndexError:
+                pass
             index += 1
             start = start + timedelta(minutes=30)
 
